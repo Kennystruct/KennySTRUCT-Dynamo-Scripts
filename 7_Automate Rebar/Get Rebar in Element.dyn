@@ -1,0 +1,122 @@
+{
+  "Uuid": "4910829b-228b-49e2-82c9-dc8f44cfa600",
+  "IsCustomNode": false,
+  "Description": null,
+  "Name": "Get Rebar in Element",
+  "ElementResolver": {
+    "ResolutionMap": {}
+  },
+  "Inputs": [],
+  "Outputs": [],
+  "Nodes": [
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "#Find the host family instance of a selected rebar object.\r\n#Authored by Dieter Vermeulen, Autodesk, 2016\r\n#http://revitbeyondbim.wordpress.com\r\n\r\nimport clr\r\nclr.AddReference('ProtoGeometry')\r\nfrom Autodesk.DesignScript.Geometry import *\r\n# Import ToDSType(bool) extension method\r\nclr.AddReference(\"RevitNodes\")\r\nimport Revit\r\nclr.ImportExtensions(Revit.Elements)\r\n# Import geometry conversion extension methods\r\nclr.ImportExtensions(Revit.GeometryConversion)\r\n# Import DocumentManager and TransactionManager\r\nclr.AddReference(\"RevitServices\")\r\nimport RevitServices\r\nfrom RevitServices.Persistence import DocumentManager\r\nfrom RevitServices.Transactions import TransactionManager\r\nfrom System.Collections.Generic import *\r\n# Import RevitAPI\r\nclr.AddReference(\"RevitAPI\")\r\nclr.AddReference(\"RevitAPIUI\")\r\n\r\nimport Autodesk \r\nfrom Autodesk.Revit.DB import *\r\nfrom Autodesk.Revit.UI import *\r\n\r\ndoc = DocumentManager.Instance.CurrentDBDocument\r\nuiapp = DocumentManager.Instance.CurrentUIApplication \r\napp = uiapp.Application \r\nuidoc = uiapp.ActiveUIDocument\r\n\r\nHostElements= uidoc.Selection.PickObjects(Selection.ObjectType.Element, \"Select Elements Containing Rebar\")\r\nNonHostedRebar=[]\r\n\r\ncollector = FilteredElementCollector(doc)\r\nrebars = collector.OfCategory(BuiltInCategory.OST_Rebar).WhereElementIsNotElementType().ToElements()\r\n\r\nRebarInHost = []\r\n\r\nfor elem in HostElements:\r\n\tHostId = elem.ElementId\r\n\tfor rebar in rebars:\r\n\t\tif rebar.GetHostId() == HostId:\r\n\t\t\tRebarInHost.append(rebar)\r\n\r\nrebarIds = []\r\n\r\ndef toList(input):\r\n\tif isinstance(input,list) == False:\r\n\t\treturn [input]\r\n\telse:\r\n\t\treturn input\r\n\r\ndef flatten(x):\r\n    result = []\r\n    for el in x:\r\n        if hasattr(el, \"__iter__\") and not isinstance(el, basestring):\r\n            result.extend(flatten(el))\r\n        else:\r\n            result.append(el)\r\n    return result\r\n\r\nelementsOrIDs = flatten(toList(RebarInHost))\r\n\r\nelementIds = List[ElementId]()\r\n\r\ntry:\r\n\tint(elementsOrIDs[0])\r\n\r\nexcept:\r\n\tfor e in elementsOrIDs:\r\n\t\telementIds.Add(UnwrapElement(e).Id)\r\n\tselection = uidoc.Selection.SetElementIds(elementIds)\r\n\t\r\nelse:\r\n\tfor ID in elementsOrIDs:\r\n\t\telementIds.Add(Autodesk.Revit.DB.ElementId(int(ID)))\r\n\tselection = uidoc.Selection.SetElementIds(elementIds)\r\n\r\nOUT = RebarInHost",
+      "VariableInputPorts": true,
+      "Id": "05682bfe6e2c47139dbcd0e48588a4c2",
+      "Inputs": [
+        {
+          "Id": "8d5f5c340dea40f7aab69908afc721aa",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "d7e4915d35084411ad7408f4189a6a63",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded IronPython script."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
+      "NodeType": "BooleanInputNode",
+      "InputValue": true,
+      "Id": "a0bb6cf5293c4146a90c672b2ff21225",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "04e21e7c56a24fdbbcd2765411e28e76",
+          "Name": "",
+          "Description": "Boolean",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Selection between a true and false."
+    }
+  ],
+  "Connectors": [
+    {
+      "Start": "04e21e7c56a24fdbbcd2765411e28e76",
+      "End": "8d5f5c340dea40f7aab69908afc721aa",
+      "Id": "f0a997eab79f4c57a1b231468e5ae9d4"
+    }
+  ],
+  "Dependencies": [],
+  "NodeLibraryDependencies": [],
+  "Bindings": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 1.0,
+      "HasRunWithoutCrash": true,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "2.6.1.8786",
+      "RunType": "Manual",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "Background Preview",
+      "EyeX": -17.0,
+      "EyeY": 24.0,
+      "EyeZ": 50.0,
+      "LookX": 12.0,
+      "LookY": -13.0,
+      "LookZ": -58.0,
+      "UpX": 0.0,
+      "UpY": 1.0,
+      "UpZ": 0.0
+    },
+    "NodeViews": [
+      {
+        "Id": "05682bfe6e2c47139dbcd0e48588a4c2",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Name": "Python Script",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": 574.6132847441794,
+        "Y": 799.03728247464539
+      },
+      {
+        "Id": "a0bb6cf5293c4146a90c672b2ff21225",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Name": "Refresh",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": 397.09090456742018,
+        "Y": 797.18809811132292
+      }
+    ],
+    "Annotations": [],
+    "X": -277.73895925080814,
+    "Y": -594.92508813728432,
+    "Zoom": 1.1522306022463966
+  }
+}

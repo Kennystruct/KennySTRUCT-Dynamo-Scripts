@@ -1,0 +1,371 @@
+{
+  "Uuid": "073ba6d9-e8e6-4ff8-9bc0-4c289d1da710",
+  "IsCustomNode": false,
+  "Description": null,
+  "Name": "Remove Area Reinforcement",
+  "ElementResolver": {
+    "ResolutionMap": {
+      "Rebars": {
+        "Key": "ACOSolution.Rebars",
+        "Value": "ACOPackage.dll"
+      }
+    }
+  },
+  "Inputs": [
+    {
+      "Id": "a26892bfb2e942c8b643b39bbf9b05c1",
+      "Name": "Run Script?",
+      "Type": "boolean",
+      "Value": "true",
+      "Description": "Selection between a true and false."
+    }
+  ],
+  "Outputs": [],
+  "Nodes": [
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Function, DynamoCore",
+      "FunctionSignature": "bf40656d-eb31-4ed2-98ec-cb021264ef41",
+      "FunctionType": "Graph",
+      "NodeType": "FunctionNode",
+      "Id": "6519cdbdb9714a6d801445c74540b2cd",
+      "Inputs": [
+        {
+          "Id": "28d96b0fb66848629079465aeedf8832",
+          "Name": "HostElement",
+          "Description": "Element",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "481c4d8dcbc84ca3a75d62cdf502d523",
+          "Name": "rebars",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Works with both Area Reinforcement and Normal Reinforcements"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
+      "NodeType": "BooleanInputNode",
+      "InputValue": true,
+      "Id": "a26892bfb2e942c8b643b39bbf9b05c1",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "f226aabb5f65481bb22c37a3e7c64ece",
+          "Name": "",
+          "Description": "Boolean",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Selection between a true and false."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "StructuralDesign.Rebar.AreaReinforcement.AreaReinforcement.RemoveAreaReinforcementSystem@Revit.Elements.Element",
+      "Id": "8c0d1eb992654742842b33bfb943829a",
+      "Inputs": [
+        {
+          "Id": "ce30047239ff4407925943a569d576ad",
+          "Name": "areaReinforcement",
+          "Description": "An AreaReinforcement element in the document.\n\nElement",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "57a51cf0cd21472c883f012f9d5af9a7",
+          "Name": "Rebars",
+          "Description": "The list of the newly created Rebar elements.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Deletes the specified AreaReinforcement, and converts its RebarInSystem elements to equivalent Rebar elements.\n\nAreaReinforcement.RemoveAreaReinforcementSystem (areaReinforcement: Element): Element[]"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "StructuralDesign.Model.Selection.PickObjectsOfCategory@Revit.Elements.Category[],int,string,bool,bool",
+      "Id": "219f6f10b56b4acb83838a52454ca91e",
+      "Inputs": [
+        {
+          "Id": "e25f2d8d08114dca9c460c6f14d59225",
+          "Name": "category",
+          "Description": "Single category or a list of categories.\n\nCategory[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "31e19ce19ed447e58c3569a95a9e7b64",
+          "Name": "objectType",
+          "Description": "Specifies the type of object to be selected. 0-Nothing, 1-Element, 2-PointOnElement, 3-Edge, 4-Face, 5-LinkedElement, 6-Subelement\n\nint\nDefault value : 1",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "ea9c4f330045463da932818b1016d800",
+          "Name": "statusPrompt",
+          "Description": "The message shown on the status bar.\n\nstring\nDefault value : \"Click to select multiple elements, TAB for alternates, ESC quit.\"",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "5a600925553b453693157f4288e5ba48",
+          "Name": "preselection",
+          "Description": "Take into account the initially selected set of objects.\n\nbool\nDefault value : false",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "4db90f5bf63a4bd78e3574826ec31152",
+          "Name": "refresh",
+          "Description": "Refresh selection.\n\nbool\nDefault value : true",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "af27d9ba3b3b48749b7fc324aca3f442",
+          "Name": "Elements",
+          "Description": "Selected elements.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Prompts the user to select multiple objects of the defined categories while showing a custom status prompt string.\n\nSelection.PickObjectsOfCategory (category: Category[], objectType: int = 1, statusPrompt: string = \"Click to select multiple elements, TAB for alternates, ESC quit.\", preselection: bool = false, refresh: bool = true): Element[]"
+    },
+    {
+      "ConcreteType": "DSRevitNodesUI.Categories, DSRevitNodesUI",
+      "SelectedIndex": 234,
+      "SelectedString": "OST_Floors",
+      "NodeType": "ExtensionNode",
+      "Id": "a766b23a55b14503a149bc86160e9a2f",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "c83ef6794b314d8899bba6f5e5e16a27",
+          "Name": "Category",
+          "Description": "The selected Category.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "All built-in categories."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "DSCore.List.Flatten@var[]..[],int",
+      "Id": "60d1bf26c8c34973a688ce9b006a97ad",
+      "Inputs": [
+        {
+          "Id": "51ff03316a6f4f8cae72cdc9d45a0859",
+          "Name": "list",
+          "Description": "List to flatten.\n\nvar[]..[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "33af01756d054e67946fb2e7f70a8fe1",
+          "Name": "amt",
+          "Description": "Layers of nesting to remove.\n\nint\nDefault value : -1",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "0b723b661c0f4f0f95403573aad6e5a3",
+          "Name": "var[]..[]",
+          "Description": "var[]..[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Flattens a nested list of lists by a certain amount.\n\nList.Flatten (list: var[]..[], amt: int = -1): var[]..[]"
+    }
+  ],
+  "Connectors": [
+    {
+      "Start": "481c4d8dcbc84ca3a75d62cdf502d523",
+      "End": "51ff03316a6f4f8cae72cdc9d45a0859",
+      "Id": "30ed199f7f804bf896efcadbb28c0f60"
+    },
+    {
+      "Start": "f226aabb5f65481bb22c37a3e7c64ece",
+      "End": "4db90f5bf63a4bd78e3574826ec31152",
+      "Id": "2a3456db5846402a8d772ec7c9c98d94"
+    },
+    {
+      "Start": "af27d9ba3b3b48749b7fc324aca3f442",
+      "End": "28d96b0fb66848629079465aeedf8832",
+      "Id": "51905bf6e1f643af9912f22386f1cf05"
+    },
+    {
+      "Start": "c83ef6794b314d8899bba6f5e5e16a27",
+      "End": "e25f2d8d08114dca9c460c6f14d59225",
+      "Id": "6dd1d364e6394dd699f3a0e9e1170206"
+    },
+    {
+      "Start": "0b723b661c0f4f0f95403573aad6e5a3",
+      "End": "ce30047239ff4407925943a569d576ad",
+      "Id": "3efdcca1f5104829bdd102da7b7a535c"
+    }
+  ],
+  "Dependencies": [
+    "bf40656d-eb31-4ed2-98ec-cb021264ef41"
+  ],
+  "NodeLibraryDependencies": [
+    {
+      "Name": "KennyStruct Nodes",
+      "Version": "0.0.1",
+      "ReferenceType": "Package",
+      "Nodes": [
+        "6519cdbdb9714a6d801445c74540b2cd"
+      ]
+    },
+    {
+      "Name": "Structural Design",
+      "Version": "2021.9.23",
+      "ReferenceType": "Package",
+      "Nodes": [
+        "8c0d1eb992654742842b33bfb943829a",
+        "219f6f10b56b4acb83838a52454ca91e"
+      ]
+    }
+  ],
+  "Bindings": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 1.0,
+      "HasRunWithoutCrash": true,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "2.6.1.8786",
+      "RunType": "Manual",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "Background Preview",
+      "EyeX": 22249.723089471037,
+      "EyeY": -237.83469722332961,
+      "EyeZ": 25435.628445905782,
+      "LookX": 383.37163709146262,
+      "LookY": -1356.1653027766704,
+      "LookZ": -3039.2339146557824,
+      "UpX": 0.024950727844227163,
+      "UpY": 0.97992470462087577,
+      "UpZ": -0.19780049154091242
+    },
+    "NodeViews": [
+      {
+        "ShowGeometry": false,
+        "Name": "GetRebarFromHost",
+        "Id": "6519cdbdb9714a6d801445c74540b2cd",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 6357.0376320104151,
+        "Y": 350.62426697780779
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Run Script?",
+        "Id": "a26892bfb2e942c8b643b39bbf9b05c1",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 5737.0376320104151,
+        "Y": 459.02408774261255
+      },
+      {
+        "ShowGeometry": false,
+        "Name": "AreaReinforcement.RemoveAreaReinforcementSystem",
+        "Id": "8c0d1eb992654742842b33bfb943829a",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 6978.0376320104151,
+        "Y": 406.73093364447442
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Selection.PickObjectsOfCategory",
+        "Id": "219f6f10b56b4acb83838a52454ca91e",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 6005.0376320104151,
+        "Y": 350.62426697780779
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Rebar Host Category",
+        "Id": "a766b23a55b14503a149bc86160e9a2f",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 5737.0376320104151,
+        "Y": 348.62426697780779
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "List.Flatten",
+        "Id": "60d1bf26c8c34973a688ce9b006a97ad",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 6675.86690222519,
+        "Y": 355.21874428879977
+      }
+    ],
+    "Annotations": [],
+    "X": -3483.0691048200338,
+    "Y": 100.10762653212143,
+    "Zoom": 0.57402916789303027
+  }
+}

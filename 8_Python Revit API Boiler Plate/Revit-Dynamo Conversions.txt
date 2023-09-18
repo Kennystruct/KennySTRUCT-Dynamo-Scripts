@@ -1,0 +1,25 @@
+import clr
+ 
+clr.AddReference("RevitNodes")
+import Revit
+clr.ImportExtensions(Revit.GeometryConversion)
+from Revit import GeometryConversion as gp
+#The inputs to this node will be stored as a list in the IN variables.
+dataEnteringNode = IN
+"""DS Point to revit XYZ"""
+dbPoint = IN[0].ToXyz()
+"""DS Vector to Revit XYZ"""
+dbVector = IN[1].ToXyz()
+"""DS Coordinate System to Revit Transform"""
+dbTransform = IN[2].ToTransform()
+dbSolid = IN[3].ToRevitType()
+#dbcurve = IN[4].ToRevitType() or 
+dbcurve = gp.ProtoToRevitCurve.ToRevitType(IN[4])
+"""XYZ to DS Point"""
+dsPoint = dbPoint.ToPoint()
+"""XYZ to DS Vector"""
+dsVector = dbVector.ToVector()
+# DS Solid from DB Solit
+dsMesh = dbSolid[0].ToProtoType()
+#Assign your output to the OUT variable.
+OUT = dbPoint,dbVector,dbTransform,dbSolid,dbcurve,dsPoint,dsVector,dsMesh

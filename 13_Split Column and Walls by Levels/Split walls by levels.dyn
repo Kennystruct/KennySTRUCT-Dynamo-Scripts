@@ -1,0 +1,151 @@
+{
+  "Uuid": "8d6b68a0-8031-4b70-8d7d-fc68af1986c7",
+  "IsCustomNode": false,
+  "Description": null,
+  "Name": "Home",
+  "ElementResolver": {
+    "ResolutionMap": {}
+  },
+  "Inputs": [],
+  "Outputs": [],
+  "Nodes": [
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Function, DynamoCore",
+      "FunctionSignature": "aebb095f-4d64-48ae-9eb2-a0068600d51d",
+      "FunctionType": "Graph",
+      "NodeType": "FunctionNode",
+      "Id": "5f3ebdc9a49c426fa2b3fe3761132da1",
+      "Inputs": [
+        {
+          "Id": "ebde972ae6ed44b8b28b8b860322165c",
+          "Name": "RunScript",
+          "Description": "Specify if you want to run this script using a Boolean node\n\nbool",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "3ab96d626f4d41e6a3f2fba014d6f3d3",
+          "Name": "SplittedWalls",
+          "Description": "Spltted wall elements grouped by levels",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "5674492e316246e986831e28c185c2be",
+          "Name": "WasRun",
+          "Description": "Specifies if the script was run",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "5f690e5dd33b44cabdb8cc39f52cadaf",
+          "Name": "WasCancelled",
+          "Description": "Specifies if the script was cancelled",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Split selected walls by project levels"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
+      "NodeType": "BooleanInputNode",
+      "InputValue": true,
+      "Id": "081e6d7cd7de45f7bc8280658b29673a",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "8496f05726394430964908c5a43992ee",
+          "Name": "",
+          "Description": "Boolean",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Selection between a true and false."
+    }
+  ],
+  "Connectors": [
+    {
+      "Start": "8496f05726394430964908c5a43992ee",
+      "End": "ebde972ae6ed44b8b28b8b860322165c",
+      "Id": "3b8a238610bd4b4bbe7e19f40a78bbfd"
+    }
+  ],
+  "Dependencies": [
+    "aebb095f-4d64-48ae-9eb2-a0068600d51d"
+  ],
+  "NodeLibraryDependencies": [
+    {
+      "Name": "KennyStruct Nodes",
+      "Version": "0.0.1",
+      "ReferenceType": "Package",
+      "Nodes": [
+        "5f3ebdc9a49c426fa2b3fe3761132da1"
+      ]
+    }
+  ],
+  "Bindings": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 1.0,
+      "HasRunWithoutCrash": true,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "2.3.1.11775",
+      "RunType": "Manual",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "Background Preview",
+      "EyeX": -17.0,
+      "EyeY": 24.0,
+      "EyeZ": 50.0,
+      "LookX": 12.0,
+      "LookY": -13.0,
+      "LookZ": -58.0,
+      "UpX": 0.0,
+      "UpY": 1.0,
+      "UpZ": 0.0
+    },
+    "NodeViews": [
+      {
+        "ShowGeometry": true,
+        "Name": "SplitSelectedWallsByLevels",
+        "Id": "5f3ebdc9a49c426fa2b3fe3761132da1",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 287.0,
+        "Y": 81.5
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Boolean",
+        "Id": "081e6d7cd7de45f7bc8280658b29673a",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 109.0,
+        "Y": 114.0
+      }
+    ],
+    "Annotations": [],
+    "X": 0.0,
+    "Y": 0.0,
+    "Zoom": 1.0
+  }
+}

@@ -1,0 +1,168 @@
+{
+  "Uuid": "9f141843-5554-4c9b-9d95-569d84889a22",
+  "IsCustomNode": false,
+  "Description": null,
+  "Name": "01 - FOUNDATION SHARED COORDINATES",
+  "ElementResolver": {
+    "ResolutionMap": {}
+  },
+  "Inputs": [],
+  "Outputs": [],
+  "Nodes": [
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "#\tDeveloped by KEHINDE AYOBADE\r\n#\tCurrently for Private Use\r\n\r\nimport sys\r\nimport clr\r\nclr.AddReference(\"System.IO\")\r\nclr.AddReference(\"System.Reflection\")\r\nclr.AddReference(\"System.Threading\")\r\nclr.AddReference(\"System.Drawing\")\r\nclr.AddReference(\"System.Windows.Forms\")\r\nclr.AddReference(\"System\")\r\nimport System.IO\r\nimport System.Reflection\r\nimport System.Threading\r\nimport System.Drawing\r\nimport System.Windows.Forms\r\nfrom System.Threading import ApartmentState, Thread, ThreadStart\r\nfrom System import Array, Object\r\nfrom System.Collections.Generic import *\r\nfrom System.Windows.Forms import Application\r\n\r\n\r\ndef tolist(obj1):\r\n\tif hasattr(obj1,\"__iter__\"): return obj1\r\n\telse: return [obj1]\r\n\r\n\r\nclass PileCoordinates(System.Windows.Forms.Form):\r\n\r\n\tdef __init__(this):\r\n\t\tthis.groupBox1 =   System.Windows.Forms.GroupBox()\r\n\t\tthis.label5 =   System.Windows.Forms.Label()\r\n\t\tthis.label2 =   System.Windows.Forms.Label()\r\n\t\tthis.label1 =   System.Windows.Forms.Label()\r\n\t\tthis.comboBox1 =   System.Windows.Forms.ComboBox()\r\n\t\tthis.button1 =   System.Windows.Forms.Button()\r\n\t\tthis.button2 =   System.Windows.Forms.Button()\r\n\t\tthis.label3 =   System.Windows.Forms.Label()\r\n\t\tthis.comboBox2 =   System.Windows.Forms.ComboBox()\r\n\t\tthis.comboBox3 =   System.Windows.Forms.ComboBox()\r\n\t\tthis.label4 =   System.Windows.Forms.Label()\r\n\t\tthis.groupBox1.SuspendLayout()\r\n\t\tthis.SuspendLayout()\r\n\t\t#\r\n\t\t# groupBox1\r\n\t\t#\r\n\t\tthis.groupBox1.Controls.Add(this.label5)\r\n\t\tthis.groupBox1.Controls.Add(this.label2)\r\n\t\tthis.groupBox1.Controls.Add(this.label1)\r\n\t\tthis.groupBox1.Controls.Add(this.comboBox3)\r\n\t\tthis.groupBox1.Controls.Add(this.comboBox2)\r\n\t\tthis.groupBox1.Controls.Add(this.comboBox1)\r\n\t\tthis.groupBox1.FlatStyle = System.Windows.Forms.FlatStyle.Popup\r\n\t\tthis.groupBox1.Font =   System.Drawing.Font(\"Calibri\", 12, System.Drawing.FontStyle.Regular)\r\n\t\tthis.groupBox1.ImeMode = System.Windows.Forms.ImeMode.On\r\n\t\tthis.groupBox1.Location =   System.Drawing.Point(29, 32)\r\n\t\tthis.groupBox1.Margin =   System.Windows.Forms.Padding(4)\r\n\t\tthis.groupBox1.Name = \"groupBox1\"\r\n\t\tthis.groupBox1.Padding =   System.Windows.Forms.Padding(4)\r\n\t\tthis.groupBox1.Size =   System.Drawing.Size(385, 237)\r\n\t\tthis.groupBox1.TabIndex = 0\r\n\t\tthis.groupBox1.TabStop = False\r\n\t\tthis.groupBox1.Text = \"Parameters\"\r\n\t\t#\r\n\t\t# label5\r\n\t\t#\r\n\t\tthis.label5.AutoSize =  True\r\n\t\tthis.label5.Font =   System.Drawing.Font(\"Calibri\", 11.25, System.Drawing.FontStyle.Regular)\r\n\t\tthis.label5.Location =   System.Drawing.Point(8, 188)\r\n\t\tthis.label5.Margin =   System.Windows.Forms.Padding(4, 0, 4, 0)\r\n\t\tthis.label5.Name = \"label5\"\r\n\t\tthis.label5.Size =   System.Drawing.Size(85, 18)\r\n\t\tthis.label5.TabIndex = 1\r\n\t\tthis.label5.Text = \"Elevation (Z)\"\r\n\t\t#\r\n\t\t# label2\r\n\t\t#\r\n\t\tthis.label2.AutoSize =  True\r\n\t\tthis.label2.Font =   System.Drawing.Font(\"Calibri\", 11.25, System.Drawing.FontStyle.Regular)\r\n\t\tthis.label2.Location =   System.Drawing.Point(8, 121)\r\n\t\tthis.label2.Margin =   System.Windows.Forms.Padding(4, 0, 4, 0)\r\n\t\tthis.label2.Name = \"label2\"\r\n\t\tthis.label2.Size =   System.Drawing.Size(118, 18)\r\n\t\tthis.label2.TabIndex = 1\r\n\t\tthis.label2.Text = \"Northings (N/S/Y)\"\r\n\t\t#\r\n\t\t# label1\r\n\t\t#\r\n\t\tthis.label1.AutoSize =  True\r\n\t\tthis.label1.Font =   System.Drawing.Font(\"Calibri\", 11.25, System.Drawing.FontStyle.Regular)\r\n\t\tthis.label1.Location =   System.Drawing.Point(8, 51)\r\n\t\tthis.label1.Margin =   System.Windows.Forms.Padding(4, 0, 4, 0)\r\n\t\tthis.label1.Name = \"label1\"\r\n\t\tthis.label1.Size =   System.Drawing.Size(110, 18)\r\n\t\tthis.label1.TabIndex = 1\r\n\t\tthis.label1.Text = \"Eastings (E/W/X)\"\r\n\t\t#\r\n\t\t# comboBox1\r\n\t\t#\r\n\t\tthis.comboBox1.FormattingEnabled =  True\r\n\t\tthis.comboBox1.Location =   System.Drawing.Point(139, 47)\r\n\t\tthis.comboBox1.Margin =   System.Windows.Forms.Padding(4)\r\n\t\tthis.comboBox1.Name = \"Eastings\"\r\n\t\tthis.comboBox1.Size =   System.Drawing.Size(207, 27)\r\n\t\tthis.comboBox1.TabIndex = 0\r\n\t\tthis.comboBox1.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend\r\n\t\tthis.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList\r\n\r\n\t\t#\r\n\t\t# button1\r\n\t\t#\r\n\t\tthis.button1.BackColor = System.Drawing.Color.Gainsboro\r\n\t\tthis.button1.Font =   System.Drawing.Font(\"Calibri\", 12, System.Drawing.FontStyle.Regular)\r\n\t\tthis.button1.Location =   System.Drawing.Point(440, 41)\r\n\t\tthis.button1.Margin =   System.Windows.Forms.Padding(4)\r\n\t\tthis.button1.Name = \"button1\"\r\n\t\tthis.button1.Size =   System.Drawing.Size(122, 34)\r\n\t\tthis.button1.TabIndex = 1\r\n\t\tthis.button1.Text = \"OK\"\r\n\t\tthis.button1.Click += this.finish\r\n\t\tthis.button1.UseVisualStyleBackColor = False\r\n\t\t#\r\n\t\t# button2\r\n\t\t#\r\n\t\tthis.button2.BackColor = System.Drawing.Color.Gainsboro\r\n\t\tthis.button2.Font =   System.Drawing.Font(\"Calibri\", 12, System.Drawing.FontStyle.Regular)\r\n\t\tthis.button2.Location =   System.Drawing.Point(440, 92)\r\n\t\tthis.button2.Margin =   System.Windows.Forms.Padding(4)\r\n\t\tthis.button2.Name = \"button2\"\r\n\t\tthis.button2.Size =   System.Drawing.Size(122, 34)\r\n\t\tthis.button2.TabIndex = 1\r\n\t\tthis.button2.Text = \"Cancel\"\r\n\t\tthis.button2.Click += this.cancel\r\n\t\tthis.button2.UseVisualStyleBackColor = False\r\n\t\t#\r\n\t\t# label3\r\n\t\t#\r\n\t\tthis.label3.AutoSize =  True\r\n\t\tthis.label3.Font =   System.Drawing.Font(\"Calibri\", 9, System.Drawing.FontStyle.Regular)\r\n\t\tthis.label3.Location =   System.Drawing.Point(443, 295)\r\n\t\tthis.label3.Name = \"label3\"\r\n\t\tthis.label3.Size =   System.Drawing.Size(119, 14)\r\n\t\tthis.label3.TabIndex = 2\r\n\t\tthis.label3.Text = \"(C) Kehinde Ayobade\"\r\n\t\t#\r\n\t\t# comboBox2\r\n\t\t#\r\n\t\tthis.comboBox2.FormattingEnabled =  True\r\n\t\tthis.comboBox2.Location =   System.Drawing.Point(139, 117)\r\n\t\tthis.comboBox2.Margin =   System.Windows.Forms.Padding(4)\r\n\t\tthis.comboBox2.Name = \"Northings\"\r\n\t\tthis.comboBox2.Size =   System.Drawing.Size(207, 27)\r\n\t\tthis.comboBox2.TabIndex = 0\r\n\t\tthis.comboBox2.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend\r\n\t\tthis.comboBox2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList\r\n\r\n\t\t#\r\n\t\t# comboBox3\r\n\t\t#\r\n\t\tthis.comboBox3.FormattingEnabled =  True\r\n\t\tthis.comboBox3.Location =   System.Drawing.Point(139, 184)\r\n\t\tthis.comboBox3.Margin =   System.Windows.Forms.Padding(4)\r\n\t\tthis.comboBox3.Name = \"Elevations\"\r\n\t\tthis.comboBox3.Size =   System.Drawing.Size(207, 27)\r\n\t\tthis.comboBox3.TabIndex = 0\r\n\t\tthis.comboBox3.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend\r\n\t\tthis.comboBox3.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList\r\n\r\n\t\t#\r\n\t\t# label4\r\n\t\t#\r\n\t\tthis.label4.AutoSize =  True\r\n\t\tthis.label4.Font =   System.Drawing.Font(\"Calibri\", 9, System.Drawing.FontStyle.Regular)\r\n\t\tthis.label4.Location =   System.Drawing.Point(26, 283)\r\n\t\tthis.label4.Name = \"label4\"\r\n\t\tthis.label4.Size =   System.Drawing.Size(202, 28)\r\n\t\tthis.label4.TabIndex = 3\r\n\t\tthis.label4.Text = \"NB: Please note that this works for\\r\\nonly structural foundations category\"\r\n\t\t#\r\n\t\t# Form1\r\n\t\t#\r\n\t\tthis.AcceptButton = this.button1\r\n\t\tthis.AutoScaleDimensions =   System.Drawing.SizeF(8, 18)\r\n\t\tthis.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font\r\n\t\tthis.CancelButton = this.button2\r\n\t\tthis.ClientSize =   System.Drawing.Size(599, 364)\r\n\t\tthis.Controls.Add(this.label4)\r\n\t\tthis.Controls.Add(this.label3)\r\n\t\tthis.Controls.Add(this.button2)\r\n\t\tthis.Controls.Add(this.button1)\r\n\t\tthis.Controls.Add(this.groupBox1)\r\n\t\tthis.Font =   System.Drawing.Font(\"Calibri\", 11.25, System.Drawing.FontStyle.Regular)\r\n\t\tthis.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle\r\n\t\tthis.Margin =   System.Windows.Forms.Padding(3, 4, 3, 4)\r\n\t\tthis.MaximizeBox = False\r\n\t\tthis.MaximumSize =   System.Drawing.Size(599, 364)\r\n\t\tthis.MinimizeBox = False\r\n\t\tthis.MinimumSize =   System.Drawing.Size(599, 364)\r\n\t\tthis.Name = \"Form1\"\r\n\t\tthis.ShowIcon = False\r\n\t\tthis.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen\r\n\t\tthis.Text = \"FOUNDATION COORDINATES\"\r\n\t\tthis.groupBox1.ResumeLayout(False)\r\n\t\tthis.groupBox1.PerformLayout()\r\n\t\tthis.ResumeLayout(False)\r\n\t\tthis.PerformLayout()\r\n\r\n\tdef add_range(this,LST):\r\n\t\tthis.comboBox1.Items.AddRange(LST)\r\n\t\tthis.comboBox2.Items.AddRange(LST)\r\n\t\tthis.comboBox3.Items.AddRange(LST)\r\n\r\n\tdef finish(this,sender,event):\r\n\t\tthis.Finish = this.comboBox1.SelectedItem,this.comboBox2.SelectedItem,this.comboBox3.SelectedItem\r\n\t\tthis.Close()\r\n\r\n\tdef cancel(this,sender,event):\r\n\t\tthis.Cancel = None\r\n\t\tthis.Close()\r\n\r\nform = PileCoordinates()\r\n\r\n#Application.Run(form)\r\n\r\n\r\nOUT = PileCoordinates()",
+      "VariableInputPorts": true,
+      "Id": "da176c4ac7ba4b17acd9dff1e74aee87",
+      "Inputs": [
+        {
+          "Id": "b58b42fdd6fe4bf39865defcbb5561c5",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "4052767abf554b538ba2d40d18d05dc2",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded IronPython script."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
+      "NodeType": "BooleanInputNode",
+      "InputValue": true,
+      "Id": "0fdc245b2d454cc8978d5d3532eccbda",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "a4b52a62a006479eb8da8c690141518f",
+          "Name": "",
+          "Description": "Boolean",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Selection between a true and false."
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "import sys\r\nimport clr\r\nclr.AddReference(\"System.IO\")\r\nclr.AddReference(\"System.Reflection\")\r\nclr.AddReference(\"System.Threading\")\r\nclr.AddReference(\"System.Drawing\")\r\nclr.AddReference(\"System.Windows.Forms\")\r\nclr.AddReference(\"System\")\r\nimport System.IO\r\nimport System.Reflection\r\nimport System.Threading\r\nimport System.Drawing\r\nimport System.Windows.Forms\r\nfrom System.Threading import ApartmentState, Thread, ThreadStart\r\nfrom System import Array, Object\r\nfrom System.Collections.Generic import *\r\nfrom System.Windows.Forms import Application\r\n\r\n\r\nclr.AddReference(\"RevitNodes\")\r\nimport Revit\r\nclr.ImportExtensions(Revit.Elements)\r\nclr.ImportExtensions(Revit.GeometryConversion)\r\n\r\nclr.AddReference(\"RevitServices\")\r\nimport RevitServices\r\nfrom RevitServices.Persistence import DocumentManager \r\nfrom RevitServices.Transactions import TransactionManager \r\n\r\nclr.AddReference(\"RevitAPI\")\r\nfrom Autodesk.Revit.DB import *\r\n\r\nclr.AddReference(\"RevitAPIUI\")\r\nfrom Autodesk.Revit.UI import *\r\n\r\nUI_form = IN[0]\r\n\r\ndoc = DocumentManager.Instance.CurrentDBDocument\r\nuiapp = DocumentManager.Instance.CurrentUIApplication \r\napp = uiapp.Application \r\nuidoc = uiapp.ActiveUIDocument\r\n\r\nRevitViews = FilteredElementCollector(doc).OfClass(View).ToElements()\r\nviewTemplates = []\r\nTemplateNames = []\r\n\r\ncollector = FilteredElementCollector(doc, doc.ActiveView.Id)\r\n\r\ndocumentSettings = doc.Settings\r\nCatGroups = documentSettings.Categories\r\n\r\nFdnELems = collector.OfCategory(BuiltInCategory.OST_StructuralFoundation).ToElements()\r\n\r\nlocations = []\r\npositions = []\r\nProjectLocation = doc.ActiveProjectLocation\r\n\r\nxCoord = []\r\nyCoord = []\r\nzCoord = []\r\n\r\n\r\nfor elem in FdnELems:\r\n\tif hasattr(elem.Location, \"Point\"):\r\n\t\tlocations.append(elem.Location.Point)\r\n\t\tpositions = ProjectLocation.GetProjectPosition(elem.Location.Point)\r\n\t\t#for pos in Positions:\r\n\t\txCoord.append(positions.EastWest)\r\n\t\tyCoord.append(positions.NorthSouth)\r\n\t\tzCoord.append(positions.Elevation)\r\n\r\n\r\n#pSet = [elems.Parameters for elems in FdnELems]\r\nAllCategories = []\r\nAllParameters = []\r\nAllParaInfo = []\r\n\r\nfor c in CatGroups:\r\n\tif c.AllowsBoundParameters:\r\n\t\tAllCategories.append(c.Name)\r\n\r\n#for elem in FdnELems:\r\nfor para in FdnELems[0].Parameters:\r\n\tAllParameters.append(para.ToString())\r\n\tAllParaInfo.append(para.Definition.Name)\r\n\r\n#print(sorted(AllParaInfo))\r\nLST = AllParaInfo\r\nLST_array = Array[Object](LST)\r\nUI_form.add_range(LST_array)\r\n\r\n#Application.Run(UI_form)\r\n\r\nUI_form.ShowDialog()\r\n\r\ntry:\r\n\ttry:\r\n\t\tif UI_form.Finish != None:\r\n\t\t\tX_Easting = UI_form.Finish[0]\r\n\t\t\tY_Northing = UI_form.Finish[1]\r\n\t\t\tZ_Elevation = UI_form.Finish[2]\r\n\t\t\tOUT = \"Run Complete\"\r\n\t\telif UI_form.Finish[0] == None:\r\n\t\t\tOUT = \"Failed, no Inputs\"\r\n\texcept: \r\n\t\tUI_form.Cancel or UI_form.Finish\r\n\t\tOUT = \"Run Complete\"\r\nexcept Exception:\r\n\tUI_form.Close()\r\n\tOUT = \"Failed, no Inputs\"\r\n\r\n\r\n#Application.Exit()\r\n\r\n\r\ntransaction = Transaction(doc, 'Coordinates')\r\ntransaction.Start()\r\n\r\ntry:\r\n\tfor elem,xData,yData,zData in zip(FdnELems,xCoord,yCoord,zCoord):\r\n\t\tX_Data = elem.GetParameters(X_Easting)\r\n\t\tfor newX in X_Data: newX.Set(xData)\r\n\t\tY_Data = elem.GetParameters(Y_Northing)\r\n\t\tfor newY in Y_Data: newY.Set(yData)\r\n\t\tZ_Data = elem.GetParameters(Z_Elevation)\r\n\t\tfor newZ in Z_Data: newZ.Set(zData)\r\nexcept:\r\n\tpass\r\ntransaction.Commit()\r\n",
+      "VariableInputPorts": true,
+      "Id": "e5d3fe52c2754dbca26acbccb9088bfd",
+      "Inputs": [
+        {
+          "Id": "eb28ff0eeacd41fd855c8e9811d1764a",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "73538ae3ba9c4018854904a69ef15313",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded IronPython script."
+    }
+  ],
+  "Connectors": [
+    {
+      "Start": "4052767abf554b538ba2d40d18d05dc2",
+      "End": "eb28ff0eeacd41fd855c8e9811d1764a",
+      "Id": "828fb4cf455441c6b450f2f841d6bef0"
+    },
+    {
+      "Start": "a4b52a62a006479eb8da8c690141518f",
+      "End": "b58b42fdd6fe4bf39865defcbb5561c5",
+      "Id": "22e29084b29e4001af6a2c45f7a828bb"
+    }
+  ],
+  "Dependencies": [],
+  "NodeLibraryDependencies": [],
+  "Bindings": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 1.0,
+      "HasRunWithoutCrash": true,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "2.6.1.8786",
+      "RunType": "Manual",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "Background Preview",
+      "EyeX": -17.0,
+      "EyeY": 24.0,
+      "EyeZ": 50.0,
+      "LookX": 12.0,
+      "LookY": -13.0,
+      "LookZ": -58.0,
+      "UpX": 0.0,
+      "UpY": 1.0,
+      "UpZ": 0.0
+    },
+    "NodeViews": [
+      {
+        "ShowGeometry": true,
+        "Name": "Python Script: UI Form",
+        "Id": "da176c4ac7ba4b17acd9dff1e74aee87",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 324.726531342755,
+        "Y": 278.60508196548653
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Refresh Script",
+        "Id": "0fdc245b2d454cc8978d5d3532eccbda",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 79.726531342754981,
+        "Y": 278.60508196548653
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Python Script: Command",
+        "Id": "e5d3fe52c2754dbca26acbccb9088bfd",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 622.72653134275492,
+        "Y": 278.60508196548653
+      }
+    ],
+    "Annotations": [],
+    "X": -55.800888382728317,
+    "Y": -118.6556738849572,
+    "Zoom": 0.91726488981185961
+  }
+}

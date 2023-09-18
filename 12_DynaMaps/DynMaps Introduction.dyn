@@ -1,0 +1,502 @@
+{
+  "Uuid": "e6e05794-15d6-4afb-bcbd-49263bb94319",
+  "IsCustomNode": false,
+  "Description": "",
+  "Name": "DynMaps Introduction",
+  "ElementResolver": {
+    "ResolutionMap": {}
+  },
+  "Inputs": [],
+  "Outputs": [],
+  "Nodes": [
+    {
+      "ConcreteType": "DynaMapsNodesZT.DynaMapsNodesZT.LiveFootPrintAsSurfaceNodeModel, DynaMapsNodesZT",
+      "NodeType": "ExtensionNode",
+      "Id": "8357b6491fc5496783817f166566cbdd",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "da159545e68f408191cc41f011b77482",
+          "Name": "Surfaces",
+          "Description": "Building FootPrints As Surfaces",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "aba48334880440a88d9549a99018b886",
+          "Name": "Elevations",
+          "Description": "Building Elevations",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Outputs the foorprints of the buildings sent from the DynaMaps view extension as surfaces."
+    },
+    {
+      "ConcreteType": "DynaMapsNodesZT.DynaMapsNodesZT.LiveRoadsAsPolyCurvesNodeModel, DynaMapsNodesZT",
+      "_ComboBoxValue": "/primary/motorway/residential/road/secondary/tertiary/",
+      "comboBoxValue": "/primary/motorway/residential/road/secondary/tertiary/",
+      "NodeType": "ExtensionNode",
+      "Id": "63770225920447bea1d9ed262a0ba982",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "e6be6edde3984ae2b4dd1203d91c4195",
+          "Name": "Roads PolyCurves",
+          "Description": "Roads of selected type and area",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Outputs roads of the selected type area in DynaMaps view extension as polycurves. Check out https://wiki.openstreetmap.org/wiki/Key:highway for informations about road types in OSM."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
+      "NodeType": "BooleanInputNode",
+      "InputValue": true,
+      "Id": "c951f93349d245d4926e59cc5006aaab",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "2ae77cff7eba40bb8dd849fbd7ceaa3a",
+          "Name": "",
+          "Description": "Boolean",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Selection between a true and false."
+    },
+    {
+      "ConcreteType": "DynaMapsNodesZT.DynaMapsNodesZT.LiveTopoMeshNodeModel, DynaMapsNodesZT",
+      "NodeType": "ExtensionNode",
+      "Id": "04446bc307464288a47af3b8b5a730b3",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "f1b5633da8324401b9ac593c51f60d52",
+          "Name": "Topo PolySurface",
+          "Description": "Topography Polysurface of selected area",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Outputs topography mesh of the selected area in DynaMaps view extension."
+    },
+    {
+      "ConcreteType": "DynaMapsNodesZT.DynaMapsNodesZT.ProjectBuildingsOnTopoNodeModel, DynaMapsNodesZT",
+      "NodeType": "ExtensionNode",
+      "Id": "35b5187c84e24b199c32ded58f7f4dfd",
+      "Inputs": [
+        {
+          "Id": "abb23365bea048bcbf46b9b0d61e8283",
+          "Name": "FootPrint Surfaces",
+          "Description": "DynaMaps obtained building footprints as surfaces",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "791cfe6720944b2681bbe4acf3f71b07",
+          "Name": "Building Elevations",
+          "Description": "DynaMaps obtained building elevations",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "0cfd23995926415b9526aa2f756dfe03",
+          "Name": "Topo Poly",
+          "Description": "DynaMaps obtained Topo as PolySurface",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "f57e2b3d2ee846d38007e0b8f8aeb546",
+          "Name": "CropToTopo?",
+          "Description": "Adjust buildings to the topography square? Default value : true",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "300882b86aa34055a06461320979527b",
+          "Name": "Solids",
+          "Description": "Building Solids",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Creates Building Geometry from DynaMaps obtained data."
+    },
+    {
+      "ConcreteType": "DynaMapsNodesZT.DynaMapsNodesZT.RoadsAsSurfaceNodeModel, DynaMapsNodesZT",
+      "NodeType": "ExtensionNode",
+      "Id": "0bc9c7ff6a1d42c58fb215a421e1f038",
+      "Inputs": [
+        {
+          "Id": "de09f171386343048e2d04a30e620e3b",
+          "Name": "Roads PolyCurves",
+          "Description": "DynaMaps obtained Roads Polycurves",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "2c4f9816f5724a7dbc153787b969b10e",
+          "Name": "Roads Width",
+          "Description": "Width to apply to the roads",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "ddf2d534d5304ef4be57062f85e2419a",
+          "Name": "Roads Surface",
+          "Description": "Roads As Surface",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Creates a surface from DynaMaps generated Roads PolyCurves."
+    },
+    {
+      "ConcreteType": "DynaMapsNodesZT.DynaMapsNodesZT.ProjectRoadsOnTopoNodeModel, DynaMapsNodesZT",
+      "NodeType": "ExtensionNode",
+      "Id": "e96a3695a94842d2980527baa2c224f4",
+      "Inputs": [
+        {
+          "Id": "206b0262179545cda1fc1d1749834fc7",
+          "Name": "Topo PolySurface",
+          "Description": "DynaMaps obtained Topo as PolySurface",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "955e443c787545828c1e250d41af872d",
+          "Name": "Roads Surface",
+          "Description": "DynaMaps obtained Roads as Surface",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "5d9d7cd09c3142a48df168d1dfaa3333",
+          "Name": "Projected Road",
+          "Description": "Projected road as PolySurface",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "a87e76ba307745a1a2a5f67da3f00ed9",
+          "Name": "Trimmed Topo",
+          "Description": "Trimmed Topography as PolySurface",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Projects the roads surface onto the DynaMaps generated topo PolySurface."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "NodeType": "CodeBlockNode",
+      "Code": "7;",
+      "Id": "7bee72314ece4e7fb9af3fa64609ca5f",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "cea6278f85be490d89e20be33c47ddd2",
+          "Name": "",
+          "Description": "Value of expression at line 1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly"
+    },
+    {
+      "ConcreteType": "DataShapesZT.DataShapesZT.GeomPreviewNodeModel, DataShapesZT",
+      "SliderValue": 255.0,
+      "rValue": "255",
+      "gValue": "148",
+      "bValue": "67",
+      "NodeType": "ExtensionNode",
+      "Id": "d859296dd3ab4d94b56fbfc137c06433",
+      "Inputs": [
+        {
+          "Id": "a1ef15d2c7c94ee4b1a5d8da954ba8f2",
+          "Name": "Geometry",
+          "Description": "Input Geometry",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "75b4ca0abbc542a893ae00c0fc91fc96",
+          "Name": "GeometryColor",
+          "Description": "Display Geometry",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "UI Node to customize geometry previews."
+    }
+  ],
+  "Connectors": [
+    {
+      "Start": "da159545e68f408191cc41f011b77482",
+      "End": "abb23365bea048bcbf46b9b0d61e8283",
+      "Id": "dd2b92dc744044ea82a790844a487426"
+    },
+    {
+      "Start": "aba48334880440a88d9549a99018b886",
+      "End": "791cfe6720944b2681bbe4acf3f71b07",
+      "Id": "1ad093294e724b8cbab0d7a5424f2ad5"
+    },
+    {
+      "Start": "e6be6edde3984ae2b4dd1203d91c4195",
+      "End": "de09f171386343048e2d04a30e620e3b",
+      "Id": "b20812a583b4423f89ef95000659d5f1"
+    },
+    {
+      "Start": "2ae77cff7eba40bb8dd849fbd7ceaa3a",
+      "End": "f57e2b3d2ee846d38007e0b8f8aeb546",
+      "Id": "c1b3709af4e241029cf06505bc69e602"
+    },
+    {
+      "Start": "f1b5633da8324401b9ac593c51f60d52",
+      "End": "0cfd23995926415b9526aa2f756dfe03",
+      "Id": "6289175f58644179b74bdbce6b610c6f"
+    },
+    {
+      "Start": "f1b5633da8324401b9ac593c51f60d52",
+      "End": "206b0262179545cda1fc1d1749834fc7",
+      "Id": "4572ffdebc6d4c76a847c50821bc00ac"
+    },
+    {
+      "Start": "300882b86aa34055a06461320979527b",
+      "End": "a1ef15d2c7c94ee4b1a5d8da954ba8f2",
+      "Id": "5d99916a27c4472980a690ce4cf49ec7"
+    },
+    {
+      "Start": "ddf2d534d5304ef4be57062f85e2419a",
+      "End": "955e443c787545828c1e250d41af872d",
+      "Id": "f879ff865c814f9fa92491c12150820e"
+    },
+    {
+      "Start": "cea6278f85be490d89e20be33c47ddd2",
+      "End": "2c4f9816f5724a7dbc153787b969b10e",
+      "Id": "4dc08efa5aad4537823b3e8b806ad746"
+    }
+  ],
+  "Dependencies": [],
+  "NodeLibraryDependencies": [
+    {
+      "Name": "DynaMaps",
+      "Version": "2019.2.21",
+      "ReferenceType": "Package",
+      "Nodes": [
+        "8357b6491fc5496783817f166566cbdd",
+        "63770225920447bea1d9ed262a0ba982",
+        "04446bc307464288a47af3b8b5a730b3",
+        "35b5187c84e24b199c32ded58f7f4dfd",
+        "0bc9c7ff6a1d42c58fb215a421e1f038",
+        "e96a3695a94842d2980527baa2c224f4"
+      ]
+    },
+    {
+      "Name": "Data-Shapes",
+      "Version": "2022.2.96",
+      "ReferenceType": "Package",
+      "Nodes": [
+        "d859296dd3ab4d94b56fbfc137c06433"
+      ]
+    }
+  ],
+  "Thumbnail": "",
+  "GraphDocumentationURL": null,
+  "ExtensionWorkspaceData": [
+    {
+      "ExtensionGuid": "28992e1d-abb9-417f-8b1b-05e053bee670",
+      "Name": "Properties",
+      "Version": "2.12",
+      "Data": {}
+    }
+  ],
+  "Author": "",
+  "Linting": {
+    "activeLinter": "None",
+    "activeLinterId": "7b75fb44-43fd-4631-a878-29f4d5d8399a",
+    "warningCount": 0,
+    "errorCount": 0
+  },
+  "Bindings": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 1.0,
+      "HasRunWithoutCrash": true,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "2.12.0.5650",
+      "RunType": "Manual",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "Background Preview",
+      "EyeX": 1701.011962890625,
+      "EyeY": 1999.14208984375,
+      "EyeZ": 941.54559326171875,
+      "LookX": -1550.567138671875,
+      "LookY": -2245.895751953125,
+      "LookZ": -696.50714111328125,
+      "UpX": -0.592426598072052,
+      "UpY": 0.76040351390838623,
+      "UpZ": -0.26611530780792236
+    },
+    "NodeViews": [
+      {
+        "ShowGeometry": false,
+        "Name": "BuildingFootPrintSurfaces",
+        "Id": "8357b6491fc5496783817f166566cbdd",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 316.45127141395847,
+        "Y": 272.97754852249989
+      },
+      {
+        "ShowGeometry": false,
+        "Name": "RoadsAsPolycurves",
+        "Id": "63770225920447bea1d9ed262a0ba982",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 316.45127141395847,
+        "Y": 804.9775485225
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Boolean",
+        "Id": "c951f93349d245d4926e59cc5006aaab",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 316.45127141395847,
+        "Y": 499.9775485225
+      },
+      {
+        "ShowGeometry": false,
+        "Name": "TopoPolySurface",
+        "Id": "04446bc307464288a47af3b8b5a730b3",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 316.45127141395847,
+        "Y": 583.97754852249977
+      },
+      {
+        "ShowGeometry": false,
+        "Name": "ProjectBuildingsOnTopo",
+        "Id": "35b5187c84e24b199c32ded58f7f4dfd",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 735.45127141395847,
+        "Y": 470.97754852249989
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "RoadsAsSurface",
+        "Id": "0bc9c7ff6a1d42c58fb215a421e1f038",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 735.45127141395847,
+        "Y": 770.97754852249989
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "ProjectRoadsOnTopo",
+        "Id": "e96a3695a94842d2980527baa2c224f4",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 1189.4512714139585,
+        "Y": 744.97754852249989
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Code Block",
+        "Id": "7bee72314ece4e7fb9af3fa64609ca5f",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 316.45127141395847,
+        "Y": 1064.1908818558331
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "GeomPreview",
+        "Id": "d859296dd3ab4d94b56fbfc137c06433",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 1189.4512714139585,
+        "Y": 470.97754852249989
+      }
+    ],
+    "Annotations": [],
+    "X": 141.25528640858874,
+    "Y": -328.53047349155986,
+    "Zoom": 0.80258150843805964
+  }
+}

@@ -1,0 +1,342 @@
+{
+  "Uuid": "b8f90efa-3e22-4ecd-b6af-50003d651402",
+  "IsCustomNode": false,
+  "Description": null,
+  "Name": "Extract Solid and Faces Geometry",
+  "ElementResolver": {
+    "ResolutionMap": {}
+  },
+  "Inputs": [],
+  "Outputs": [],
+  "Nodes": [
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "# Load the Python Standard and DesignScript Libraries\r\nimport sys\r\nimport clr\r\nclr.AddReference('ProtoGeometry')\r\nfrom Autodesk.DesignScript.Geometry import *\r\n\r\nclr.AddReference(\"RevitNodes\")\r\nimport Revit\r\nclr.ImportExtensions(Revit.Elements)\r\nclr.ImportExtensions(Revit.GeometryConversion)\r\n\r\nclr.AddReference(\"RevitServices\")\r\nimport RevitServices\r\nfrom RevitServices.Persistence import DocumentManager \r\nfrom RevitServices.Transactions import TransactionManager \r\n\r\nclr.AddReference(\"RevitAPI\")\r\nfrom Autodesk.Revit.DB import *\r\nfrom Autodesk.Revit.Creation import ItemFactoryBase\r\n\r\nclr.AddReference(\"RevitAPIUI\")\r\nfrom Autodesk.Revit.UI import *\r\n\r\ndoc = DocumentManager.Instance.CurrentDBDocument\r\nuiapp = DocumentManager.Instance.CurrentUIApplication \r\napp = uiapp.Application \r\nuidoc = uiapp.ActiveUIDocument\r\n\r\nTransactionManager.Instance.EnsureInTransaction(doc)\r\n\r\noptions = Options()\r\noptions.ComputeReferences = True\r\noptions.View = doc.ActiveView\r\n\r\nselection = uidoc.Selection\r\nselectedIds = selection.GetElementIds()\r\n\r\ngeomElements = []\r\n\r\ntry:\r\n\t\r\n\tif len(selectedIds) == 0:\r\n\t\tTaskDialog.Show(\"Select Elements\",\"You haven't selected any elements.\")\r\n\telse:\r\n\t\tinfo = \"Ids of selected elements in the document are: \"\r\n\t\tfor id in selectedIds:\r\n\t\t\tinfo += \"\\n\" + (id.IntegerValue).ToString()\r\n\t\t\telem = doc.GetElement(id)\r\n\t\t\tgeomElem = elem.get_Geometry(options)\r\n\t\t\t\r\n\t\t\tfor y in geomElem:\r\n\t\t\t\tif y.GetType() == GeometryInstance and bool(y.GetInstanceGeometry())==True:\r\n\t\t\t\t\tgeoInstance = y.GetInstanceGeometry()\r\n\t\t\t\t\tfor x in geoInstance:\r\n\t\t\t\t\t\tif x.GetType() == Solid and x.Volume !=0:\r\n\t\t\t\t\t\t\tgeomElements.append(x)\r\n\t\t\t\t\t\t\t\r\n\t\t\t\telif y.GetType() == Solid and y.Volume !=0:\r\n\t\t\t\t\tgeomElements.append(y)\r\n\t\t\t\t\t\t\r\nexcept Exception as E:\r\n\tTaskDialog.Show(\"Element Geometry\", E.ToString())\r\n\r\nRevitSolids = []\r\nDynamoSolids = []\r\nsolidVolumes = []\r\nRevitFaces = []\r\nDynamoFaces = []\r\n\r\nfor geom in geomElements:\r\n\tRevitSolids.append(geom)\r\n\tDynamoSolids.append(geom.ToProtoType())\r\n\tsolidVolumes.append(round(0.0283168 * geom.Volume,3))\r\n\tRevitFaces.append(geom.Faces)\r\n\r\nfor faceArray in RevitFaces:\r\n\tfaces = []\r\n\tfor face in faceArray:\r\n\t\tfaces.append(face.ToProtoType()[0])\r\n\tDynamoFaces.append(faces)\r\n\r\nXrefSurface = []\r\nYrefSurface = []\r\nXSurface = []\r\nYSurface = []\r\n\r\nfor RevfaceList,DynfaceList in zip(RevitFaces,DynamoFaces):\r\n\tXrevFace = []\r\n\tYrevFace = []\r\n\tXdynFace = []\r\n\tYdynFace = []\r\n\tXFacePoint = []\r\n\tYFacePoint = []\r\n\t\r\n\tfor Revface,Dynface in zip(RevfaceList,DynfaceList):\r\n\t\tif abs(round(Revface.FaceNormal.Normalize().DotProduct(XYZ.BasisX))) == 1:\r\n\t\t\tXdynFace.append(Dynface)\r\n\t\t\tXrevFace.append(Revface)\r\n\t\telif abs(round(Revface.FaceNormal.Normalize().DotProduct(XYZ.BasisY))) == 1:\r\n\t\t\tYdynFace.append(Dynface)\r\n\t\t\tYrevFace.append(Revface)\r\n\t\t\t\t\t\r\n\tXSurface.append(XdynFace)\r\n\tYSurface.append(YdynFace)\r\n\tXrefSurface.append(XrevFace)\r\n\tYrefSurface.append(YrevFace)\r\n\r\nxPoint = []\r\nyPoint = []\r\nxOffset = 500/304.8\r\n\r\nLINEx = []\r\nrefers = []\r\n# Get the Origin point for X face \r\nfor i,xS in zip(range(0,XrefSurface.Count),XrefSurface):\r\n\tREFS = []\r\n\tfor xRef in xS:\r\n\t\tLINE = []\r\n\t\tX = []\r\n\t\tY = []\r\n\t\tpt = XrefSurface[i][0].Origin\r\n\t\tlineX = Line.CreateBound(pt,XYZ(pt.X+2,pt.Y,pt.Z)).CreateOffset(xOffset,XrefSurface[i][0].XVector)\r\n\t\t\r\n\t\trefArray = ReferenceArray()\r\n\t\t\r\n\t\tLINE.append(lineX)\r\n\t\tREFS.append(xRef.Reference)\r\n\t\trefArray.Append(xRef.Reference)\r\n\t\tX.append(pt.ToPoint())\r\n\t\t\r\n\trefers.append(REFS)\r\n\txPoint.append(X)\r\n\tLINEx.append(LINE)\r\n\r\n\r\nREFARRAY = ReferenceArray()\r\n\r\nDIMLINE = LINEx[0][0]\r\n\r\nREFARRAY.Append(refers[0][0])\r\nREFARRAY.Append(refers[0][1])\r\n\r\n\r\nDIM = doc.Create.NewDimension(doc.ActiveView, DIMLINE, REFARRAY)\r\n\r\n\r\nTransactionManager.Instance.TransactionTaskDone()\r\n\r\nOUT = xPoint,XSurface,LINEx,refers,DIM",
+      "VariableInputPorts": true,
+      "Id": "300f9526cc814b809ae2c93a1b353891",
+      "Inputs": [
+        {
+          "Id": "ca1a832147624f869764fa8bc68e74bf",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "1912dbdbb8664aba8a9b5461277edeeb",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded IronPython script."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
+      "NodeType": "BooleanInputNode",
+      "InputValue": true,
+      "Id": "92594dbed898420ea048fafe0d8065ac",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "1b24eba90d644fcda733ac8b44fe2cec",
+          "Name": "",
+          "Description": "Boolean",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Selection between a true and false."
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "# Load the Python Standard and DesignScript Libraries\r\nimport sys\r\nimport clr\r\nclr.AddReference('ProtoGeometry')\r\nfrom Autodesk.DesignScript.Geometry import *\r\n\r\nclr.AddReference(\"RevitNodes\")\r\nimport Revit\r\nclr.ImportExtensions(Revit.Elements)\r\nclr.ImportExtensions(Revit.GeometryConversion)\r\n\r\nclr.AddReference(\"RevitServices\")\r\nimport RevitServices\r\nfrom RevitServices.Persistence import DocumentManager \r\nfrom RevitServices.Transactions import TransactionManager \r\n\r\nclr.AddReference(\"RevitAPI\")\r\nfrom Autodesk.Revit.DB import *\r\nfrom Autodesk.Revit.Creation import ItemFactoryBase\r\n\r\nclr.AddReference(\"RevitAPIUI\")\r\nfrom Autodesk.Revit.UI import *\r\n\r\nclr.AddReference(\"System\")\r\nfrom System import Array, Object\r\n\r\n\r\ndoc = DocumentManager.Instance.CurrentDBDocument\r\nuiapp = DocumentManager.Instance.CurrentUIApplication \r\napp = uiapp.Application \r\nuidoc = uiapp.ActiveUIDocument\r\n\r\n\r\nUI = IN[0]\r\n\r\ndef tolist(obj1):\r\n\tif hasattr(obj1,\"__iter__\"): return obj1\r\n\telse: return [obj1]\r\n\r\ndef hasInd(l1, i):\r\n\ttry:\r\n\t\tl1[i]\r\n\t\treturn  True\r\n\texcept:\r\n\t\treturn  False\r\n\t\t\r\nclass NameWrap(Object):\r\n\tdef __init__(this, obj1, name1 = None):\r\n\t\tthis.obj = obj1\r\n\t\tif obj1 == None: name1 = \"null\"\r\n\t\tif name1 == None and obj1 != None: this.name = obj1.ToString()\r\n\t\telse: this.name = name1\r\n\tdef ToString(this):\r\n\t\treturn this.name\r\n\r\n\r\nsettings = doc.Settings\r\n\r\ncategories = settings.Categories\r\n\r\ncollector = FilteredElementCollector(doc).OfClass(DimensionType).ToElements()\r\n\r\ndimensionTypes = []\r\ndimNames = []\r\n\r\nfor dim in collector:\r\n\tif dim.FamilyName == \"Linear Dimension Style\" and dim.LookupParameter(\"Type Name\").AsString() != \"\":\r\n\t\tdimensionTypes.append(dim)\r\n\t\tdimNames.append(dim.LookupParameter(\"Type Name\").AsString())\r\n\r\ndimensionTypes = tolist([dimType for _,dimType in sorted(zip(dimNames,dimensionTypes))])\r\n\r\ndimNames = tolist(sorted(dimNames))\r\n\r\ncategoryNames = sorted([cat.Name for cat in categories if cat.AllowsBoundParameters])\r\n\r\nfor i in xrange(len(dimensionTypes)):\r\n\tname1 = None\r\n\tif hasInd(dimNames, i): name1 = dimNames[i]\r\n\tdimensionTypes[i] = NameWrap(dimensionTypes[i], name1)\r\n\r\ncat_Array = Array[Object](categoryNames)\r\ndim_Array = Array[Object](dimensionTypes)\r\n\r\nUI.Select_Category.Items.AddRange(cat_Array)\r\nUI.Dimension_Style.Items.AddRange(dim_Array)\r\n\r\n\r\nUI.ShowDialog()\r\n\r\nif UI.DialogResult.ToString() == \"OK\" and bool(UI.Select_Category.SelectedItem) != False:\r\n\r\n\tclass MySelectionFilter(Selection.ISelectionFilter):\r\n\t\tdef __init__(self):\r\n\t\t\tpass\r\n\t\tdef AllowElement(self, element):\r\n\t\t\tif element.Category.Name == UI.Select_Category.SelectedItem:\r\n\t\t\t\treturn True\r\n\t\t\telse:\r\n\t\t\t\treturn False\r\n\t\tdef AllowReference(self, element):\r\n\t\t\treturn False\r\n\t\t\t\r\n\tmessage = \"Please Select {} Elements in current view\"\r\n\t\r\n\tTaskDialog.Show(\"Select Elements\", message.format(UI.Select_Category.SelectedItem))\r\n\tSel_filter = MySelectionFilter()\r\n\tobj_type = Selection.ObjectType.Element\r\n\t\r\n\tselection = []\r\n\t\r\n\tfor elemRef in uidoc.Selection.PickObjects(obj_type,Sel_filter,\"Select Element(s)\"):\r\n\t\tselection.append(Document.GetElement(doc,elemRef))\r\n\t\t\r\n\tOUT = UI.Dimension_Style.SelectedItem.obj, selection\r\n\r\nelif UI.DialogResult.ToString() == \"Cancel\" or bool(UI.Select_Category.SelectedItem) == False or bool(UI.Dimension_Style.SelectedItem) == False:\r\n\tTaskDialog.Show(\"Auto Dimension Error\", \"Missing one or more data; Please fill up dialog box\")\r\n\tOUT = \"Missing one or more data; please fill up dialog box\"\r\n\r\n\r\n\r\n\r\n\r\nTransactionManager.Instance.EnsureInTransaction(doc)\r\n\r\nTransactionManager.Instance.TransactionTaskDone()\r\n",
+      "VariableInputPorts": true,
+      "Id": "9d4bac8f44494595aea1cbe01fcf9f90",
+      "Inputs": [
+        {
+          "Id": "512a8f8d75b3467695606c1f1223d686",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "3ac597929faf4834969a7be83fe7ac97",
+          "Name": "IN[1]",
+          "Description": "Input #1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "42dea2ae000a4854aace6a6cca76d9c4",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded IronPython script."
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "import sys\r\nimport clr\r\nclr.AddReference(\"System.IO\")\r\nclr.AddReference(\"System.Reflection\")\r\nclr.AddReference(\"System.Threading\")\r\nclr.AddReference(\"System.Drawing\")\r\nclr.AddReference(\"System.Windows.Forms\")\r\nclr.AddReference(\"System\")\r\nimport System.IO\r\nimport System.Reflection\r\nimport System.Threading\r\nimport System.Drawing\r\nimport System.Windows.Forms\r\nfrom System.Threading import ApartmentState, Thread, ThreadStart\r\nfrom System import Array, Object\r\nfrom System.Collections.Generic import *\r\n\r\ndef tolist(obj1):\r\n\tif hasattr(obj1,\"__iter__\"): return obj1\r\n\telse: return [obj1]\r\n\r\ndef hasInd(l1, i):\r\n\ttry:\r\n\t\tl1[i]\r\n\t\treturn  True\r\n\texcept:\r\n\t\treturn  False\r\n\r\nclass NameWrap(Object):\r\n\tdef __init__(this, obj1, name1 = None):\r\n\t\tthis.obj = obj1\r\n\t\tif obj1 == None: name1 = \"null\"\r\n\t\tif name1 == None and obj1 != None: this.name = obj1.ToString()\r\n\t\telse: this.name = name1\r\n\tdef ToString(this):\r\n\t\treturn this.name\r\n\r\nclass AutoDimension(System.Windows.Forms.Form):\r\n    def __init__(this):\r\n        this.Select_Category =  System.Windows.Forms.ComboBox()\r\n        this.label1 =  System.Windows.Forms.Label()\r\n        this.Dimension_Style =  System.Windows.Forms.ComboBox()\r\n        this.label2 =  System.Windows.Forms.Label()\r\n        this.GridDimOffset =  System.Windows.Forms.NumericUpDown()\r\n        this.label3 =  System.Windows.Forms.Label()\r\n        this.label4 =  System.Windows.Forms.Label()\r\n        this.EdgeDimOffset =  System.Windows.Forms.NumericUpDown()\r\n        this.button1 =  System.Windows.Forms.Button()\r\n        this.button2 =  System.Windows.Forms.Button()\r\n        this.label5 =  System.Windows.Forms.Label()\r\n        this.label6 =  System.Windows.Forms.Label()\r\n        this.SuspendLayout()\r\n        #\r\n        # Select_Category\r\n        #\r\n        this.Select_Category.FormattingEnabled = True\r\n        this.Select_Category.Location =  System.Drawing.Point(156, 35)\r\n        this.Select_Category.Name = \"Select_Category\"\r\n        this.Select_Category.Size =  System.Drawing.Size(228, 21)\r\n        this.Select_Category.TabIndex = 0\r\n        #\r\n        # label1\r\n        #\r\n        this.label1.AutoSize = True\r\n        this.label1.Location =  System.Drawing.Point(32, 38)\r\n        this.label1.Name = \"label1\"\r\n        this.label1.Size =  System.Drawing.Size(82, 13)\r\n        this.label1.TabIndex = 1\r\n        this.label1.Text = \"Select Category\"\r\n        this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter\r\n        #\r\n        # Dimension_Style\r\n        #\r\n        this.Dimension_Style.FormattingEnabled = True\r\n        this.Dimension_Style.Location =  System.Drawing.Point(156, 77)\r\n        this.Dimension_Style.Name = \"Dimension_Style\"\r\n        this.Dimension_Style.Size =  System.Drawing.Size(228, 21)\r\n        this.Dimension_Style.TabIndex = 0\r\n        #\r\n        # label2\r\n        #\r\n        this.label2.AutoSize = True\r\n        this.label2.Location =  System.Drawing.Point(32, 80)\r\n        this.label2.Name = \"label2\"\r\n        this.label2.Size =  System.Drawing.Size(82, 13)\r\n        this.label2.TabIndex = 1\r\n        this.label2.Text = \"Dimension Style\"\r\n        this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter\r\n        #\r\n        # GridDimOffset\r\n        #\r\n        this.GridDimOffset.Increment =  10\r\n        this.GridDimOffset.Location =  System.Drawing.Point(156, 118)\r\n        this.GridDimOffset.Maximum =  5000\r\n        this.GridDimOffset.Minimum = 200\r\n        this.GridDimOffset.Name = \"GridDimOffset\"\r\n        this.GridDimOffset.Size =  System.Drawing.Size(89, 20)\r\n        this.GridDimOffset.TabIndex = 2\r\n        this.GridDimOffset.Value =  200\r\n        #\r\n        # label3\r\n        #\r\n        this.label3.AutoSize = True\r\n        this.label3.Location =  System.Drawing.Point(32, 120)\r\n        this.label3.Name = \"label3\"\r\n        this.label3.Size =  System.Drawing.Size(109, 13)\r\n        this.label3.TabIndex = 1\r\n        this.label3.Text = \"Grid Dimension Offset\"\r\n        this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter\r\n        #\r\n        # label4\r\n        #\r\n        this.label4.AutoSize = True\r\n        this.label4.Location =  System.Drawing.Point(32, 161)\r\n        this.label4.Name = \"label4\"\r\n        this.label4.Size =  System.Drawing.Size(115, 13)\r\n        this.label4.TabIndex = 1\r\n        this.label4.Text = \"Edge Dimension Offset\"\r\n        this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter\r\n        #\r\n        # EdgeDimOffset\r\n        #\r\n        this.EdgeDimOffset.Increment =  10\r\n        this.EdgeDimOffset.Location =  System.Drawing.Point(156, 159)\r\n        this.EdgeDimOffset.Maximum =  5000\r\n        this.EdgeDimOffset.Minimum =  400\r\n        this.EdgeDimOffset.Name = \"EdgeDimOffset\"\r\n        this.EdgeDimOffset.Size =  System.Drawing.Size(89, 20)\r\n        this.EdgeDimOffset.TabIndex = 2\r\n        this.EdgeDimOffset.Value =  400\r\n        #\r\n        # button1\r\n        #\r\n        this.button1.BackColor = System.Drawing.Color.FromArgb(192, 192, 255)\r\n        this.button1.Location =  System.Drawing.Point(297, 187)\r\n        this.button1.Name = \"button1\"\r\n        this.button1.Size =  System.Drawing.Size(75, 23)\r\n        this.button1.TabIndex = 3\r\n        this.button1.Text = \"OK\"\r\n        this.button1.UseMnemonic = False\r\n        this.button1.UseVisualStyleBackColor = False\r\n        this.button1.DialogResult = System.Windows.Forms.DialogResult.OK\r\n#        this.button1.Click += this.finish\r\n        #\r\n        # button2\r\n        #\r\n        this.button2.BackColor = System.Drawing.Color.FromArgb(255, 192, 192)\r\n        this.button2.Location =  System.Drawing.Point(378, 187)\r\n        this.button2.Name = \"button2\"\r\n        this.button2.Size =  System.Drawing.Size(75, 23)\r\n        this.button2.TabIndex = 3\r\n        this.button2.Text = \"Cancel\"\r\n        this.button2.UseVisualStyleBackColor = False\r\n        this.button2.DialogResult = System.Windows.Forms.DialogResult.Cancel\r\n\r\n        #\r\n        # label5\r\n        #\r\n        this.label5.AutoSize = True\r\n        this.label5.Location =  System.Drawing.Point(251, 120)\r\n        this.label5.Name = \"label5\"\r\n        this.label5.Size =  System.Drawing.Size(29, 13)\r\n        this.label5.TabIndex = 1\r\n        this.label5.Text = \"(mm)\"\r\n        this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter\r\n        #\r\n        # label6\r\n        #\r\n        this.label6.AutoSize = True\r\n        this.label6.Location =  System.Drawing.Point(251, 161)\r\n        this.label6.Name = \"label6\"\r\n        this.label6.Size =  System.Drawing.Size(29, 13)\r\n        this.label6.TabIndex = 1\r\n        this.label6.Text = \"(mm)\"\r\n        this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter\r\n        #\r\n        # Form1\r\n        #\r\n        this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen\r\n        this.AutoScaleDimensions =  System.Drawing.SizeF(6, 13)\r\n        this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font\r\n        this.BackColor = System.Drawing.SystemColors.ControlLight\r\n        this.ClientSize =  System.Drawing.Size(463, 222)\r\n        this.MaximumSize =   System.Drawing.Size(479, 261)\r\n        this.MinimumSize =   System.Drawing.Size(479, 261)\r\n        this.MaximizeBox = False\r\n        this.MinimizeBox = False\r\n        this.Controls.Add(this.button2)\r\n        this.Controls.Add(this.button1)\r\n        this.Controls.Add(this.EdgeDimOffset)\r\n        this.Controls.Add(this.label4)\r\n        this.Controls.Add(this.GridDimOffset)\r\n        this.Controls.Add(this.label6)\r\n        this.Controls.Add(this.label5)\r\n        this.Controls.Add(this.label3)\r\n        this.Controls.Add(this.label2)\r\n        this.Controls.Add(this.label1)\r\n        this.Controls.Add(this.Dimension_Style)\r\n        this.Controls.Add(this.Select_Category)\r\n        this.ForeColor = System.Drawing.SystemColors.ActiveCaptionText\r\n        this.Name = \"Form1\"\r\n        this.ShowIcon = False\r\n        this.Text = \"KennyStruct | Auto Dimension Element to Grid\"\r\n        this.TopMost = True\r\n        this.ResumeLayout(False)\r\n        this.PerformLayout()\r\n\r\n\tdef add_range(this,CAT,DIM):\r\n\t\tthis.Select_Category.Items.AddRange(CAT)\r\n\t\tthis.Dimension_Style.Items.AddRange(DIM)\r\n\r\n\tdef finish(this,sender,event):\r\n\t\tthis.Finish = this.Select_Category.SelectedItem,this.Dimension_Stylethis.SelectedItem\r\n\t\tthis.Close()\r\n\r\n\tdef cancel(this,sender,event):\r\n\t\tthis.Cancel = None\r\n\t\tthis.Close()\r\n\r\n\r\nform = AutoDimension()\r\n\r\n\r\nOUT = AutoDimension()\r\n",
+      "VariableInputPorts": true,
+      "Id": "0cb17c4926ca413e831586785319982c",
+      "Inputs": [
+        {
+          "Id": "92cb375fc9bb432c88ce5b8f58a84c36",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "5780d3fabaf24b319bdc3e1d28e832df",
+          "Name": "IN[1]",
+          "Description": "Input #1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "0af3d9c6283a4b7ca0cb9cf2eda9cebb",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded IronPython script."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "NodeType": "CodeBlockNode",
+      "Code": "x[0];\nx[1];",
+      "Id": "34a8279e891c43b88eca6fb995bf5233",
+      "Inputs": [
+        {
+          "Id": "99ba22495a1a4eb198256e413510fd10",
+          "Name": "x",
+          "Description": "x",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "f79abf9479d546bbad63e1ab1fb3bbaf",
+          "Name": "",
+          "Description": "Value of expression at line 1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "4f56fad55b2048e5ba5a7e7b3c0a74aa",
+          "Name": "",
+          "Description": "Value of expression at line 2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly"
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "import sys\r\nimport clr\r\nclr.AddReference(\"System.IO\")\r\nclr.AddReference(\"System.Reflection\")\r\nclr.AddReference(\"System.Threading\")\r\nclr.AddReference(\"System.Drawing\")\r\nclr.AddReference(\"System.Windows.Forms\")\r\nclr.AddReference(\"System\")\r\nimport System.IO\r\nimport System.Reflection\r\nimport System.Threading\r\nimport System.Drawing\r\nimport System.Windows.Forms\r\nfrom System.Threading import ApartmentState, Thread, ThreadStart\r\nfrom System import Array, Object\r\nfrom System.Collections.Generic import *\r\n\r\nclr.AddReference(\"RevitServices\")\r\nimport RevitServices\r\nfrom RevitServices.Persistence import DocumentManager \r\nfrom RevitServices.Transactions import TransactionManager \r\n\r\nclr.AddReference(\"RevitAPI\")\r\nfrom Autodesk.Revit.DB import *\r\nfrom Autodesk.Revit.Creation import ItemFactoryBase\r\n\r\nclr.AddReference(\"RevitAPIUI\")\r\nfrom Autodesk.Revit.UI import *\r\n\r\n\r\ndef tolist(obj1):\r\n\tif hasattr(obj1,\"__iter__\"): return obj1\r\n\telse: return [obj1]\r\n\r\ndef hasInd(l1, i):\r\n\ttry:\r\n\t\tl1[i]\r\n\t\treturn  True\r\n\texcept:\r\n\t\treturn  False\r\n\r\nclass NameWrap(Object):\r\n\tdef __init__(this, obj1, name1 = None):\r\n\t\tthis.obj = obj1\r\n\t\tif obj1 == None: name1 = \"null\"\r\n\t\tif name1 == None and obj1 != None: this.name = obj1.ToString()\r\n\t\telse: this.name = name1\r\n\tdef ToString(this):\r\n\t\treturn this.name\r\n\r\nclass AutoDimension(System.Windows.Forms.Form):\r\n    def __init__(this):\r\n        this.Select_Category =  System.Windows.Forms.ComboBox()\r\n        this.label1 =  System.Windows.Forms.Label()\r\n        this.Dimension_Style =  System.Windows.Forms.ComboBox()\r\n        this.label2 =  System.Windows.Forms.Label()\r\n        this.GridDimOffset =  System.Windows.Forms.NumericUpDown()\r\n        this.label3 =  System.Windows.Forms.Label()\r\n        this.label4 =  System.Windows.Forms.Label()\r\n        this.EdgeDimOffset =  System.Windows.Forms.NumericUpDown()\r\n        this.button1 =  System.Windows.Forms.Button()\r\n        this.button2 =  System.Windows.Forms.Button()\r\n        this.label5 =  System.Windows.Forms.Label()\r\n        this.label6 =  System.Windows.Forms.Label()\r\n        this.SuspendLayout()\r\n        #\r\n        # Select_Category\r\n        #\r\n        this.Select_Category.FormattingEnabled = True\r\n        this.Select_Category.Location =  System.Drawing.Point(156, 35)\r\n        this.Select_Category.Name = \"Select_Category\"\r\n        this.Select_Category.Size =  System.Drawing.Size(228, 21)\r\n        this.Select_Category.TabIndex = 0\r\n        #\r\n        # label1\r\n        #\r\n        this.label1.AutoSize = True\r\n        this.label1.Location =  System.Drawing.Point(32, 38)\r\n        this.label1.Name = \"label1\"\r\n        this.label1.Size =  System.Drawing.Size(82, 13)\r\n        this.label1.TabIndex = 1\r\n        this.label1.Text = \"Select Category\"\r\n        this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter\r\n        #\r\n        # Dimension_Style\r\n        #\r\n        this.Dimension_Style.FormattingEnabled = True\r\n        this.Dimension_Style.Location =  System.Drawing.Point(156, 77)\r\n        this.Dimension_Style.Name = \"Dimension_Style\"\r\n        this.Dimension_Style.Size =  System.Drawing.Size(228, 21)\r\n        this.Dimension_Style.TabIndex = 0\r\n        #\r\n        # label2\r\n        #\r\n        this.label2.AutoSize = True\r\n        this.label2.Location =  System.Drawing.Point(32, 80)\r\n        this.label2.Name = \"label2\"\r\n        this.label2.Size =  System.Drawing.Size(82, 13)\r\n        this.label2.TabIndex = 1\r\n        this.label2.Text = \"Dimension Style\"\r\n        this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter\r\n        #\r\n        # GridDimOffset\r\n        #\r\n        this.GridDimOffset.Increment =  10\r\n        this.GridDimOffset.Location =  System.Drawing.Point(156, 118)\r\n        this.GridDimOffset.Maximum =  5000\r\n        this.GridDimOffset.Minimum = 200\r\n        this.GridDimOffset.Name = \"GridDimOffset\"\r\n        this.GridDimOffset.Size =  System.Drawing.Size(89, 20)\r\n        this.GridDimOffset.TabIndex = 2\r\n        this.GridDimOffset.Value =  200\r\n        #\r\n        # label3\r\n        #\r\n        this.label3.AutoSize = True\r\n        this.label3.Location =  System.Drawing.Point(32, 120)\r\n        this.label3.Name = \"label3\"\r\n        this.label3.Size =  System.Drawing.Size(109, 13)\r\n        this.label3.TabIndex = 1\r\n        this.label3.Text = \"Grid Dimension Offset\"\r\n        this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter\r\n        #\r\n        # label4\r\n        #\r\n        this.label4.AutoSize = True\r\n        this.label4.Location =  System.Drawing.Point(32, 161)\r\n        this.label4.Name = \"label4\"\r\n        this.label4.Size =  System.Drawing.Size(115, 13)\r\n        this.label4.TabIndex = 1\r\n        this.label4.Text = \"Edge Dimension Offset\"\r\n        this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter\r\n        #\r\n        # EdgeDimOffset\r\n        #\r\n        this.EdgeDimOffset.Increment =  10\r\n        this.EdgeDimOffset.Location =  System.Drawing.Point(156, 159)\r\n        this.EdgeDimOffset.Maximum =  5000\r\n        this.EdgeDimOffset.Minimum =  400\r\n        this.EdgeDimOffset.Name = \"EdgeDimOffset\"\r\n        this.EdgeDimOffset.Size =  System.Drawing.Size(89, 20)\r\n        this.EdgeDimOffset.TabIndex = 2\r\n        this.EdgeDimOffset.Value =  400\r\n        #\r\n        # button1\r\n        #\r\n        this.button1.BackColor = System.Drawing.Color.FromArgb(192, 192, 255)\r\n        this.button1.Location =  System.Drawing.Point(297, 187)\r\n        this.button1.Name = \"button1\"\r\n        this.button1.Size =  System.Drawing.Size(75, 23)\r\n        this.button1.TabIndex = 3\r\n        this.button1.Text = \"OK\"\r\n        this.button1.UseMnemonic = False\r\n        this.button1.UseVisualStyleBackColor = False\r\n        this.button1.DialogResult = System.Windows.Forms.DialogResult.OK\r\n#        this.button1.Click += this.finish\r\n        #\r\n        # button2\r\n        #\r\n        this.button2.BackColor = System.Drawing.Color.FromArgb(255, 192, 192)\r\n        this.button2.Location =  System.Drawing.Point(378, 187)\r\n        this.button2.Name = \"button2\"\r\n        this.button2.Size =  System.Drawing.Size(75, 23)\r\n        this.button2.TabIndex = 3\r\n        this.button2.Text = \"Cancel\"\r\n        this.button2.UseVisualStyleBackColor = False\r\n        this.button2.DialogResult = System.Windows.Forms.DialogResult.Cancel\r\n\r\n        #\r\n        # label5\r\n        #\r\n        this.label5.AutoSize = True\r\n        this.label5.Location =  System.Drawing.Point(251, 120)\r\n        this.label5.Name = \"label5\"\r\n        this.label5.Size =  System.Drawing.Size(29, 13)\r\n        this.label5.TabIndex = 1\r\n        this.label5.Text = \"(mm)\"\r\n        this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter\r\n        #\r\n        # label6\r\n        #\r\n        this.label6.AutoSize = True\r\n        this.label6.Location =  System.Drawing.Point(251, 161)\r\n        this.label6.Name = \"label6\"\r\n        this.label6.Size =  System.Drawing.Size(29, 13)\r\n        this.label6.TabIndex = 1\r\n        this.label6.Text = \"(mm)\"\r\n        this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter\r\n        #\r\n        # Form1\r\n        #\r\n        this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen\r\n        this.AutoScaleDimensions =  System.Drawing.SizeF(6, 13)\r\n        this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font\r\n        this.BackColor = System.Drawing.SystemColors.ControlLight\r\n        this.ClientSize =  System.Drawing.Size(463, 222)\r\n        this.MaximumSize =   System.Drawing.Size(479, 261)\r\n        this.MinimumSize =   System.Drawing.Size(479, 261)\r\n        this.MaximizeBox = False\r\n        this.MinimizeBox = False\r\n        this.Controls.Add(this.button2)\r\n        this.Controls.Add(this.button1)\r\n        this.Controls.Add(this.EdgeDimOffset)\r\n        this.Controls.Add(this.label4)\r\n        this.Controls.Add(this.GridDimOffset)\r\n        this.Controls.Add(this.label6)\r\n        this.Controls.Add(this.label5)\r\n        this.Controls.Add(this.label3)\r\n        this.Controls.Add(this.label2)\r\n        this.Controls.Add(this.label1)\r\n        this.Controls.Add(this.Dimension_Style)\r\n        this.Controls.Add(this.Select_Category)\r\n        this.ForeColor = System.Drawing.SystemColors.ActiveCaptionText\r\n        this.Name = \"Form1\"\r\n        this.ShowIcon = False\r\n        this.Text = \"KennyStruct | Auto Dimension Element to Grid\"\r\n        this.TopMost = True\r\n        this.ResumeLayout(False)\r\n        this.PerformLayout()\r\n\r\n\tdef add_range(this,CAT,DIM):\r\n\t\tthis.Select_Category.Items.AddRange(CAT)\r\n\t\tthis.Dimension_Style.Items.AddRange(DIM)\r\n\r\n\tdef finish(this,sender,event):\r\n\t\tthis.Finish = this.Select_Category.SelectedItem,this.Dimension_Stylethis.SelectedItem\r\n\t\tthis.Close()\r\n\r\n\tdef cancel(this,sender,event):\r\n\t\tthis.Cancel = None\r\n\t\tthis.Close()\r\n\r\n\r\nUI = AutoDimension()\r\n\r\n\r\ndoc = DocumentManager.Instance.CurrentDBDocument\r\nuiapp = DocumentManager.Instance.CurrentUIApplication \r\napp = uiapp.Application \r\nuidoc = uiapp.ActiveUIDocument\r\n\r\n\r\ndef tolist(obj1):\r\n\tif hasattr(obj1,\"__iter__\"): return obj1\r\n\telse: return [obj1]\r\n\r\ndef hasInd(l1, i):\r\n\ttry:\r\n\t\tl1[i]\r\n\t\treturn  True\r\n\texcept:\r\n\t\treturn  False\r\n\t\t\r\nclass NameWrap(Object):\r\n\tdef __init__(this, obj1, name1 = None):\r\n\t\tthis.obj = obj1\r\n\t\tif obj1 == None: name1 = \"null\"\r\n\t\tif name1 == None and obj1 != None: this.name = obj1.ToString()\r\n\t\telse: this.name = name1\r\n\tdef ToString(this):\r\n\t\treturn this.name\r\n\r\n\r\nsettings = doc.Settings\r\n\r\ncategories = settings.Categories\r\n\r\ncollector = FilteredElementCollector(doc).OfClass(DimensionType).ToElements()\r\n\r\ndimensionTypes = []\r\ndimNames = []\r\n\r\nfor dim in collector:\r\n\tif dim.FamilyName == \"Linear Dimension Style\" and dim.LookupParameter(\"Type Name\").AsString() != \"\":\r\n\t\tdimensionTypes.append(dim)\r\n\t\tdimNames.append(dim.LookupParameter(\"Type Name\").AsString())\r\n\r\ndimensionTypes = tolist([dimType for _,dimType in sorted(zip(dimNames,dimensionTypes))])\r\n\r\ndimNames = tolist(sorted(dimNames))\r\n\r\ncategoryNames = sorted([cat.Name for cat in categories if cat.AllowsBoundParameters])\r\n\r\nfor i in xrange(len(dimensionTypes)):\r\n\tname1 = None\r\n\tif hasInd(dimNames, i): name1 = dimNames[i]\r\n\tdimensionTypes[i] = NameWrap(dimensionTypes[i], name1)\r\n\r\ncat_Array = Array[Object](categoryNames)\r\ndim_Array = Array[Object](dimensionTypes)\r\n\r\nUI.Select_Category.Items.AddRange(cat_Array)\r\nUI.Dimension_Style.Items.AddRange(dim_Array)\r\n\r\n\r\nUI.ShowDialog()\r\n\r\nif UI.DialogResult.ToString() == \"OK\" and bool(UI.Select_Category.SelectedItem) != False:\r\n\r\n\tclass MySelectionFilter(Selection.ISelectionFilter):\r\n\t\tdef __init__(self):\r\n\t\t\tpass\r\n\t\tdef AllowElement(self, element):\r\n\t\t\tif element.Category.Name == UI.Select_Category.SelectedItem:\r\n\t\t\t\treturn True\r\n\t\t\telse:\r\n\t\t\t\treturn False\r\n\t\tdef AllowReference(self, element):\r\n\t\t\treturn False\r\n\t\t\t\r\n\tmessage = \"Please Select {} Elements in current view\"\r\n\t\r\n\tTaskDialog.Show(\"Select Elements\", message.format(UI.Select_Category.SelectedItem))\r\n\tSel_filter = MySelectionFilter()\r\n\tobj_type = Selection.ObjectType.Element\r\n\t\r\n\tselection = []\r\n\t\r\n\tfor elemRef in uidoc.Selection.PickObjects(obj_type,Sel_filter,\"Select Element(s)\"):\r\n\t\tselection.append(Document.GetElement(doc,elemRef))\r\n\t\t\r\n\tOUT = UI.Dimension_Style.SelectedItem.obj, selection\r\n\r\nelif UI.DialogResult.ToString() == \"Cancel\" or bool(UI.Select_Category.SelectedItem) == False or bool(UI.Dimension_Style.SelectedItem) == False:\r\n\tTaskDialog.Show(\"Auto Dimension Error\", \"Missing one or more data; Please fill up dialog box\")\r\n\tOUT = \"Missing one or more data; please fill up dialog box\"",
+      "VariableInputPorts": true,
+      "Id": "140ddba1b99a4df6a416973dff86a0d7",
+      "Inputs": [
+        {
+          "Id": "a1f86f4c209e4d8ebf3acd69c3ac9f16",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "59eb4a9bb09c4bea9c7c8ae89f2a6e45",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded IronPython script."
+    }
+  ],
+  "Connectors": [
+    {
+      "Start": "1b24eba90d644fcda733ac8b44fe2cec",
+      "End": "ca1a832147624f869764fa8bc68e74bf",
+      "Id": "b349a7b47f9244f99195dea22807e3bd"
+    },
+    {
+      "Start": "1b24eba90d644fcda733ac8b44fe2cec",
+      "End": "92cb375fc9bb432c88ce5b8f58a84c36",
+      "Id": "2a72ce7c30ac49c3be422fefd34f27f0"
+    },
+    {
+      "Start": "1b24eba90d644fcda733ac8b44fe2cec",
+      "End": "3ac597929faf4834969a7be83fe7ac97",
+      "Id": "2d4e57b9b7404395a6e13f81801e80f2"
+    },
+    {
+      "Start": "1b24eba90d644fcda733ac8b44fe2cec",
+      "End": "5780d3fabaf24b319bdc3e1d28e832df",
+      "Id": "bd4f877a02d54e55aa750eb0b522b7d7"
+    },
+    {
+      "Start": "1b24eba90d644fcda733ac8b44fe2cec",
+      "End": "a1f86f4c209e4d8ebf3acd69c3ac9f16",
+      "Id": "408cca4f8cf84022a7560c7e16d723c0"
+    },
+    {
+      "Start": "42dea2ae000a4854aace6a6cca76d9c4",
+      "End": "99ba22495a1a4eb198256e413510fd10",
+      "Id": "b5244204828e4082bf67621987128189"
+    },
+    {
+      "Start": "0af3d9c6283a4b7ca0cb9cf2eda9cebb",
+      "End": "512a8f8d75b3467695606c1f1223d686",
+      "Id": "9208faa952ae4fa88c7cab51e144ca6c"
+    }
+  ],
+  "Dependencies": [],
+  "NodeLibraryDependencies": [],
+  "Bindings": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 1.0,
+      "HasRunWithoutCrash": true,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "2.6.1.8786",
+      "RunType": "Manual",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "Background Preview",
+      "EyeX": -7417.6494318322866,
+      "EyeY": 5171.4880068289194,
+      "EyeZ": 5032.3039013522848,
+      "LookX": -1816.7873357458384,
+      "LookY": -6896.4880068289194,
+      "LookZ": -3929.9728619235739,
+      "UpX": -0.29929451500840426,
+      "UpY": 0.70090926429987532,
+      "UpZ": -0.64741717347051075
+    },
+    "NodeViews": [
+      {
+        "ShowGeometry": true,
+        "Name": "Python Script",
+        "Id": "300f9526cc814b809ae2c93a1b353891",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": true,
+        "X": 641.41298563791725,
+        "Y": 557.03102302339119
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Boolean",
+        "Id": "92594dbed898420ea048fafe0d8065ac",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 206.5891489654141,
+        "Y": 817.207283086579
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Python Script",
+        "Id": "9d4bac8f44494595aea1cbe01fcf9f90",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 695.0033242665902,
+        "Y": 855.39859240789974
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Python Script",
+        "Id": "0cb17c4926ca413e831586785319982c",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": true,
+        "X": 475.64783240605504,
+        "Y": 864.19297977174585
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Code Block",
+        "Id": "34a8279e891c43b88eca6fb995bf5233",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 1035.685927729528,
+        "Y": 819.71554984619
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Python Script",
+        "Id": "140ddba1b99a4df6a416973dff86a0d7",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 508.67257274079122,
+        "Y": 1045.627015290939
+      }
+    ],
+    "Annotations": [],
+    "X": 256.34634650548566,
+    "Y": -165.24451960504817,
+    "Zoom": 0.44130493943281457
+  }
+}

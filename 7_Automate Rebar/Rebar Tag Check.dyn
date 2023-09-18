@@ -1,0 +1,481 @@
+{
+  "Uuid": "f8b59300-4df1-4051-b40e-c9b04c2b36a0",
+  "IsCustomNode": false,
+  "Description": null,
+  "Name": "Rebar Tag Check",
+  "ElementResolver": {
+    "ResolutionMap": {}
+  },
+  "Inputs": [
+    {
+      "Id": "35561fcb472446cbb87cc2876f8c0a7c",
+      "Name": "Run Script",
+      "Type": "boolean",
+      "Value": "true",
+      "Description": "Selection between a true and false."
+    }
+  ],
+  "Outputs": [],
+  "Nodes": [
+    {
+      "ConcreteType": "DSRevitNodesUI.Categories, DSRevitNodesUI",
+      "SelectedIndex": 614,
+      "SelectedString": "OST_Rebar",
+      "NodeType": "ExtensionNode",
+      "Id": "5fff8c60bc0d4f438ef334ad86e0e9e2",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "d44e92d2707942d8ba5ed57863245928",
+          "Name": "Category",
+          "Description": "The selected Category.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "All built-in categories."
+    },
+    {
+      "ConcreteType": "DSRevitNodesUI.Categories, DSRevitNodesUI",
+      "SelectedIndex": 619,
+      "SelectedString": "OST_RebarTags",
+      "NodeType": "ExtensionNode",
+      "Id": "102c886302d94cec8a65b9178ba83c0a",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "5803a441186b42d3b2e163ba600b0926",
+          "Name": "Category",
+          "Description": "The selected Category.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "All built-in categories."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "archilab.Revit.Selection.Select.ByCategoryAndView@Revit.Elements.Category,Revit.Elements.Views.View",
+      "Id": "cf2e2198a9cc4157badc1409ac88c547",
+      "Inputs": [
+        {
+          "Id": "7ace4680007349168460dba077a33296",
+          "Name": "category",
+          "Description": "Category to filter for.\n\nCategory",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "1495236b18f1405bad7b06cf35aa4dc6",
+          "Name": "view",
+          "Description": "View to filter for.\n\nView",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "1af2e97ca9aa4be6b539b7ab4a66acd4",
+          "Name": "Element",
+          "Description": "Element.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Select Elements by Category and View.\n\nSelect.ByCategoryAndView (category: Category, view: View): Element[]"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Function, DynamoCore",
+      "FunctionSignature": "58849545-7510-4baf-99da-98c0b1e184fd",
+      "FunctionType": "Graph",
+      "NodeType": "FunctionNode",
+      "Id": "c80b3fb28303434f9620e344eca4b991",
+      "Inputs": [
+        {
+          "Id": "ac5d0e58e2d24686b108ecc94095aee1",
+          "Name": "refresh",
+          "Description": "bool\nDefault value : true",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "544fea9205d644509c360585cf5d70eb",
+          "Name": "view",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Selects the current document's active view. Supports more view types than the built-in option.\r\nWill be depreciated once the bult in node works with all plan types."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
+      "NodeType": "BooleanInputNode",
+      "InputValue": true,
+      "Id": "35561fcb472446cbb87cc2876f8c0a7c",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "8b98215338bd40ae876f477d6d0e667a",
+          "Name": "",
+          "Description": "Boolean",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Selection between a true and false."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "archilab.Revit.Selection.Select.ByCategoryAndView@Revit.Elements.Category,Revit.Elements.Views.View",
+      "Id": "8dd5d05261584dec9ae752f17a6f0f46",
+      "Inputs": [
+        {
+          "Id": "1e696d9d8ec74771a67a6db645a40993",
+          "Name": "category",
+          "Description": "Category to filter for.\n\nCategory",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "a63a51e441b643a0b0733ca85c6caea3",
+          "Name": "view",
+          "Description": "View to filter for.\n\nView",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "571ee920bb4b41439d0bdcdac578a073",
+          "Name": "Element",
+          "Description": "Element.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Select Elements by Category and View.\n\nSelect.ByCategoryAndView (category: Category, view: View): Element[]"
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "import clr\r\n\r\nclr.AddReference('RevitAPI')\r\nfrom Autodesk.Revit.DB import *\r\nfrom Autodesk.Revit.DB.Structure import *\r\n\r\nclr.AddReference('RevitNodes')\r\nimport Revit\r\nclr.ImportExtensions(Revit.GeometryConversion)\r\nclr.ImportExtensions(Revit.Elements)\r\n\r\nclr.AddReference('RevitServices')\r\nimport RevitServices\r\nfrom RevitServices.Persistence import DocumentManager\r\nfrom RevitServices.Transactions import TransactionManager\r\n\r\ndoc = DocumentManager.Instance.CurrentDBDocument\r\n\r\n#Preparing input from dynamo to revit\r\ntag = UnwrapElement(IN[0])\r\nOUT = []\r\nfor t in tag:\r\n\tid = t.TaggedLocalElementId\r\n\telement = doc.GetElement(id)\r\n\r\n\tif element.GetType().ToString() == \"Autodesk.Revit.DB.Dimension\":\r\n\t\tuId = set([r.ElementId for r in element.References])\r\n\t\tfor ui in uId:\r\n\t\t\tOUT.append(doc.GetElement(ui).ToDSType(True))\r\n\telse:\r\n\t\t\tOUT.append(element.ToDSType(True))",
+      "VariableInputPorts": true,
+      "Id": "90b0764de5184119801bd97b5e11fe38",
+      "Inputs": [
+        {
+          "Id": "a6e48940e47746fcafd0f9d5bf79ccf4",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "207feca9f6a34750a795d23f9ba494b0",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded IronPython script."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "DSCore.List.SetDifference@var[],var[]",
+      "Id": "a4b4c4ecf0f34927b58c0eee177e0b6f",
+      "Inputs": [
+        {
+          "Id": "ce64aa5c64e14d5996abc066e810a7e7",
+          "Name": "list1",
+          "Description": "List of objects to be included in the new list.\n\nvar[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "364f1d982629409585bb27768d6d0aba",
+          "Name": "list2",
+          "Description": "List of objects to be excluded in the new list.\n\nvar[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "619eae84d584432ebab4ac2eaccd3055",
+          "Name": "newList",
+          "Description": "The new list that contains objects in List1 but not in List2.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Returns a new list that includes objects in List1 but excludes objects in List2.\n\nList.SetDifference (list1: var[], list2: var[]): var[]..[]"
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "# This node has been made by Modelical\r\n# www.modelical.com\r\nimport clr\r\n\r\n#Load Dynamo wrappers\r\nclr.AddReference(\"RevitNodes\")\r\nimport Revit\r\nclr.ImportExtensions(Revit.Elements)\r\n\r\n#Load Revit API\r\nclr.AddReference('RevitAPI')\r\nimport Autodesk\r\nfrom Autodesk.Revit.DB import *\r\n\r\n#Load document reference\r\nclr.AddReference(\"RevitServices\")\r\nimport RevitServices\r\nfrom RevitServices.Persistence import DocumentManager\r\nfrom System.Collections.Generic import *\r\n\r\ndoc = DocumentManager.Instance.CurrentDBDocument\r\nuidoc = DocumentManager.Instance.CurrentUIApplication.ActiveUIDocument\r\n\r\ndef toList(input):\r\n\tif isinstance(input,list) == False:\r\n\t\treturn [input]\r\n\telse:\r\n\t\treturn input\r\n\r\ndef flatten(x):\r\n    result = []\r\n    for el in x:\r\n        if hasattr(el, \"__iter__\") and not isinstance(el, basestring):\r\n            result.extend(flatten(el))\r\n        else:\r\n            result.append(el)\r\n    return result\r\n\r\nelementsOrIDs = flatten(toList(IN[0]))\r\n\r\nelementIds = List[ElementId]()\r\n\r\ntry:\r\n\tint(elementsOrIDs[0])\r\n\r\nexcept:\r\n\tfor e in elementsOrIDs:\r\n\t\telementIds.Add(UnwrapElement(e).Id)\r\n\tselection = uidoc.Selection.SetElementIds(elementIds)\r\n\t\r\nelse:\r\n\tfor ID in elementsOrIDs:\r\n\t\telementIds.Add(Autodesk.Revit.DB.ElementId(int(ID)))\r\n\tselection = uidoc.Selection.SetElementIds(elementIds)\r\n\r\n\r\nOUT = IN[0]",
+      "VariableInputPorts": true,
+      "Id": "fff25c059f824a8db84265388547e089",
+      "Inputs": [
+        {
+          "Id": "98a5b0b06ee341f8babdf706d32069ec",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "859c97ab942b4b09a3e2928fbf8c56cf",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded IronPython script."
+    }
+  ],
+  "Connectors": [
+    {
+      "Start": "d44e92d2707942d8ba5ed57863245928",
+      "End": "7ace4680007349168460dba077a33296",
+      "Id": "95b1225dc3b345c98ac843a2f54517ef"
+    },
+    {
+      "Start": "5803a441186b42d3b2e163ba600b0926",
+      "End": "1e696d9d8ec74771a67a6db645a40993",
+      "Id": "5174a78133e542088de443138029d64a"
+    },
+    {
+      "Start": "1af2e97ca9aa4be6b539b7ab4a66acd4",
+      "End": "ce64aa5c64e14d5996abc066e810a7e7",
+      "Id": "839aa8170b9344aaa91678c08c1c2b55"
+    },
+    {
+      "Start": "544fea9205d644509c360585cf5d70eb",
+      "End": "1495236b18f1405bad7b06cf35aa4dc6",
+      "Id": "670f56f20ff742abac7edb09184b6ced"
+    },
+    {
+      "Start": "544fea9205d644509c360585cf5d70eb",
+      "End": "a63a51e441b643a0b0733ca85c6caea3",
+      "Id": "05620cc4301d4696b27c5c3965d69815"
+    },
+    {
+      "Start": "8b98215338bd40ae876f477d6d0e667a",
+      "End": "ac5d0e58e2d24686b108ecc94095aee1",
+      "Id": "137b89002b34447f8f6120f7a4c78434"
+    },
+    {
+      "Start": "571ee920bb4b41439d0bdcdac578a073",
+      "End": "a6e48940e47746fcafd0f9d5bf79ccf4",
+      "Id": "ba9758ca7e1a4263b519160676563b17"
+    },
+    {
+      "Start": "207feca9f6a34750a795d23f9ba494b0",
+      "End": "364f1d982629409585bb27768d6d0aba",
+      "Id": "f797ec75f7e143548fff175741650684"
+    },
+    {
+      "Start": "619eae84d584432ebab4ac2eaccd3055",
+      "End": "98a5b0b06ee341f8babdf706d32069ec",
+      "Id": "6f0b6a2cc1b3466c97b50c0dc2c4f22e"
+    }
+  ],
+  "Dependencies": [
+    "58849545-7510-4baf-99da-98c0b1e184fd"
+  ],
+  "NodeLibraryDependencies": [
+    {
+      "Name": "archi-lab.net",
+      "Version": "2022.210.2522",
+      "ReferenceType": "Package",
+      "Nodes": [
+        "cf2e2198a9cc4157badc1409ac88c547",
+        "8dd5d05261584dec9ae752f17a6f0f46"
+      ]
+    },
+    {
+      "Name": "spring nodes",
+      "Version": "204.1.0",
+      "ReferenceType": "Package",
+      "Nodes": [
+        "c80b3fb28303434f9620e344eca4b991"
+      ]
+    }
+  ],
+  "Bindings": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 1.0,
+      "HasRunWithoutCrash": true,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "2.6.1.8786",
+      "RunType": "Manual",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "Background Preview",
+      "EyeX": -17.0,
+      "EyeY": 24.0,
+      "EyeZ": 50.0,
+      "LookX": 12.0,
+      "LookY": -13.0,
+      "LookZ": -58.0,
+      "UpX": 0.0,
+      "UpY": 1.0,
+      "UpZ": 0.0
+    },
+    "NodeViews": [
+      {
+        "ShowGeometry": true,
+        "Name": "Categories",
+        "Id": "5fff8c60bc0d4f438ef334ad86e0e9e2",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 543.84364380197292,
+        "Y": -1.0460286207284213
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Categories",
+        "Id": "102c886302d94cec8a65b9178ba83c0a",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 229.84364380197292,
+        "Y": 166.95397137927159
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Select.ByCategoryAndView",
+        "Id": "cf2e2198a9cc4157badc1409ac88c547",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 864.84364380197292,
+        "Y": -1.0460286207284213
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "ꟿ Document.ActiveView",
+        "Id": "c80b3fb28303434f9620e344eca4b991",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 229.84364380197292,
+        "Y": 57.953971379271579
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Run Script",
+        "Id": "35561fcb472446cbb87cc2876f8c0a7c",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": -5.1563561980270833,
+        "Y": 57.953971379271579
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Select.ByCategoryAndView",
+        "Id": "8dd5d05261584dec9ae752f17a6f0f46",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 543.84364380197292,
+        "Y": 132.95397137927159
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Python Script",
+        "Id": "90b0764de5184119801bd97b5e11fe38",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 864.84364380197292,
+        "Y": 132.95397137927159
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "List.SetDifference",
+        "Id": "a4b4c4ecf0f34927b58c0eee177e0b6f",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 1185.843643801973,
+        "Y": 52.953971379271579
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Select In Revit",
+        "Id": "fff25c059f824a8db84265388547e089",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 1475.843643801973,
+        "Y": 52.953971379271579
+      }
+    ],
+    "Annotations": [],
+    "X": 56.661185633443324,
+    "Y": 322.13120175737686,
+    "Zoom": 0.42966481820390856
+  }
+}

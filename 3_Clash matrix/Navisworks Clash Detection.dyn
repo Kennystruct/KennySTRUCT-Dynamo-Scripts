@@ -1,0 +1,363 @@
+{
+  "Uuid": "a5d4c428-0b9e-4db1-b454-8130e9d57de8",
+  "IsCustomNode": false,
+  "Description": null,
+  "Name": "Navisworks Clash Detection",
+  "ElementResolver": {
+    "ResolutionMap": {}
+  },
+  "Inputs": [],
+  "Outputs": [],
+  "Nodes": [
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "DynaWorks20.FileSettings.OpenNavisFile.OpenFile@string,bool",
+      "Id": "2d935da762a9481b89ece1f0b4899eae",
+      "Inputs": [
+        {
+          "Id": "1e9a7a19d8e241b29abe0e146bfdd50d",
+          "Name": "FilePath",
+          "Description": "File path to the Autodesk Navisworks NWF File.\n\nstring",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "65abf7f6d8b34d87901828ae46ff6eea",
+          "Name": "Visible",
+          "Description": "If Navisworks UI is opened\n\nbool",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "c4191d8416124bdaab91464c66558008",
+          "Name": "OpenNavisFile",
+          "Description": "Opened Navisworks File",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Opens a Navisworks File for a single session, can be open for UserInteraction or in the background to save on memory and GUI.\n\nOpenNavisFile.OpenFile (FilePath: string, Visible: bool): OpenNavisFile"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.Filename, CoreNodeModels",
+      "HintPath": "E:\\CLASH TEST FILES\\Federated Navisworks Model\\Federated Model.nwf",
+      "InputValue": "Federated Navisworks Model\\Federated Model.nwf",
+      "NodeType": "ExtensionNode",
+      "Id": "636c119f3fe44439b5203bc2dff562d3",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "5963d49ac6cc45f1b1ca26f5188a0225",
+          "Name": "",
+          "Description": "Filename",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows you to select a file on the system to get its filename"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
+      "NodeType": "BooleanInputNode",
+      "InputValue": true,
+      "Id": "bf2488b838d54034844233c311c60279",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "9defe2b4ace242ad943a34f4a1c14e6f",
+          "Name": "",
+          "Description": "Boolean",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Selection between a true and false."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "DynaWorks20.Objects.NavisNodes.GetFilesInProject@DynaWorks20.FileSettings.OpenNavisFile",
+      "Id": "44e5054894334c6bbfefc93d7a8d21e6",
+      "Inputs": [
+        {
+          "Id": "992039537fbc4cf39b1df89574f299a7",
+          "Name": "OpenNavisFile",
+          "Description": "open Navisworks Project\n\nOpenNavisFile",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "998481c6ad4a460381a71346038705f1",
+          "Name": "Node",
+          "Description": "Nodes",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Gets a List of all nwc files in the loaded Project as Nodes\n\nNavisNodes.GetFilesInProject (OpenNavisFile: OpenNavisFile): var[]"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "DynaWorks20.Objects.NavisNodes.GetNodeChildren@var",
+      "Id": "9ff2303d79154aeaa5cc57fec2ff37c3",
+      "Inputs": [
+        {
+          "Id": "5b9ee4a6f2d2482b96a4221af3be0200",
+          "Name": "Node",
+          "Description": "Navisworks Node\n\nvar",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "0fd8da19ada1474a850df33b6ea267f9",
+          "Name": "list",
+          "Description": "Nodes",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Gets a List of all the children nodes of a Node if the Nodes is a group\n\nNavisNodes.GetNodeChildren (Node: var): var[]"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "DynaWorks20.Objects.NavisSelection.GetSelectionSetsInProject@DynaWorks20.FileSettings.OpenNavisFile",
+      "Id": "8515d79f7a9e4df79d1e2c428ea4868c",
+      "Inputs": [
+        {
+          "Id": "bcead6adf648433fa1864c0a5f710520",
+          "Name": "OpenNavisFile",
+          "Description": "open Navisworks Project\n\nOpenNavisFile",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "8d8a35d5f8de42f5977c464127bbe2af",
+          "Name": "list",
+          "Description": "SelectionSets",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Gets list of selection sets in project\n\nNavisSelection.GetSelectionSetsInProject (OpenNavisFile: OpenNavisFile): var[]"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "DynaWorks20.ClashDetection.ClashDetection.GetClashPoint@var,bool",
+      "Id": "13c79bb7e25246bdb0a09d85e2bd92d2",
+      "Inputs": [
+        {
+          "Id": "b2df6b82039446afb98928611d5f4176",
+          "Name": "Result",
+          "Description": "Navisworks Clash Result\n\nvar",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "9b261f6201aa4b4a9a0acb1822ec38c4",
+          "Name": "FirstClashItem",
+          "Description": "Navisworks Clash Result\n\nbool",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "b13aec83a69c4f11ad90c2d7dcbcce9f",
+          "Name": "Point",
+          "Description": "Point of Clash",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Returns the Point of a Clash Result based on first or second object\n\nClashDetection.GetClashPoint (Result: var, FirstClashItem: bool): Point"
+    }
+  ],
+  "Connectors": [
+    {
+      "Start": "c4191d8416124bdaab91464c66558008",
+      "End": "992039537fbc4cf39b1df89574f299a7",
+      "Id": "257232ee84934330966c2e877b706805"
+    },
+    {
+      "Start": "c4191d8416124bdaab91464c66558008",
+      "End": "bcead6adf648433fa1864c0a5f710520",
+      "Id": "7db8f771458a4cf4aa1c863ff7c7163b"
+    },
+    {
+      "Start": "5963d49ac6cc45f1b1ca26f5188a0225",
+      "End": "1e9a7a19d8e241b29abe0e146bfdd50d",
+      "Id": "3381b3361bab40e0bf5f8ac3141f0bde"
+    },
+    {
+      "Start": "9defe2b4ace242ad943a34f4a1c14e6f",
+      "End": "65abf7f6d8b34d87901828ae46ff6eea",
+      "Id": "1aceae8e8e624a47800b49d15c036ac0"
+    },
+    {
+      "Start": "998481c6ad4a460381a71346038705f1",
+      "End": "5b9ee4a6f2d2482b96a4221af3be0200",
+      "Id": "aa19010673804eb2a2e9925ab385c0f3"
+    }
+  ],
+  "Dependencies": [],
+  "NodeLibraryDependencies": [
+    {
+      "Name": "DynaWorks20",
+      "Version": "2.0.0",
+      "ReferenceType": "Package",
+      "Nodes": [
+        "2d935da762a9481b89ece1f0b4899eae",
+        "44e5054894334c6bbfefc93d7a8d21e6",
+        "9ff2303d79154aeaa5cc57fec2ff37c3",
+        "8515d79f7a9e4df79d1e2c428ea4868c",
+        "13c79bb7e25246bdb0a09d85e2bd92d2"
+      ]
+    }
+  ],
+  "Bindings": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 1.0,
+      "HasRunWithoutCrash": true,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "2.3.0.5885",
+      "RunType": "Manual",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "Background Preview",
+      "EyeX": -17.0,
+      "EyeY": 24.0,
+      "EyeZ": 50.0,
+      "LookX": 12.0,
+      "LookY": -13.0,
+      "LookZ": -58.0,
+      "UpX": 0.0,
+      "UpY": 1.0,
+      "UpZ": 0.0
+    },
+    "NodeViews": [
+      {
+        "ShowGeometry": true,
+        "Name": "OpenNavisFile.OpenFile",
+        "Id": "2d935da762a9481b89ece1f0b4899eae",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 268.8,
+        "Y": 187.99999999999997
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "File Path",
+        "Id": "636c119f3fe44439b5203bc2dff562d3",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": -110.40000000000003,
+        "Y": 192.00000000000003
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Boolean",
+        "Id": "bf2488b838d54034844233c311c60279",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 18.400000000000034,
+        "Y": 301.6
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "NavisNodes.GetFilesInProject",
+        "Id": "44e5054894334c6bbfefc93d7a8d21e6",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 580.1636471133379,
+        "Y": 225.46527067017513
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "NavisNodes.GetNodeChildren",
+        "Id": "9ff2303d79154aeaa5cc57fec2ff37c3",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 879.04379026920344,
+        "Y": 498.85269573333443
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "NavisSelection.GetSelectionSetsInProject",
+        "Id": "8515d79f7a9e4df79d1e2c428ea4868c",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 522.50552312307173,
+        "Y": 437.80444162588009
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "ClashDetection.GetClashPoint",
+        "Id": "13c79bb7e25246bdb0a09d85e2bd92d2",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 235.99634014133653,
+        "Y": 357.22259934238144
+      }
+    ],
+    "Annotations": [],
+    "X": -820.76644270899556,
+    "Y": -150.60004425572248,
+    "Zoom": 1.5737000388104119
+  }
+}

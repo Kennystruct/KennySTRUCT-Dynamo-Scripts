@@ -1,0 +1,924 @@
+{
+  "Uuid": "f8b59300-4df1-4051-b40e-c9b04c2b36a0",
+  "IsCustomNode": false,
+  "Description": null,
+  "Name": "Multi-Rebar Tag",
+  "ElementResolver": {
+    "ResolutionMap": {}
+  },
+  "Inputs": [
+    {
+      "Id": "79f356b75eb2414496bcce759ecf447c",
+      "Name": "Run Script",
+      "Type": "boolean",
+      "Value": "true",
+      "Description": "Selection between a true and false."
+    },
+    {
+      "Id": "fdeb3dc98ca548e5b8ca0b3d2fd316bb",
+      "Name": "Horizontal Tags==True / Vertical Tags==False",
+      "Type": "boolean",
+      "Value": "true",
+      "Description": "Selection between a true and false."
+    }
+  ],
+  "Outputs": [],
+  "Nodes": [
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "ACOSolution.Annotation.MultiRebarAnnotation@Revit.Elements.Element,Revit.Elements.Element,Revit.Elements.Views.View,Autodesk.DesignScript.Geometry.Point,Autodesk.DesignScript.Geometry.Point,bool",
+      "Id": "fb05bf85dd2448f1936cbcb53f2abc6d",
+      "Inputs": [
+        {
+          "Id": "6db15b5a907e493bad3dc4a190a3b86a",
+          "Name": "typeMultiTag",
+          "Description": "MultiReferenceAnnotationType.\n\nElement",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "a1f3bd7283b64a879118bb226db7af44",
+          "Name": "rebars",
+          "Description": "Rebar will annotate.\n\nElement",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "429d640868ec4bcf924cb11da5d695fd",
+          "Name": "sectionView",
+          "Description": "Section View include tag.\n\nView",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "b2b54efdd7d5421fb46e121e35c95594",
+          "Name": "tagHead",
+          "Description": "A specify point.\n\nPoint",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "2cc5858afe1b4b16a0f91a4b6a21c124",
+          "Name": "dimensionOrigin",
+          "Description": "A specify point.\n\nPoint",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "64cd0cc27f764794bb2d5e9042df6268",
+          "Name": "horizontal",
+          "Description": "bool",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "e3cc939289844816bbd636a7d21fb91b",
+          "Name": "MultiRebarAnnotation",
+          "Description": "The new MultiRebarAnnotation.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Longest",
+      "Description": "Creates a new MultiReferenceAnnotation. Should be used in section. Developed by hungthp.com\n\nAnnotation.MultiRebarAnnotation (typeMultiTag: Element, rebars: Element, sectionView: View, tagHead: Point, dimensionOrigin: Point, horizontal: bool): var[]..[]"
+    },
+    {
+      "ConcreteType": "DSRevitNodesUI.Categories, DSRevitNodesUI",
+      "SelectedIndex": 355,
+      "SelectedString": "OST_MultiReferenceAnnotations",
+      "NodeType": "ExtensionNode",
+      "Id": "f083c425a59d4a5f9bc381d34b3082c4",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "b1f7c4029fc54b6f8cdccd128c718db8",
+          "Name": "Category",
+          "Description": "The selected Category.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "All built-in categories."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Function, DynamoCore",
+      "FunctionSignature": "65f93a80-674c-4a98-9d0c-db3a138287e5",
+      "FunctionType": "Graph",
+      "NodeType": "FunctionNode",
+      "Id": "bbc6f39255734473b15e13f805431885",
+      "Inputs": [
+        {
+          "Id": "3bc06c1bf27c4fd8b3969d1f1fdf15bf",
+          "Name": "category",
+          "Description": " Works with categories, BuiltInCategories and BuiltInCategories as strings\n\nvar[]..[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "824ce88f34f04ebf8187bc2825d3ca60",
+          "Name": "toggle",
+          "Description": "bool\nDefault value : true",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "9df36dca62f9462cb593654470d46cd3",
+          "Name": "docOrRevitLinkInstance",
+          "Description": " Use only if you want to query a linked model\n\nvar\nDefault value : null",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "2a6be209d6ca4de1b464c72913b32221",
+          "Name": "familyTypes",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Gets all family types/symbols of a given category in the model."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
+      "NodeType": "BooleanInputNode",
+      "InputValue": true,
+      "Id": "79f356b75eb2414496bcce759ecf447c",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "16993fc0f699402abaa665c75b10d217",
+          "Name": "",
+          "Description": "Boolean",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Selection between a true and false."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "Revit.Elements.Element.Name",
+      "Id": "628689cbb9c248718608706b98720257",
+      "Inputs": [
+        {
+          "Id": "b3e430899b9b4662aa2b88df7aef3dee",
+          "Name": "element",
+          "Description": "Revit.Elements.Element",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "b614546456034eaca44bcbe2c48a6fff",
+          "Name": "string",
+          "Description": "string",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Get the Name of the Element\n\nElement.Name: string"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Function, DynamoCore",
+      "FunctionSignature": "a4a2f0a2-ccd6-4307-921d-241ffb37010f",
+      "FunctionType": "Graph",
+      "NodeType": "FunctionNode",
+      "Id": "f093949ceba5461c9e42842be699799e",
+      "Inputs": [
+        {
+          "Id": "4f98e81adf1e430e9d43101b8ed661e9",
+          "Name": "list",
+          "Description": "var[]..[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "8987719b08af4820b584793cf908eda7",
+          "Name": "names",
+          "Description": "var[]..[]\nDefault value : null",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "a36cf62ae3e048a096d0534abdbb7253",
+          "Name": "customMsg",
+          "Description": "string\nDefault value : \"Choose an item and press Select\"",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "0a8ee85e30e749b9ab4b3cade964edac",
+          "Name": "reset",
+          "Description": "bool\nDefault value : true",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "b86ff956b5e447cb95deb08804f15a25",
+          "Name": "selection",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Selects one list item by a drop-down combo box. The optional names input will override the object representation."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
+      "NodeType": "StringInputNode",
+      "InputValue": "Select Multi-Rebar Tag",
+      "Id": "a2e5c5e511c14c06b0911203812e4524",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "9d12fdab97e5437980f5e6909df1643d",
+          "Name": "",
+          "Description": "String",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Creates a string."
+    },
+    {
+      "ConcreteType": "DSRevitNodesUI.Categories, DSRevitNodesUI",
+      "SelectedIndex": 614,
+      "SelectedString": "OST_Rebar",
+      "NodeType": "ExtensionNode",
+      "Id": "1cf7a977184b49cea226cdc3e13b93dc",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "ad500fec4f534efe827c0dae6dabdb63",
+          "Name": "Category",
+          "Description": "The selected Category.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "All built-in categories."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Function, DynamoCore",
+      "FunctionSignature": "58849545-7510-4baf-99da-98c0b1e184fd",
+      "FunctionType": "Graph",
+      "NodeType": "FunctionNode",
+      "Id": "0daa25b32c444f219ef572dc792bdde8",
+      "Inputs": [
+        {
+          "Id": "809d5403427745fa883a0ff9e616a7ea",
+          "Name": "refresh",
+          "Description": "bool\nDefault value : true",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "4482656a95da4b28bc3fc35bb2edd1c5",
+          "Name": "view",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Selects the current document's active view. Supports more view types than the built-in option.\r\nWill be depreciated once the bult in node works with all plan types."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Function, DynamoCore",
+      "FunctionSignature": "1ef3fc26-c445-4b78-b0a6-42da44b6112f",
+      "FunctionType": "Graph",
+      "NodeType": "FunctionNode",
+      "Id": "1e43af70df9b40148134e5f45c14a61b",
+      "Inputs": [
+        {
+          "Id": "e2199331af234d9f811a3326700aefb1",
+          "Name": "Rebar",
+          "Description": "The structural rebar objects which you want to detect\nthe sketched centerlines from\n\nElement[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "8f477ff7435747849ac54d88cef6c58f",
+          "Name": "AdjustForSelfIntersection",
+          "Description": "If the curves overlap, as in a planar stirrup, this parameter controls whether\nthey should be adjusted to avoid intersection (as in fine views), \nor kept in a single plane for simplicity (as in coarse views).\n\nbool\nDefault value : false",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "03f8e9c8ff9e4b92bcf2588e5b69f838",
+          "Name": "SuppressHooks",
+          "Description": "Identifies if the chain will include hooks curves.\n\nbool\nDefault value : true",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "f7e57ac48bc64e2c90e89ffb36545547",
+          "Name": "SuppressBendRadius",
+          "Description": "Identifies if the connected chain will include unfilleted curves.\n\nbool\nDefault value : true",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "3ff475c508b04da5a860977f467f3ee2",
+          "Name": "MultiPlanarOption",
+          "Description": "If the Rebar is a multi-planar shape, this parameter controls whether to \ngenerate only the curves in the primary plane (false), or to generate \nall curves (true) including the out-of-plane connector segments as well as \nmulti-planar copies of the primary plane curves. \n\nbool\nDefault value : true",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "b23d91b3b3074119bcf568c3e267d756",
+          "Name": "BarPositionIndex",
+          "Description": "Use this value to obtain all the curves at a specific index in the distribution.\n\nint\nDefault value : 0",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "48c7324ac0fa48fe95286794df029664",
+          "Name": "PolyCurves",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Get the centerline curves from a selected set of rebars"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "Autodesk.DesignScript.Geometry.Curve.PointAtParameter@double",
+      "Id": "d79db546c0d14b8380dc0468b28477cb",
+      "Inputs": [
+        {
+          "Id": "3b5a47592786493e817a3412a4da5749",
+          "Name": "curve",
+          "Description": "Autodesk.DesignScript.Geometry.Curve",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "9930c7f067ea40aeaebc012a2d91a88d",
+          "Name": "param",
+          "Description": "The parameter at which to evaluate\n\ndouble\nDefault value : 0",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "890237db4b6c4ca89421ed120160e4a4",
+          "Name": "Point",
+          "Description": "Point",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Get a Point on the Curve at a specified parameter between StartParameter() and EndParameter()\n\nCurve.PointAtParameter (param: double = 0): Point"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "NodeType": "CodeBlockNode",
+      "Code": "0.5;",
+      "Id": "8214ed4dae35427d89c3319ec98e0b72",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "db039a929b00490aa48d2bbd421ffe4b",
+          "Name": "",
+          "Description": "Value of expression at line 1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
+      "NodeType": "BooleanInputNode",
+      "InputValue": true,
+      "Id": "fdeb3dc98ca548e5b8ca0b3d2fd316bb",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "40fad45e6d084a9c9a3e1cb62c3b948e",
+          "Name": "",
+          "Description": "Boolean",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Selection between a true and false."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "StructuralDesign.Model.Selection.PickObjectsOfCategory@Revit.Elements.Category[],int,string,bool,bool",
+      "Id": "29a69dd93a254dfca0f7ebb5c411f503",
+      "Inputs": [
+        {
+          "Id": "ee7f69c091904bf3b1c03e1c170588ac",
+          "Name": "category",
+          "Description": "Single category or a list of categories.\n\nCategory[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "c835d281c8464943a59213b8f6440da0",
+          "Name": "objectType",
+          "Description": "Specifies the type of object to be selected. 0-Nothing, 1-Element, 2-PointOnElement, 3-Edge, 4-Face, 5-LinkedElement, 6-Subelement\n\nint\nDefault value : 1",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "c07dff4496d8460497ff8f8d07db95c4",
+          "Name": "statusPrompt",
+          "Description": "The message shown on the status bar.\n\nstring\nDefault value : \"Click to select multiple elements, TAB for alternates, ESC quit.\"",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "6954e8fb73554224bd72ffe4ab9d288b",
+          "Name": "preselection",
+          "Description": "Take into account the initially selected set of objects.\n\nbool\nDefault value : false",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "e5de78471f804913af000d0d40561434",
+          "Name": "refresh",
+          "Description": "Refresh selection.\n\nbool\nDefault value : true",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "9742361dd22f4c20aeac4c7f38030f94",
+          "Name": "Elements",
+          "Description": "Selected elements.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Prompts the user to select multiple objects of the defined categories while showing a custom status prompt string.\n\nSelection.PickObjectsOfCategory (category: Category[], objectType: int = 1, statusPrompt: string = \"Click to select multiple elements, TAB for alternates, ESC quit.\", preselection: bool = false, refresh: bool = true): Element[]"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
+      "NodeType": "StringInputNode",
+      "InputValue": "Select Rebars",
+      "Id": "fd4d086aaf5c4c02913a142fc2015793",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "dbfe825780204579b28c3294abd08d7f",
+          "Name": "",
+          "Description": "String",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Creates a string."
+    }
+  ],
+  "Connectors": [
+    {
+      "Start": "b1f7c4029fc54b6f8cdccd128c718db8",
+      "End": "3bc06c1bf27c4fd8b3969d1f1fdf15bf",
+      "Id": "ef69e6787c924e058774ed8ce978b5c5"
+    },
+    {
+      "Start": "2a6be209d6ca4de1b464c72913b32221",
+      "End": "b3e430899b9b4662aa2b88df7aef3dee",
+      "Id": "18dac37c9d834fe7954294f34064461b"
+    },
+    {
+      "Start": "2a6be209d6ca4de1b464c72913b32221",
+      "End": "4f98e81adf1e430e9d43101b8ed661e9",
+      "Id": "f33155aa663b4110a15bb4e4753c0d93"
+    },
+    {
+      "Start": "16993fc0f699402abaa665c75b10d217",
+      "End": "824ce88f34f04ebf8187bc2825d3ca60",
+      "Id": "627a7f7dad1e41038d7724b82f4b7faa"
+    },
+    {
+      "Start": "16993fc0f699402abaa665c75b10d217",
+      "End": "0a8ee85e30e749b9ab4b3cade964edac",
+      "Id": "f7d7d738e37247df9d9f12c70c8724ad"
+    },
+    {
+      "Start": "16993fc0f699402abaa665c75b10d217",
+      "End": "809d5403427745fa883a0ff9e616a7ea",
+      "Id": "94709032a56d4b7397a283f602ba03d8"
+    },
+    {
+      "Start": "16993fc0f699402abaa665c75b10d217",
+      "End": "e5de78471f804913af000d0d40561434",
+      "Id": "821003a28bf541de91c304bb71a6421f"
+    },
+    {
+      "Start": "b614546456034eaca44bcbe2c48a6fff",
+      "End": "8987719b08af4820b584793cf908eda7",
+      "Id": "a290e01c0faa44aa94c33e18f70cb685"
+    },
+    {
+      "Start": "b86ff956b5e447cb95deb08804f15a25",
+      "End": "6db15b5a907e493bad3dc4a190a3b86a",
+      "Id": "a415825b7093415e92e3e4aff7e5016f"
+    },
+    {
+      "Start": "9d12fdab97e5437980f5e6909df1643d",
+      "End": "a36cf62ae3e048a096d0534abdbb7253",
+      "Id": "55ef8c85f8f2496cadf0bc6834cb478f"
+    },
+    {
+      "Start": "ad500fec4f534efe827c0dae6dabdb63",
+      "End": "ee7f69c091904bf3b1c03e1c170588ac",
+      "Id": "5a4f6e2102224eed8abfed5d1b0abe3a"
+    },
+    {
+      "Start": "4482656a95da4b28bc3fc35bb2edd1c5",
+      "End": "429d640868ec4bcf924cb11da5d695fd",
+      "Id": "c83be80b821e4a9bb9ffadd79d7bf59c"
+    },
+    {
+      "Start": "48c7324ac0fa48fe95286794df029664",
+      "End": "3b5a47592786493e817a3412a4da5749",
+      "Id": "98f3ee27601847fa9b3d40f5085a6d41"
+    },
+    {
+      "Start": "890237db4b6c4ca89421ed120160e4a4",
+      "End": "b2b54efdd7d5421fb46e121e35c95594",
+      "Id": "b0c41cb20536460ebff432f63dc62a68"
+    },
+    {
+      "Start": "890237db4b6c4ca89421ed120160e4a4",
+      "End": "2cc5858afe1b4b16a0f91a4b6a21c124",
+      "Id": "f8b82f7274db4a488380b460d488814a"
+    },
+    {
+      "Start": "db039a929b00490aa48d2bbd421ffe4b",
+      "End": "9930c7f067ea40aeaebc012a2d91a88d",
+      "Id": "ca652f966bdd448ea6d480635e9c2ba6"
+    },
+    {
+      "Start": "40fad45e6d084a9c9a3e1cb62c3b948e",
+      "End": "64cd0cc27f764794bb2d5e9042df6268",
+      "Id": "f76a81bd676d4bb49dfbf725fdb5020f"
+    },
+    {
+      "Start": "9742361dd22f4c20aeac4c7f38030f94",
+      "End": "e2199331af234d9f811a3326700aefb1",
+      "Id": "aaeea165aaed4e6da9224ae606912298"
+    },
+    {
+      "Start": "9742361dd22f4c20aeac4c7f38030f94",
+      "End": "a1f3bd7283b64a879118bb226db7af44",
+      "Id": "c316e6bfcd1745f193ab9d3cb2e8e4ae"
+    },
+    {
+      "Start": "dbfe825780204579b28c3294abd08d7f",
+      "End": "c07dff4496d8460497ff8f8d07db95c4",
+      "Id": "5262d243276c48de9c6e762166aae389"
+    }
+  ],
+  "Dependencies": [
+    "65f93a80-674c-4a98-9d0c-db3a138287e5",
+    "a4a2f0a2-ccd6-4307-921d-241ffb37010f",
+    "58849545-7510-4baf-99da-98c0b1e184fd",
+    "1ef3fc26-c445-4b78-b0a6-42da44b6112f"
+  ],
+  "NodeLibraryDependencies": [
+    {
+      "Name": "ACOPackage",
+      "Version": "1.0.4",
+      "ReferenceType": "Package",
+      "Nodes": [
+        "fb05bf85dd2448f1936cbcb53f2abc6d"
+      ]
+    },
+    {
+      "Name": "Clockwork for Dynamo 2.x",
+      "Version": "2.3.0",
+      "ReferenceType": "Package",
+      "Nodes": [
+        "bbc6f39255734473b15e13f805431885"
+      ]
+    },
+    {
+      "Name": "spring nodes",
+      "Version": "204.1.0",
+      "ReferenceType": "Package",
+      "Nodes": [
+        "f093949ceba5461c9e42842be699799e",
+        "0daa25b32c444f219ef572dc792bdde8"
+      ]
+    },
+    {
+      "Name": "BIM4Struc.Rebar",
+      "Version": "1.2.4",
+      "ReferenceType": "Package",
+      "Nodes": [
+        "1e43af70df9b40148134e5f45c14a61b"
+      ]
+    },
+    {
+      "Name": "Structural Design",
+      "Version": "2021.9.23",
+      "ReferenceType": "Package",
+      "Nodes": [
+        "29a69dd93a254dfca0f7ebb5c411f503"
+      ]
+    }
+  ],
+  "Bindings": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 1.0,
+      "HasRunWithoutCrash": true,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "2.6.1.8786",
+      "RunType": "Manual",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "Background Preview",
+      "EyeX": -16115.537532451548,
+      "EyeY": 7389.3201197912595,
+      "EyeZ": 60453.955007109558,
+      "LookX": 3163.4721027640471,
+      "LookY": -3427.0947779943845,
+      "LookZ": -15290.115163359562,
+      "UpX": 0.0,
+      "UpY": 1.0,
+      "UpZ": 0.0
+    },
+    "NodeViews": [
+      {
+        "ShowGeometry": true,
+        "Name": "Annotation.MultiRebarAnnotation",
+        "Id": "fb05bf85dd2448f1936cbcb53f2abc6d",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 2424.9629611405685,
+        "Y": 514.11977258124
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Categories",
+        "Id": "f083c425a59d4a5f9bc381d34b3082c4",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 909.67238166988841,
+        "Y": 354.03861363987994
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "All Family Types Of Category",
+        "Id": "bbc6f39255734473b15e13f805431885",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 1240.6723816698884,
+        "Y": 359.03861363987994
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Run Script",
+        "Id": "79f356b75eb2414496bcce759ecf447c",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 611.4832347607047,
+        "Y": 443.57174864875651
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Element.Name",
+        "Id": "628689cbb9c248718608706b98720257",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 1665.6723816698884,
+        "Y": 351.53861363987994
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "ꟿ List.DropDown",
+        "Id": "f093949ceba5461c9e42842be699799e",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 2092.6723816698886,
+        "Y": 366.53861363987994
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "String",
+        "Id": "a2e5c5e511c14c06b0911203812e4524",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 1665.6723816698884,
+        "Y": 459.53861363987994
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Categories",
+        "Id": "1cf7a977184b49cea226cdc3e13b93dc",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 973.60228275482859,
+        "Y": 548.0056875194166
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "ꟿ Document.ActiveView",
+        "Id": "0daa25b32c444f219ef572dc792bdde8",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 2092.6723816698886,
+        "Y": 552.53861363987994
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Rebar.GetCenterlineCurve",
+        "Id": "1e43af70df9b40148134e5f45c14a61b",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 1602.6383837761073,
+        "Y": 547.34272873173188
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Curve.PointAtParameter",
+        "Id": "d79db546c0d14b8380dc0468b28477cb",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 2098.8092080359947,
+        "Y": 647.242156513317
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Code Block",
+        "Id": "8214ed4dae35427d89c3319ec98e0b72",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 1960.2400472429742,
+        "Y": 737.47490088955772
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Horizontal Tags==True / Vertical Tags==False",
+        "Id": "fdeb3dc98ca548e5b8ca0b3d2fd316bb",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 569.39553804452464,
+        "Y": 592.7909065766238
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Selection.PickObjectsOfCategory",
+        "Id": "29a69dd93a254dfca0f7ebb5c411f503",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 1240.6723816698884,
+        "Y": 554.03861363987994
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "String",
+        "Id": "fd4d086aaf5c4c02913a142fc2015793",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 963.76691335714554,
+        "Y": 652.088002820575
+      }
+    ],
+    "Annotations": [],
+    "X": -1342.434641480809,
+    "Y": -193.35508620339857,
+    "Zoom": 0.70059649301685123
+  }
+}

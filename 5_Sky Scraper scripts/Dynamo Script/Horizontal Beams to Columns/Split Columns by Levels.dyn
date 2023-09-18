@@ -1,0 +1,212 @@
+{
+  "Uuid": "3be86e11-10f2-47cd-8a08-b9d1e4456de9",
+  "IsCustomNode": false,
+  "Description": null,
+  "Name": "Split Columns by Levels",
+  "ElementResolver": {
+    "ResolutionMap": {}
+  },
+  "Inputs": [
+    {
+      "Id": "cc98f66fada44c7c959581360b0ec587",
+      "Name": "Run Script",
+      "Type": "boolean",
+      "Value": "false",
+      "Description": "Selection between a true and false."
+    },
+    {
+      "Id": "7845511760ef47c087b80fad0a7848cd",
+      "Name": "Column Base Offset",
+      "Type": "number",
+      "Value": "0",
+      "NumberType": "Double",
+      "Description": "Creates a number."
+    }
+  ],
+  "Outputs": [],
+  "Nodes": [
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Function, DynamoCore",
+      "FunctionSignature": "95c3ea48-3d48-421c-b604-07236792da96",
+      "FunctionType": "Graph",
+      "NodeType": "FunctionNode",
+      "Id": "cc9fffa6bb16462285f80b7c0a87f24f",
+      "Inputs": [
+        {
+          "Id": "4d08469d120a494aa71bb92eeca8a03a",
+          "Name": "BaseOffset",
+          "Description": "Specify column base level offset\n\nvar[]..[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "57f64f2ec95e4b1a8981053724e88b86",
+          "Name": "RunScript",
+          "Description": "Choose if you want to run the script \n\nbool",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "a880724303da45ba88c204b55995fced",
+          "Name": "SplittedColumns",
+          "Description": "Spltted Column elements grouped by levels",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "9d73c55e8729411a89cb78bccef6bbee",
+          "Name": "WasRun",
+          "Description": "Specifies if script was run",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "712b5ef84e5042c5879bf49e3469dfd4",
+          "Name": "WasCancelled",
+          "Description": "Specifies if script was cancelled",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Split selected revit structural columns base on associated levels in the document"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
+      "NodeType": "BooleanInputNode",
+      "InputValue": false,
+      "Id": "cc98f66fada44c7c959581360b0ec587",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "480faae209e745c0b9947c78916c1ee9",
+          "Name": "",
+          "Description": "Boolean",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Selection between a true and false."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.DoubleInput, CoreNodeModels",
+      "NodeType": "NumberInputNode",
+      "NumberType": "Double",
+      "InputValue": 0.0,
+      "Id": "7845511760ef47c087b80fad0a7848cd",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "b74409479855401c8e7fcd73e872fac8",
+          "Name": "",
+          "Description": "Double",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Creates a number."
+    }
+  ],
+  "Connectors": [
+    {
+      "Start": "480faae209e745c0b9947c78916c1ee9",
+      "End": "57f64f2ec95e4b1a8981053724e88b86",
+      "Id": "cd18add4dee94dc2bae37ba1f6f8515b"
+    },
+    {
+      "Start": "b74409479855401c8e7fcd73e872fac8",
+      "End": "4d08469d120a494aa71bb92eeca8a03a",
+      "Id": "47af524afbc944aba87409562cf8ed91"
+    }
+  ],
+  "Dependencies": [
+    "95c3ea48-3d48-421c-b604-07236792da96"
+  ],
+  "NodeLibraryDependencies": [
+    {
+      "Name": "KennyStruct Nodes",
+      "Version": "0.0.1",
+      "ReferenceType": "Package",
+      "Nodes": [
+        "cc9fffa6bb16462285f80b7c0a87f24f"
+      ]
+    }
+  ],
+  "Bindings": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 1.0,
+      "HasRunWithoutCrash": false,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "2.3.0.5885",
+      "RunType": "Manual",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "Background Preview",
+      "EyeX": -17.0,
+      "EyeY": 24.0,
+      "EyeZ": 50.0,
+      "LookX": 12.0,
+      "LookY": -13.0,
+      "LookZ": -58.0,
+      "UpX": 0.0,
+      "UpY": 1.0,
+      "UpZ": 0.0
+    },
+    "NodeViews": [
+      {
+        "Id": "cc9fffa6bb16462285f80b7c0a87f24f",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Name": "SplitColumnsByLevels",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": 333.71980505985044,
+        "Y": 379.03842992382664
+      },
+      {
+        "Id": "cc98f66fada44c7c959581360b0ec587",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Name": "Run Script",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": 134.87152216116959,
+        "Y": 430.19763960825156
+      },
+      {
+        "Id": "7845511760ef47c087b80fad0a7848cd",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Name": "Column Base Offset",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": 139.35505219381525,
+        "Y": 356.96664907503839
+      }
+    ],
+    "Annotations": [],
+    "X": -136.48928569114463,
+    "Y": -163.70392500000003,
+    "Zoom": 1.33823125
+  }
+}

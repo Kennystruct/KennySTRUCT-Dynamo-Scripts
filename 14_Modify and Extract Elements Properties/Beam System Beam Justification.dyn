@@ -1,0 +1,211 @@
+{
+  "Uuid": "27acd8d1-7d1b-4e19-9bc4-22ae41302cac",
+  "IsCustomNode": false,
+  "Description": null,
+  "Name": "Beam System Beam Justification",
+  "ElementResolver": {
+    "ResolutionMap": {}
+  },
+  "Inputs": [],
+  "Outputs": [],
+  "Nodes": [
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "import clr\r\nimport sys\r\n\r\nimport System\r\nfrom System import Array\r\nfrom System.Collections.Generic import *\r\nclr.AddReference('ProtoGeometry')\r\nfrom Autodesk.DesignScript.Geometry import *\r\n\r\nclr.AddReference(\"RevitNodes\")\r\nimport Revit\r\nclr.ImportExtensions(Revit.Elements)\r\nclr.ImportExtensions(Revit.GeometryConversion)\r\n\r\nclr.AddReference(\"RevitServices\")\r\nimport RevitServices\r\nfrom RevitServices.Persistence import DocumentManager \r\nfrom RevitServices.Transactions import TransactionManager \r\n\r\nclr.AddReference(\"RevitAPI\")\r\nfrom Autodesk.Revit.DB import *\r\n\r\nclr.AddReference(\"RevitAPIUI\")\r\nfrom Autodesk.Revit.UI import *\r\n\r\ndoc = DocumentManager.Instance.CurrentDBDocument\r\nuiapp = DocumentManager.Instance.CurrentUIApplication \r\napp = uiapp.Application \r\nuidoc = uiapp.ActiveUIDocument\r\n\r\nTransactionManager.Instance.EnsureInTransaction(doc)\r\ndef PickedBeamSystem():\r\n\tclass MySelectionFilter(Selection.ISelectionFilter):\r\n\t\tdef __init__(self):\r\n\t\t\tpass\r\n\t\tdef AllowElement(self, element):\r\n\t\t\tif element.Category.Name == \"Structural Beam Systems\":\r\n\t\t\t\treturn True\r\n\t\t\telse:\r\n\t\t\t\treturn False\r\n\t\tdef AllowReference(self, element):\r\n\t\t\treturn False\r\n\tBeamSystems = []\r\n\tSel_filter = MySelectionFilter()\r\n\tobj_type = Selection.ObjectType.Element\r\n\tselection = uidoc.Selection.PickObjects(obj_type,Sel_filter,\"Select Beam System(s)\")\r\n\tfor elems in selection:\r\n\t\tBeamSystems.append(Document.GetElement(doc,elems))\r\n\treturn BeamSystems\r\n\r\nBeamSystems = PickedBeamSystem()\r\nBeams = []\r\n\r\nfor beamSystem in BeamSystems:\r\n\tbeamIds = beamSystem.GetBeamIds()\r\n\tfor ids in beamIds:\r\n\t\tBeams.append(doc.GetElement(ids))\r\n\r\nfor beam in Beams:\r\n\tparam = beam.LookupParameter(\"z Justification\")\r\n\tparam.Set(3)\r\n\r\nTransactionManager.Instance.TransactionTaskDone()\r\n\r\n\r\n\r\nOUT = Beams",
+      "VariableInputPorts": true,
+      "Id": "0d6d050195fe43349501a28fdaf5bd73",
+      "Inputs": [
+        {
+          "Id": "540ca53df78f4831a7768cd1cc7a7f21",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "5429eabf0f734a38afcc6bcf4df2379a",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded IronPython script."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
+      "NodeType": "BooleanInputNode",
+      "InputValue": true,
+      "Id": "205ee247ca6c449f8083bc50ab666506",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "496b27b1804942cea49bebde32ea88e3",
+          "Name": "",
+          "Description": "Boolean",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Selection between a true and false."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "Revit.Elements.Element.GetParameterValueByName@string",
+      "Id": "88c9de885c50492c9588bb3d14a18119",
+      "Inputs": [
+        {
+          "Id": "0bbb2ec4551043c8b4b8f5a6e99ea761",
+          "Name": "element",
+          "Description": "Revit.Elements.Element",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "2bbb56d4c0724bd1bdb36e424192c752",
+          "Name": "parameterName",
+          "Description": "The name of the parameter whose value you want to obtain.\n\nstring",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "43dd35661e7f4e19a52967dd7a0ad6a9",
+          "Name": "var[]..[]",
+          "Description": "var[]..[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Get the value of one of the element's parameters.\n\nElement.GetParameterValueByName (parameterName: string): var[]..[]"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
+      "NodeType": "StringInputNode",
+      "InputValue": "z Justification",
+      "Id": "3777e9a309814af9b04e90253acb2628",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "0aa877d0743449e7b7b9fc4970668feb",
+          "Name": "",
+          "Description": "String",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Creates a string."
+    }
+  ],
+  "Connectors": [
+    {
+      "Start": "5429eabf0f734a38afcc6bcf4df2379a",
+      "End": "0bbb2ec4551043c8b4b8f5a6e99ea761",
+      "Id": "f21b1a56536a49a7aead0b60b1ab844b"
+    },
+    {
+      "Start": "496b27b1804942cea49bebde32ea88e3",
+      "End": "540ca53df78f4831a7768cd1cc7a7f21",
+      "Id": "82330a8a047c495cb0da5eb9991cbf21"
+    },
+    {
+      "Start": "0aa877d0743449e7b7b9fc4970668feb",
+      "End": "2bbb56d4c0724bd1bdb36e424192c752",
+      "Id": "754c1bf94dde4229823b2d903f02e9b6"
+    }
+  ],
+  "Dependencies": [],
+  "NodeLibraryDependencies": [],
+  "Bindings": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 1.0,
+      "HasRunWithoutCrash": true,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "2.6.1.8786",
+      "RunType": "Manual",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "Background Preview",
+      "EyeX": -17.0,
+      "EyeY": 24.0,
+      "EyeZ": 50.0,
+      "LookX": 12.0,
+      "LookY": -13.0,
+      "LookZ": -58.0,
+      "UpX": 0.0,
+      "UpY": 1.0,
+      "UpZ": 0.0
+    },
+    "NodeViews": [
+      {
+        "ShowGeometry": true,
+        "Name": "Python Script",
+        "Id": "0d6d050195fe43349501a28fdaf5bd73",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 320.87803489624162,
+        "Y": 391.71582657436619
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Boolean",
+        "Id": "205ee247ca6c449f8083bc50ab666506",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 91.237892047214245,
+        "Y": 251.37270712445553
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Element.GetParameterValueByName",
+        "Id": "88c9de885c50492c9588bb3d14a18119",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 588.65875336341367,
+        "Y": 417.68611555811844
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "String",
+        "Id": "3777e9a309814af9b04e90253acb2628",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 393.49163158913154,
+        "Y": 584.07283227812832
+      }
+    ],
+    "Annotations": [],
+    "X": 127.44029490694084,
+    "Y": -109.77419249065531,
+    "Zoom": 0.56229881507348278
+  }
+}

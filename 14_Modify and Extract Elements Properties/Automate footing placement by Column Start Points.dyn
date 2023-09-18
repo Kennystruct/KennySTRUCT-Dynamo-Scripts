@@ -1,0 +1,454 @@
+{
+  "Uuid": "2ea74a05-03b9-4dfc-89a5-267be118a589",
+  "IsCustomNode": false,
+  "Description": null,
+  "Name": "Automate footing placement by Column Start Points",
+  "ElementResolver": {
+    "ResolutionMap": {}
+  },
+  "Inputs": [],
+  "Outputs": [],
+  "Nodes": [
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Function, DynamoCore",
+      "FunctionSignature": "7537e2ed-d8e0-4688-951b-e992bf2bd60c",
+      "FunctionType": "Graph",
+      "NodeType": "FunctionNode",
+      "Id": "e4505bedba3f4890bad65c5d3a28b933",
+      "Inputs": [
+        {
+          "Id": "670a2f5c42074ea6a529cb79dc03f5c4",
+          "Name": "category",
+          "Description": "var[]..[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "cd692f8a2bd84ef58d3a3aeaddbb9240",
+          "Name": "element",
+          "Description": "Element",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "214a71acee2e4586839e8fdfa596e2fc",
+          "Name": "ElementsInDocument",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Get all the elements of a particular category and selected type in Revit. To select a type, use the \"Select Model Element\" node or any node that helps you select an element in the Revit workspace"
+    },
+    {
+      "ConcreteType": "DSRevitNodesUI.Categories, DSRevitNodesUI",
+      "SelectedIndex": 550,
+      "SelectedString": "OST_StructuralColumns",
+      "NodeType": "ExtensionNode",
+      "Id": "1077bb5b270c4cf59fa1004bfd84d22c",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "2353ba955f3c4aa98add5819a37d9a99",
+          "Name": "Category",
+          "Description": "The selected Category.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "All built-in categories."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Function, DynamoCore",
+      "FunctionSignature": "bd89d95e-b372-40d6-8ec0-a838cc4f2c47",
+      "FunctionType": "Graph",
+      "NodeType": "FunctionNode",
+      "Id": "f6b5778d11e449eb93003f6bf6c26c42",
+      "Inputs": [
+        {
+          "Id": "30ea12d0b2ac44909832db06a895bbfd",
+          "Name": "Columns",
+          "Description": "var[]..[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "975242b8fdd34412aafd6d76a702cf89",
+          "Name": "ProjectElevation",
+          "Description": "bool",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "26d6e0bff10541e3b71524a0ae7c5435",
+          "Name": "Curves",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "99dd09529ce74b20ad7d9c8da04f4289",
+          "Name": "StartPoints",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "96ade177b9674b1784348b1a6867ab1c",
+          "Name": "EndPoints",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "d3487c3f187546ea8f298c42f120457f",
+          "Name": "Rotations",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "95ac4e2101c8406aa057d3af894260d8",
+          "Name": "ColumnStyle",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Get all column associated geometries (curves, start and end points, rotations and column style)"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
+      "NodeType": "BooleanInputNode",
+      "InputValue": true,
+      "Id": "8312f2a881d24c1fa7714ac4d0abfdd0",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "221ae443e1154ac8939a19603b2f7573",
+          "Name": "",
+          "Description": "Boolean",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Selection between a true and false."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "Revit.Elements.FamilyInstance.ByPoint@Revit.Elements.FamilyType,Autodesk.DesignScript.Geometry.Point",
+      "Id": "b1c6b23e95624fb99b476e851a0571c1",
+      "Inputs": [
+        {
+          "Id": "7d5b2205d9404821b1ecfe6d46809d38",
+          "Name": "familyType",
+          "Description": "Family Type. Also called Family Symbol.\n\nFamilyType",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "11345fb307ad4bafa7e24fd3bcb80a10",
+          "Name": "point",
+          "Description": "Point in meters.\n\nPoint",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "fcf6d7acb2f84540beacb87904e8ca5b",
+          "Name": "FamilyInstance",
+          "Description": "FamilyInstance",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Place a Revit FamilyInstance given the FamilyType (also known as the FamilySymbol in the Revit API) and its coordinates in world space\n\nFamilyInstance.ByPoint (familyType: FamilyType, point: Point): FamilyInstance"
+    },
+    {
+      "ConcreteType": "DSRevitNodesUI.FamilyTypes, DSRevitNodesUI",
+      "SelectedIndex": 104,
+      "SelectedString": "M_Footing-Rectangular:1500 x 1000 x 300mm",
+      "NodeType": "ExtensionNode",
+      "Id": "2339611d71ff4b93b56839ad7b62137a",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "f16f433a0815424cb1da76ec22114001",
+          "Name": "Family Type",
+          "Description": "The selected Family Type",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "All family types available in the document."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "Revit.Elements.FamilyInstance.SetRotation@double",
+      "Id": "876f1683c0864ea298f9bedf70880521",
+      "Inputs": [
+        {
+          "Id": "989de68b0ade4e0c8d64e738d90286f8",
+          "Name": "familyInstance",
+          "Description": "Revit.Elements.FamilyInstance",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "3e2d70f5bfde46d887d2dcc6036c013f",
+          "Name": "degree",
+          "Description": "The Euler angle around Z-axis.\n\ndouble",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "c1dd3be8a07d46bc87824b7933e0d00d",
+          "Name": "FamilyInstance",
+          "Description": "The result family instance.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Set the Euler angle of the family instance around its local Z-axis.\n\nFamilyInstance.SetRotation (degree: double): FamilyInstance"
+    },
+    {
+      "ConcreteType": "Dynamo.Nodes.DSModelElementSelection, DSRevitNodesUI",
+      "NodeType": "ExtensionNode",
+      "InstanceId": [],
+      "Id": "fdf7b193512748cdbb89b561e7ee1b7b",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "ffdcb2c52925468da2f265664dde7b1b",
+          "Name": "Element",
+          "Description": "The selected elements.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled"
+    }
+  ],
+  "Connectors": [
+    {
+      "Start": "214a71acee2e4586839e8fdfa596e2fc",
+      "End": "30ea12d0b2ac44909832db06a895bbfd",
+      "Id": "c87599758b704e59b68371fa75904517"
+    },
+    {
+      "Start": "2353ba955f3c4aa98add5819a37d9a99",
+      "End": "670a2f5c42074ea6a529cb79dc03f5c4",
+      "Id": "1e3438b06c204878b2e31fcaa6a52286"
+    },
+    {
+      "Start": "96ade177b9674b1784348b1a6867ab1c",
+      "End": "11345fb307ad4bafa7e24fd3bcb80a10",
+      "Id": "a6bad40f1e654d87bcce90c2b11f9010"
+    },
+    {
+      "Start": "d3487c3f187546ea8f298c42f120457f",
+      "End": "3e2d70f5bfde46d887d2dcc6036c013f",
+      "Id": "ae001f5af32b4853b7a654bac04f440d"
+    },
+    {
+      "Start": "221ae443e1154ac8939a19603b2f7573",
+      "End": "975242b8fdd34412aafd6d76a702cf89",
+      "Id": "e25ea90b3486461c8306b55bcc7b302b"
+    },
+    {
+      "Start": "fcf6d7acb2f84540beacb87904e8ca5b",
+      "End": "989de68b0ade4e0c8d64e738d90286f8",
+      "Id": "09118cd8d16e4ab6833535444c13bb29"
+    },
+    {
+      "Start": "f16f433a0815424cb1da76ec22114001",
+      "End": "7d5b2205d9404821b1ecfe6d46809d38",
+      "Id": "eaab1dd2b2de4e9dba2e7a0168ee0f17"
+    },
+    {
+      "Start": "ffdcb2c52925468da2f265664dde7b1b",
+      "End": "cd692f8a2bd84ef58d3a3aeaddbb9240",
+      "Id": "9ba7044425aa40cd9542db9a7d72ca73"
+    }
+  ],
+  "Dependencies": [
+    "7537e2ed-d8e0-4688-951b-e992bf2bd60c",
+    "bd89d95e-b372-40d6-8ec0-a838cc4f2c47"
+  ],
+  "NodeLibraryDependencies": [
+    {
+      "Name": "KennyStruct Nodes",
+      "Version": "0.0.1",
+      "ReferenceType": "Package",
+      "Nodes": [
+        "e4505bedba3f4890bad65c5d3a28b933",
+        "f6b5778d11e449eb93003f6bf6c26c42"
+      ]
+    }
+  ],
+  "Bindings": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 1.0,
+      "HasRunWithoutCrash": true,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "2.6.1.8786",
+      "RunType": "Manual",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "Background Preview",
+      "EyeX": -17.0,
+      "EyeY": 24.0,
+      "EyeZ": 50.0,
+      "LookX": 12.0,
+      "LookY": -13.0,
+      "LookZ": -58.0,
+      "UpX": 0.0,
+      "UpY": 1.0,
+      "UpZ": 0.0
+    },
+    "NodeViews": [
+      {
+        "ShowGeometry": true,
+        "Name": "AllElementsofSelectedCategoryandType",
+        "Id": "e4505bedba3f4890bad65c5d3a28b933",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 377.0,
+        "Y": 313.0
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Categories",
+        "Id": "1077bb5b270c4cf59fa1004bfd84d22c",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 65.0,
+        "Y": 292.0
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "GetColumnGeometry",
+        "Id": "f6b5778d11e449eb93003f6bf6c26c42",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 744.16037009067327,
+        "Y": 567.35839882709479
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Boolean",
+        "Id": "8312f2a881d24c1fa7714ac4d0abfdd0",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 501.526058992015,
+        "Y": 628.87943469712081
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "FamilyInstance.ByPoint",
+        "Id": "b1c6b23e95624fb99b476e851a0571c1",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 1185.6222463690947,
+        "Y": 433.65034039871455
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Footing Family Type",
+        "Id": "2339611d71ff4b93b56839ad7b62137a",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 750.46572263213136,
+        "Y": 388.17079872549266
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "FamilyInstance.SetRotation",
+        "Id": "876f1683c0864ea298f9bedf70880521",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 1554.3123854557614,
+        "Y": 448.73286946158078
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Select Column Element Type",
+        "Id": "fdf7b193512748cdbb89b561e7ee1b7b",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 22.513547623480349,
+        "Y": 413.52475295706353
+      }
+    ],
+    "Annotations": [],
+    "X": 27.185563798303747,
+    "Y": 137.29461079237191,
+    "Zoom": 0.51832839747751747
+  }
+}

@@ -1,0 +1,354 @@
+{
+  "Uuid": "444bc1f4-d919-4838-9456-0b326aa9d15e",
+  "IsCustomNode": false,
+  "Description": null,
+  "Name": "Place Family Instance by Point and View",
+  "ElementResolver": {
+    "ResolutionMap": {}
+  },
+  "Inputs": [
+    {
+      "Id": "fe49ed21ce444394b74b29cf0ccdccf3",
+      "Name": "Show Dialog?",
+      "Type": "boolean",
+      "Value": "false",
+      "Description": "Selection between a true and false."
+    }
+  ],
+  "Outputs": [],
+  "Nodes": [
+    {
+      "ConcreteType": "DSRevitNodesUI.FamilyTypes, DSRevitNodesUI",
+      "SelectedIndex": 69,
+      "SelectedString": "KSD - U-Bar:KSD - U-Bar",
+      "NodeType": "ExtensionNode",
+      "Id": "1d381ca64c344f8bac951ec456db715e",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "a70f6f95a62748bbae10074282bfbe6e",
+          "Name": "Family Type",
+          "Description": "The selected Family Type",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "All family types available in the document."
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "# Load the Python Standard and DesignScript Libraries\r\nimport sys\r\nimport clr\r\nclr.AddReference('ProtoGeometry')\r\nfrom Autodesk.DesignScript.Geometry import *\r\n\r\nclr.AddReference(\"RevitNodes\")\r\nimport Revit\r\nclr.ImportExtensions(Revit.Elements)\r\nclr.ImportExtensions(Revit.GeometryConversion)\r\n\r\nclr.AddReference(\"RevitAPI\")\r\nfrom Autodesk.Revit.DB import Point as RPT\r\nfrom Autodesk.Revit.DB.Events import *\r\n\r\nclr.AddReference(\"RevitAPIUI\")\r\nfrom Autodesk.Revit.UI import TaskDialog\r\n\r\nclr.AddReference(\"RevitServices\")\r\nfrom RevitServices.Persistence import DocumentManager \r\nfrom RevitServices.Transactions import TransactionManager \r\n\r\ndoc = DocumentManager.Instance.CurrentDBDocument\r\nuidoc = DocumentManager.Instance.CurrentUIApplication.ActiveUIDocument\r\n\r\nif IN[2]:\r\n\tTaskDialog.Show(\"Pick Point Dialog\", IN[0])\r\n\r\npt = uidoc.Selection.PickPoint(IN[1])\r\n\r\n# Assign your output to the OUT variable.\r\nOUT = pt.ToPoint()",
+      "VariableInputPorts": true,
+      "Id": "c267c110fb01492693211b99a0708221",
+      "Inputs": [
+        {
+          "Id": "44f0e4bc29124a508afa722280d07d7a",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "26d128d76d1d45d482738ac1a38df28c",
+          "Name": "IN[1]",
+          "Description": "Input #1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "59b7b38606394962913124de06561694",
+          "Name": "IN[2]",
+          "Description": "Input #2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "e9910b70bba54355aaaa074fc6cdefff",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded IronPython script."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
+      "NodeType": "BooleanInputNode",
+      "InputValue": false,
+      "Id": "fe49ed21ce444394b74b29cf0ccdccf3",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "a9faa5137cc5466ebe0d4ff00848e262",
+          "Name": "",
+          "Description": "Boolean",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Selection between a true and false."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
+      "NodeType": "StringInputNode",
+      "InputValue": "Please Pick a Point in Revit",
+      "Id": "051831dbbc334821ada2586dcea4decd",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "61955355e5314f07a4bd8afa65c3f6b9",
+          "Name": "",
+          "Description": "String",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Creates a string."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
+      "NodeType": "StringInputNode",
+      "InputValue": "Pick a point after you close the dialog",
+      "Id": "502441a734af4da199981e7d2e8655d1",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "d27c359ed4db4d32ab33add86056ab5d",
+          "Name": "",
+          "Description": "String",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Creates a string."
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "import clr\r\nclr.AddReference('RevitAPI')\r\nfrom Autodesk.Revit.DB import *\r\n\r\nclr.AddReference(\"RevitNodes\")\r\nimport Revit\r\nclr.ImportExtensions(Revit.Elements)\r\nclr.ImportExtensions(Revit.GeometryConversion)\r\n\r\nclr.AddReference(\"RevitServices\")\r\nimport RevitServices\r\nfrom RevitServices.Persistence import DocumentManager\r\nfrom RevitServices.Transactions import TransactionManager\r\n\r\ndoc = DocumentManager.Instance.CurrentDBDocument\r\npoints = UnwrapElement(IN[0])\r\nfamtype = UnwrapElement(IN[1])\r\n#lvl = UnwrapElement(IN[2])\r\nelementlist = list()\r\ncounter = 0\r\n\r\nTransactionManager.Instance.EnsureInTransaction(doc)\r\n# make sure familysymbol is active\r\nif famtype.IsActive == False:\r\n\tfamtype.Activate()\r\n\tdoc.Regenerate()\r\nfor point in points:\r\n\tnewobj = doc.Create.NewFamilyInstance(point.ToXyz(),famtype,doc.ActiveView)\r\n\telementlist.append(newobj.ToDSType(False))\r\nTransactionManager.Instance.TransactionTaskDone()\r\nOUT = elementlist",
+      "VariableInputPorts": true,
+      "Id": "1b9394b224f64d52ac9ca1edc61fd6b3",
+      "Inputs": [
+        {
+          "Id": "f9fb68627330414c8918fb659cde7f92",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "a6016953c0cd47f6b2c6f261b5afae01",
+          "Name": "IN[1]",
+          "Description": "Input #1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "8f4a31b9497d4d20b318b28d55fc222c",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded IronPython script."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.CreateList, CoreNodeModels",
+      "VariableInputPorts": true,
+      "NodeType": "ExtensionNode",
+      "Id": "85ebc67f6dff4a0abdcc38f5d53df5ec",
+      "Inputs": [
+        {
+          "Id": "594eec128e8a4df7998d0430de9f9b5c",
+          "Name": "item0",
+          "Description": "Item Index #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "24ae60e19b5547e6a942529c13cead0b",
+          "Name": "list",
+          "Description": "A list",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Makes a new list out of the given inputs"
+    }
+  ],
+  "Connectors": [
+    {
+      "Start": "a70f6f95a62748bbae10074282bfbe6e",
+      "End": "a6016953c0cd47f6b2c6f261b5afae01",
+      "Id": "70f99bd92d6846d7a3d37eca65db4a1d"
+    },
+    {
+      "Start": "e9910b70bba54355aaaa074fc6cdefff",
+      "End": "594eec128e8a4df7998d0430de9f9b5c",
+      "Id": "5828063ca2c6455699b2cfd19d4fcbb7"
+    },
+    {
+      "Start": "a9faa5137cc5466ebe0d4ff00848e262",
+      "End": "59b7b38606394962913124de06561694",
+      "Id": "235330232223491b83218348e7e4494f"
+    },
+    {
+      "Start": "61955355e5314f07a4bd8afa65c3f6b9",
+      "End": "26d128d76d1d45d482738ac1a38df28c",
+      "Id": "2f8951dc3a11439ab6db9e5a5fb6a2df"
+    },
+    {
+      "Start": "d27c359ed4db4d32ab33add86056ab5d",
+      "End": "44f0e4bc29124a508afa722280d07d7a",
+      "Id": "52067fe8218e45459813cc9625f04ac4"
+    },
+    {
+      "Start": "24ae60e19b5547e6a942529c13cead0b",
+      "End": "f9fb68627330414c8918fb659cde7f92",
+      "Id": "a8bd0bed5d3f410b99273b4e91367b38"
+    }
+  ],
+  "Dependencies": [],
+  "NodeLibraryDependencies": [],
+  "Bindings": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 1.0,
+      "HasRunWithoutCrash": true,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "2.6.1.8786",
+      "RunType": "Manual",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "Background Preview",
+      "EyeX": -9.1337367633080273,
+      "EyeY": 81.423819071585655,
+      "EyeZ": 100.56960418716514,
+      "LookX": 9.1337367633080273,
+      "LookY": -81.423819071585655,
+      "LookZ": -100.56960418716514,
+      "UpX": 0.040357610278848148,
+      "UpY": 0.8949343616020311,
+      "UpZ": -0.44436893648922038
+    },
+    "NodeViews": [
+      {
+        "ShowGeometry": true,
+        "Name": "Family Type to Place",
+        "Id": "1d381ca64c344f8bac951ec456db715e",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 11.204723801000341,
+        "Y": 464.29263293072631
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Python Script",
+        "Id": "c267c110fb01492693211b99a0708221",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": -37.598008318460643,
+        "Y": 283.2820433162002
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Show Dialog?",
+        "Id": "fe49ed21ce444394b74b29cf0ccdccf3",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": -337.60866587537879,
+        "Y": 395.79537008890725
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "String",
+        "Id": "051831dbbc334821ada2586dcea4decd",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": -338.60333709691974,
+        "Y": 312.79537008890725
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "String",
+        "Id": "502441a734af4da199981e7d2e8655d1",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": -338.60333709691974,
+        "Y": 214.79537008890725
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Python Script",
+        "Id": "1b9394b224f64d52ac9ca1edc61fd6b3",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 514.39666290308026,
+        "Y": 322.79537008890725
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "List Create",
+        "Id": "85ebc67f6dff4a0abdcc38f5d53df5ec",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 187.39666290308026,
+        "Y": 281.79537008890725
+      }
+    ],
+    "Annotations": [],
+    "X": 298.66904475752767,
+    "Y": -105.03393727542993,
+    "Zoom": 0.83219544990338878
+  }
+}

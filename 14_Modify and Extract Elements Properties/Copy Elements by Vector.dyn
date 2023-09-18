@@ -1,0 +1,470 @@
+{
+  "Uuid": "2ea74a05-03b9-4dfc-89a5-267be118a589",
+  "IsCustomNode": false,
+  "Description": null,
+  "Name": "Copy Elements by Vector",
+  "ElementResolver": {
+    "ResolutionMap": {}
+  },
+  "Inputs": [
+    {
+      "Id": "ebd8784b4b7642d8a3907a2f91372f77",
+      "Name": "Z Vector Distance",
+      "Type": "number",
+      "Value": "0",
+      "NumberType": "Double",
+      "Description": "Creates a number."
+    },
+    {
+      "Id": "407a905336414593892f8e92ec23b50a",
+      "Name": "X Vector Distance",
+      "Type": "number",
+      "Value": "0",
+      "NumberType": "Double",
+      "Description": "Creates a number."
+    },
+    {
+      "Id": "4e6b10f713d048c88a624431e3b05de4",
+      "Name": "Y Vector Distance",
+      "Type": "number",
+      "Value": "0",
+      "NumberType": "Double",
+      "Description": "Creates a number."
+    }
+  ],
+  "Outputs": [],
+  "Nodes": [
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Function, DynamoCore",
+      "FunctionSignature": "baf73550-ccd9-4c94-8543-5eb088bfd742",
+      "FunctionType": "Graph",
+      "NodeType": "FunctionNode",
+      "Id": "d6c6fb642d12430e9ebb9d4020059e60",
+      "Inputs": [
+        {
+          "Id": "912f60b94d7e4cdc861b647ab9e5f3f6",
+          "Name": "element",
+          "Description": "var[]..[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "91942d66c1fd42f2b6ce9d3ba0c0d8c7",
+          "Name": "vector",
+          "Description": "Vector",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "d31d831098694d218155f5f43d57bdab",
+          "Name": "rehostToClosestLevel",
+          "Description": "bool\nDefault value : false",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "c1de305a2ebc4b7cbf86187c5e75b143",
+          "Name": "newElement",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Copies an element or a list of elements by a given vector."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "Autodesk.DesignScript.Geometry.Vector.ByCoordinates@double,double,double",
+      "Id": "b6f8b2d749fb48c2b4ce5c05ab8b97eb",
+      "Inputs": [
+        {
+          "Id": "6d9042516af64cfd8df83913b542dfbe",
+          "Name": "x",
+          "Description": "X coordinate\n\ndouble\nDefault value : 0",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "dbcf90b0db6944ac8f14ef8239f3c845",
+          "Name": "y",
+          "Description": "Y coordinate\n\ndouble\nDefault value : 0",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "7e8e22b6675b41f38408c6be5bfe8111",
+          "Name": "z",
+          "Description": "Z coordinate\n\ndouble\nDefault value : 0",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "8e1d90214fb0405fb9f68246efa81c9a",
+          "Name": "Vector",
+          "Description": "Vector",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Form a Vector by 3 Euclidean coordinates\n\nVector.ByCoordinates (x: double = 0, y: double = 0, z: double = 0): Vector"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.DoubleInput, CoreNodeModels",
+      "NodeType": "NumberInputNode",
+      "NumberType": "Double",
+      "InputValue": 0.0,
+      "Id": "ebd8784b4b7642d8a3907a2f91372f77",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "a7ed342862844ad89c6f4b97be0a013c",
+          "Name": "",
+          "Description": "Double",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Creates a number."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
+      "NodeType": "BooleanInputNode",
+      "InputValue": true,
+      "Id": "46cd7d3212b546ec912e19553dd538ce",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "0ab82d442f5c4ce0b942ed804a1f5689",
+          "Name": "",
+          "Description": "Boolean",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Selection between a true and false."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.DoubleInput, CoreNodeModels",
+      "NodeType": "NumberInputNode",
+      "NumberType": "Double",
+      "InputValue": 0.0,
+      "Id": "407a905336414593892f8e92ec23b50a",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "97d60e8c1ea3458595d851c481bd469d",
+          "Name": "",
+          "Description": "Double",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Creates a number."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.DoubleInput, CoreNodeModels",
+      "NodeType": "NumberInputNode",
+      "NumberType": "Double",
+      "InputValue": 0.0,
+      "Id": "4e6b10f713d048c88a624431e3b05de4",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "53430301f4524639a426e9493cdcbfb7",
+          "Name": "",
+          "Description": "Double",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Creates a number."
+    },
+    {
+      "ConcreteType": "DSRevitNodesUI.Categories, DSRevitNodesUI",
+      "SelectedIndex": -1,
+      "NodeType": "ExtensionNode",
+      "Id": "17fb75f4759a4c369b3786d7574008f0",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "d6d5a26eba3d457dab3618e024ef27db",
+          "Name": "Category",
+          "Description": "The selected Category.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "All built-in categories."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "Rhythm.Revit.Selection.Selection.Pick@bool,var[],bool",
+      "Id": "bdd4f4feecc840b2bfe5021535ace289",
+      "Inputs": [
+        {
+          "Id": "26cf620bb6e74f8e956bdbb33788efe4",
+          "Name": "runIt",
+          "Description": "Allows you to tell the node to \"run\". Also allows you to refresh selection.\n\nbool",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "4870012f0c864c27bc90c3834f010730",
+          "Name": "category",
+          "Description": "The category or categories to isolate to. (leave blank if you want to be able to pick anything)\n\nvar[]\nDefault value : Rhythm.Revit.Selection.Selection.GetNull()",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "5e4ede87d85e4ca18ca7ca89b21bf01d",
+          "Name": "singleSelection",
+          "Description": "Optional input for a single item selection. Default to multiple.\n\nbool\nDefault value : false",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "3f88cbeeaac648dbbb1a5af62b79cbe4",
+          "Name": "var[]..[]",
+          "Description": "var[]..[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Sometimes a pick selection is nicer. 😁\n\nSelection.Pick (runIt: bool, category: var[] = Rhythm.Revit.Selection.Selection.GetNull(), singleSelection: bool = false): var[]..[]"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
+      "NodeType": "BooleanInputNode",
+      "InputValue": true,
+      "Id": "55e65dd1ec1c48df9b72caa4bf186620",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "7712664f32514892985b650651b98813",
+          "Name": "",
+          "Description": "Boolean",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Selection between a true and false."
+    }
+  ],
+  "Connectors": [
+    {
+      "Start": "8e1d90214fb0405fb9f68246efa81c9a",
+      "End": "91942d66c1fd42f2b6ce9d3ba0c0d8c7",
+      "Id": "5198ba9e463b4217afcec0d651aaa1a4"
+    },
+    {
+      "Start": "a7ed342862844ad89c6f4b97be0a013c",
+      "End": "7e8e22b6675b41f38408c6be5bfe8111",
+      "Id": "0652dd66a5e44dbe9ce74a2aa58ae196"
+    },
+    {
+      "Start": "0ab82d442f5c4ce0b942ed804a1f5689",
+      "End": "d31d831098694d218155f5f43d57bdab",
+      "Id": "d9476179c4e64b28be95268610ed3055"
+    },
+    {
+      "Start": "97d60e8c1ea3458595d851c481bd469d",
+      "End": "6d9042516af64cfd8df83913b542dfbe",
+      "Id": "0b99dd27de47469c909a57d8578e52a9"
+    },
+    {
+      "Start": "53430301f4524639a426e9493cdcbfb7",
+      "End": "dbcf90b0db6944ac8f14ef8239f3c845",
+      "Id": "5312d94181854d22a67e53c6b0bf4d97"
+    },
+    {
+      "Start": "d6d5a26eba3d457dab3618e024ef27db",
+      "End": "4870012f0c864c27bc90c3834f010730",
+      "Id": "1acf833c42fe46e786326f3e96cf34f2"
+    },
+    {
+      "Start": "3f88cbeeaac648dbbb1a5af62b79cbe4",
+      "End": "912f60b94d7e4cdc861b647ab9e5f3f6",
+      "Id": "5d0cb81a680b467e9cc171bc23cf9d75"
+    },
+    {
+      "Start": "7712664f32514892985b650651b98813",
+      "End": "26cf620bb6e74f8e956bdbb33788efe4",
+      "Id": "0b1a595c484e4dbbb6ad3281338aedf1"
+    }
+  ],
+  "Dependencies": [
+    "baf73550-ccd9-4c94-8543-5eb088bfd742"
+  ],
+  "Bindings": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 100.0,
+      "HasRunWithoutCrash": true,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "2.0.3.8810",
+      "RunType": "Manual",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "Background Preview",
+      "EyeX": -166464.51215090536,
+      "EyeY": 129310.30100349759,
+      "EyeZ": -382927.022647692,
+      "LookX": 178031.09808840536,
+      "LookY": -125910.30100349759,
+      "LookZ": 188851.796085192,
+      "UpX": 0.16013263502430092,
+      "UpY": 0.97236992039767978,
+      "UpZ": 0.16986546766777147
+    },
+    "NodeViews": [
+      {
+        "ShowGeometry": true,
+        "Name": "Element.CopyByVector",
+        "Id": "d6c6fb642d12430e9ebb9d4020059e60",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 1640.6259129385321,
+        "Y": 1776.8662570710908
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Vector.ByCoordinates",
+        "Id": "b6f8b2d749fb48c2b4ce5c05ab8b97eb",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 1295.6259129385321,
+        "Y": 1802.8662570710908
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Z Vector Distance",
+        "Id": "ebd8784b4b7642d8a3907a2f91372f77",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 990.62591293853211,
+        "Y": 1935.8662570710908
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Boolean",
+        "Id": "46cd7d3212b546ec912e19553dd538ce",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 1295.6259129385321,
+        "Y": 1962.8662570710908
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "X Vector Distance",
+        "Id": "407a905336414593892f8e92ec23b50a",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 990.62591293853211,
+        "Y": 1769.8662570710908
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Y Vector Distance",
+        "Id": "4e6b10f713d048c88a624431e3b05de4",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 990.62591293853211,
+        "Y": 1852.8662570710908
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Select Category to Copy",
+        "Id": "17fb75f4759a4c369b3786d7574008f0",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 990.62591293853211,
+        "Y": 1661.8662570710908
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "ʳʰʸᵗʰᵐ|Selection.Pick",
+        "Id": "bdd4f4feecc840b2bfe5021535ace289",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 1295.6259129385321,
+        "Y": 1642.8662570710908
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Run Script",
+        "Id": "55e65dd1ec1c48df9b72caa4bf186620",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 990.62591293853211,
+        "Y": 1577.8662570710908
+      }
+    ],
+    "Annotations": [],
+    "X": -951.25787179744827,
+    "Y": -1107.8090299936871,
+    "Zoom": 0.76840713526082993
+  }
+}

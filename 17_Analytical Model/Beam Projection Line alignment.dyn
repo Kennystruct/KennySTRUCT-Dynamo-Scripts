@@ -1,0 +1,122 @@
+{
+  "Uuid": "6c4d679e-45f8-4a37-9587-45e37baa7649",
+  "IsCustomNode": false,
+  "Description": null,
+  "Name": "Beam Projection Line alignment",
+  "ElementResolver": {
+    "ResolutionMap": {}
+  },
+  "Inputs": [],
+  "Outputs": [],
+  "Nodes": [
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "import clr\r\nimport sys\r\n\r\nimport System\r\nfrom System import Array\r\nfrom System.Collections.Generic import *\r\nclr.AddReference('ProtoGeometry')\r\nfrom Autodesk.DesignScript.Geometry import *\r\n\r\nclr.AddReference(\"RevitNodes\")\r\nimport Revit\r\nclr.ImportExtensions(Revit.Elements)\r\nclr.ImportExtensions(Revit.GeometryConversion)\r\n\r\nclr.AddReference(\"RevitServices\")\r\nimport RevitServices\r\nfrom RevitServices.Persistence import DocumentManager \r\nfrom RevitServices.Transactions import TransactionManager \r\n\r\nclr.AddReference(\"RevitAPI\")\r\nfrom Autodesk.Revit.DB import *\r\n\r\nclr.AddReference(\"RevitAPIUI\")\r\nfrom Autodesk.Revit.UI import *\r\n\r\nfrom Autodesk.Revit.DB.Structure import *\r\n\r\ndoc = DocumentManager.Instance.CurrentDBDocument\r\nuiapp = DocumentManager.Instance.CurrentUIApplication \r\napp = uiapp.Application \r\nuidoc = uiapp.ActiveUIDocument\r\n\r\nTransactionManager.Instance.EnsureInTransaction(doc)\r\n\r\nbeams = FilteredElementCollector(doc).OfCategory(BuiltInCategory.OST_StructuralFraming).WhereElementIsNotElementType().ToElements()\r\n\r\nBeamsAnalyticalModel = []\r\nBeams = []\r\n\r\nfor beam in beams:\r\n\tif beam.GetAnalyticalModel().IsEnabled():\r\n\t\tBeamsAnalyticalModel.append(beam.GetAnalyticalModel())\r\n\t\tBeams.append(beam)\r\n\t\t\r\nBeamAM = []\r\ntry:\r\n\tfor AM in BeamsAnalyticalModel:\r\n\t\tBeamAM.append(AM.LookupParameter(\"Start Alignment Method\").AsInteger())\r\n\t\tAM.LookupParameter(\"Start Alignment Method\").Set(1)\r\n\t\tAM.LookupParameter(\"End Alignment Method\").Set(1)\r\nexcept:\r\n\tpass\r\n\t\t\r\nTransactionManager.Instance.TransactionTaskDone()\r\n\r\nOUT = BeamAM",
+      "VariableInputPorts": true,
+      "Id": "f38aacff0ad546e69e2869f11d9b4631",
+      "Inputs": [
+        {
+          "Id": "e3ed903e52d44d03bdedfe095c5d7d91",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "793801c9c3fb4c3fb8219659c7e1eaaf",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded IronPython script."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
+      "NodeType": "BooleanInputNode",
+      "InputValue": true,
+      "Id": "2c27a31a70b2495a8d265587a57e2b32",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "837ba52c9db5418ba861229c543c9e65",
+          "Name": "",
+          "Description": "Boolean",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Selection between a true and false."
+    }
+  ],
+  "Connectors": [
+    {
+      "Start": "837ba52c9db5418ba861229c543c9e65",
+      "End": "e3ed903e52d44d03bdedfe095c5d7d91",
+      "Id": "a6035a7aed0e443ebfbc3aeb79e2404f"
+    }
+  ],
+  "Dependencies": [],
+  "NodeLibraryDependencies": [],
+  "Bindings": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 1.0,
+      "HasRunWithoutCrash": true,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "2.6.1.8786",
+      "RunType": "Manual",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "Background Preview",
+      "EyeX": -17.0,
+      "EyeY": 24.0,
+      "EyeZ": 50.0,
+      "LookX": 12.0,
+      "LookY": -13.0,
+      "LookZ": -58.0,
+      "UpX": 0.0,
+      "UpY": 1.0,
+      "UpZ": 0.0
+    },
+    "NodeViews": [
+      {
+        "ShowGeometry": true,
+        "Name": "Python Script",
+        "Id": "f38aacff0ad546e69e2869f11d9b4631",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 190.52380241748273,
+        "Y": 182.886100393655
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Boolean",
+        "Id": "2c27a31a70b2495a8d265587a57e2b32",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 47.097154217317041,
+        "Y": 181.51273193057861
+      }
+    ],
+    "Annotations": [],
+    "X": 136.19096134626562,
+    "Y": -239.4672386411595,
+    "Zoom": 0.91641321937535114
+  }
+}

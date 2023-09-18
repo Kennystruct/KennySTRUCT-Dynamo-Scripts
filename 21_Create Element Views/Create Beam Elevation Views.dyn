@@ -1,0 +1,232 @@
+{
+  "Uuid": "3c9d0464-8643-5ffe-96e5-ab1769818209",
+  "IsCustomNode": false,
+  "Description": "",
+  "Name": "Create Beam Elevation Views",
+  "ElementResolver": {
+    "ResolutionMap": {
+      "Application.Document.ActiveView": {
+        "Key": "Revit.Application.Document",
+        "Value": "RevitNodes.dll"
+      },
+      "Application.Document": {
+        "Key": "Revit.Application.Document",
+        "Value": "RevitNodes.dll"
+      },
+      "Revit.Application.Document.ActiveView": {
+        "Key": "Revit.Application.Document",
+        "Value": "RevitNodes.dll"
+      },
+      "Document": {
+        "Key": "Revit.Application.Document",
+        "Value": "RevitNodes.dll"
+      },
+      "Application.Document.Current": {
+        "Key": "Revit.Application.Document",
+        "Value": "RevitNodes.dll"
+      },
+      "Revit.Application.Document.Current": {
+        "Key": "Revit.Application.Document",
+        "Value": "RevitNodes.dll"
+      },
+      "Document.Current": {
+        "Key": "Revit.Application.Document",
+        "Value": "RevitNodes.dll"
+      }
+    }
+  },
+  "Inputs": [],
+  "Outputs": [],
+  "Nodes": [
+    {
+      "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
+      "NodeType": "StringInputNode",
+      "InputValue": "KSD - Cross Section",
+      "Id": "2557c022a31c4814b1298ccc1dd5ed70",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "144a9e34541145e6ac6157ad1b52a6aa",
+          "Name": "",
+          "Description": "String",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Creates a string."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "NodeType": "CodeBlockNode",
+      "Code": "100;",
+      "Id": "6fce798e0d0442bd8632fa8350776203",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "4d71d4d09aa8414a87b4c1744b97155d",
+          "Name": "",
+          "Description": "Value of expression at line 1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly"
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "#Created by KEHINDE AYOBADE\r\n#FREE FOR USE\r\n#https://www.linkedin.com/kehinde-ayobade\r\n\r\nimport sys\r\nimport clr\r\nclr.AddReference('ProtoGeometry')\r\nfrom Autodesk.DesignScript.Geometry import *\r\n\r\nclr.AddReference(\"RevitNodes\")\r\nimport Revit\r\nclr.ImportExtensions(Revit.Elements)\r\nclr.ImportExtensions(Revit.GeometryConversion)\r\n\r\nclr.AddReference(\"RevitServices\")\r\nimport RevitServices\r\nfrom RevitServices.Persistence import DocumentManager \r\nfrom RevitServices.Transactions import TransactionManager \r\n\r\nclr.AddReference(\"RevitAPI\")\r\nfrom Autodesk.Revit.DB import *\r\n\r\nclr.AddReference(\"RevitAPIUI\")\r\nfrom Autodesk.Revit.UI import *\r\n\r\ndoc = DocumentManager.Instance.CurrentDBDocument\r\nuiapp = DocumentManager.Instance.CurrentUIApplication \r\napp = uiapp.Application \r\nuidoc = uiapp.ActiveUIDocument\r\n\r\ndef PickedBeams():\r\n\tclass MySelectionFilter(Selection.ISelectionFilter):\r\n\t\tdef __init__(self):\r\n\t\t\tpass\r\n\t\tdef AllowElement(self, element):\r\n\t\t\tif element.Category.Name == \"Structural Framing\":\r\n\t\t\t\treturn True\r\n\t\t\telse:\r\n\t\t\t\treturn False\r\n\t\tdef AllowReference(self, element):\r\n\t\t\treturn False\r\n\t\r\n\trefresh = True\r\n\tbeams = []\r\n\t\r\n\t\r\n\tSel_filter = MySelectionFilter()\r\n\tobj_type = Selection.ObjectType.Element\r\n\t\r\n\tif refresh:\r\n\t\tselection = uidoc.Selection.PickObjects(obj_type,Sel_filter,\"Select Structural Framing Element\")\r\n\t\t\r\n\t\tfor elems in selection:\r\n\t\t\t\tbeams.append(Document.GetElement(doc,elems))\r\n\telse:\r\n\t\tbeams.append(\"Please Set Toggle to True\")\r\n\t\tbeams = beams[0]\r\n\t\t\r\n\treturn beams\r\n\t\r\nStruct_beams = PickedBeams()\r\n\r\n# wall selection\r\nbeams = Struct_beams\r\n\r\nif not isinstance(beams, list):\r\n    beams = [beams]\r\n\r\nsectionTypeName = IN[0]\r\n\r\nfeet = 304.8\r\n\r\noffset = (IN[1])/feet\r\n\r\nviewFamilyTypes = FilteredElementCollector(doc).OfClass(ViewFamilyType).ToElements()\r\n\r\nds = []\r\nnewSections = []\r\nviewFamilyTypeId = []\r\n\r\nfor vf in viewFamilyTypes:\r\n\tif vf.get_Parameter(BuiltInParameter.SYMBOL_NAME_PARAM).AsString() == sectionTypeName:\r\n\t\tviewFamilyTypeId.append(vf.Id)\r\n\r\nfor beam in beams:\r\n\tbeamCrv = beam.Location.Curve\r\n\tbeamLen = beamCrv.Length\r\n\tbeamHeight = float(Document.GetElement(doc,beam.GetTypeId()).GetParameters(\"h\")[0].AsValueString())/feet\r\n\tbeamWidth = float(Document.GetElement(doc,beam.GetTypeId()).GetParameters(\"b\")[0].AsValueString())/feet\r\n\tbeamId = beam.GetTypeId()\r\n\tbeamMid = beamCrv.Evaluate(0.5,True)\r\n\tXbeamDir = beamCrv.Direction.Normalize()\r\n\tYbeamDir = XYZ.BasisZ\r\n\tZbeamDir = XbeamDir.CrossProduct(YbeamDir)\r\n\t\r\n\t#Min and Max values\r\n\tMin = -beamLen/2\r\n\tMax = beamLen/2\r\n\t\r\n\tcs = CoordinateSystem.ByOriginVectors(beamMid.ToPoint(),XbeamDir.ToVector(),YbeamDir.ToVector(),ZbeamDir.ToVector())\r\n\t\r\n\t#MinPoint and MaxPoint \r\n\tMinPoint = XYZ(Min-offset,-beamHeight-offset,-offset-0.5*beamWidth)\r\n\tMaxPoint = XYZ(Max+offset,offset,offset+0.5*beamWidth)\r\n\t\t\r\n\tt = Transform.Identity\r\n\tt.Origin = beamMid\r\n\tt.BasisX = XbeamDir\r\n\tt.BasisY = YbeamDir\r\n\tt.BasisZ = ZbeamDir\r\n\t\r\n\tsectionBox = BoundingBoxXYZ();\r\n\tsectionBox.Transform = t\r\n\tsectionBox.Min = MinPoint # scope box bottom\r\n\tsectionBox.Max = MaxPoint # scope box top\r\n#\t\r\n\tTransactionManager.Instance.EnsureInTransaction(doc)\r\n\tfor SectTypeId in viewFamilyTypeId:\r\n\t\tnewSection = ViewSection.CreateSection(doc, SectTypeId, sectionBox)\r\n\t\tnewSections.append(newSection)\r\n\tTransactionManager.Instance.TransactionTaskDone()\r\n\t\r\n\tTransactionManager.Instance.EnsureInTransaction(doc)\r\n\tTransactionManager.Instance.ForceCloseTransaction()\r\n\t\r\n\tview = newSections\r\n\tuidoc.RequestViewChange(view[0])\r\n\t\r\n\tsuccess = []\r\n\tif doc.ActiveView.Name != view[0].Name:\r\n\t\tsuccess.append('Active View is ' + view[0].Name.ToString())\r\n\telse:\r\n\t\tsuccess.append('Active View is ' + doc.ActiveView.Name.ToString())\r\n\r\nOUT =  success[-1]",
+      "Engine": "IronPython2",
+      "VariableInputPorts": true,
+      "Id": "7790205cd41946e9af7ecc0b05fad844",
+      "Inputs": [
+        {
+          "Id": "0f88e339c974484db29ca37092fc85fe",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "8ac46e207a5d4db890a262c9afa44a5e",
+          "Name": "IN[1]",
+          "Description": "Input #1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "73fc5b9e480343a09c93bd53b9f83fd8",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded Python script."
+    }
+  ],
+  "Connectors": [
+    {
+      "Start": "144a9e34541145e6ac6157ad1b52a6aa",
+      "End": "0f88e339c974484db29ca37092fc85fe",
+      "Id": "6ddd468c042843cb8cc0254c34f83df4"
+    },
+    {
+      "Start": "4d71d4d09aa8414a87b4c1744b97155d",
+      "End": "8ac46e207a5d4db890a262c9afa44a5e",
+      "Id": "48f249b33839456a9cee88ab4d7e2841"
+    }
+  ],
+  "Dependencies": [],
+  "NodeLibraryDependencies": [],
+  "Thumbnail": "",
+  "GraphDocumentationURL": null,
+  "ExtensionWorkspaceData": [
+    {
+      "ExtensionGuid": "28992e1d-abb9-417f-8b1b-05e053bee670",
+      "Name": "Properties",
+      "Version": "2.12",
+      "Data": {}
+    }
+  ],
+  "Author": "None provided",
+  "Linting": {
+    "activeLinter": "None",
+    "activeLinterId": "7b75fb44-43fd-4631-a878-29f4d5d8399a",
+    "warningCount": 0,
+    "errorCount": 0
+  },
+  "Bindings": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 10000.0,
+      "HasRunWithoutCrash": true,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "2.12.0.5650",
+      "RunType": "Manual",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "Background Preview",
+      "EyeX": 11332.927370742409,
+      "EyeY": 46994.372024434735,
+      "EyeZ": 11612.858077906323,
+      "LookX": -9189.824831679909,
+      "LookY": -41328.122024434735,
+      "LookZ": -17059.773116968823,
+      "UpX": -0.37624906497532062,
+      "UpY": 0.60876142900872166,
+      "UpZ": -0.69845985114139375
+    },
+    "NodeViews": [
+      {
+        "ShowGeometry": true,
+        "Name": "Section Type Name",
+        "Id": "2557c022a31c4814b1298ccc1dd5ed70",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": -699.97419089697416,
+        "Y": 364.5055639387395
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Code Block",
+        "Id": "6fce798e0d0442bd8632fa8350776203",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": -603.54143737378172,
+        "Y": 425.995929730628
+      },
+      {
+        "ShowGeometry": false,
+        "Name": "Python Script",
+        "Id": "7790205cd41946e9af7ecc0b05fad844",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": -457.354262283291,
+        "Y": 381.97403215587144
+      }
+    ],
+    "Annotations": [
+      {
+        "Id": "f3045c926b494f29957a89f67f8971f5",
+        "Title": "PYTHON SCRIPT",
+        "Nodes": [
+          "2557c022a31c4814b1298ccc1dd5ed70",
+          "6fce798e0d0442bd8632fa8350776203",
+          "7790205cd41946e9af7ecc0b05fad844"
+        ],
+        "Left": -709.97419089697416,
+        "Top": 311.5055639387395,
+        "Width": 386.61992861368316,
+        "Height": 207.49036579188851,
+        "FontSize": 36.0,
+        "InitialTop": 364.5055639387395,
+        "InitialHeight": 202.72324313969131,
+        "TextblockHeight": 43.0,
+        "Background": "#FFC1D676"
+      }
+    ],
+    "X": 952.87456260996271,
+    "Y": -314.84699037162341,
+    "Zoom": 1.2095228119929748
+  }
+}

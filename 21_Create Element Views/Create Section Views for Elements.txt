@@ -1,0 +1,104 @@
+[Transaction( TransactionMode.Manual )]
+public class Command : IExternalCommand
+{
+  public Result Execute(
+    ExternalCommandData commandData,
+    ref string message,
+    ElementSet elements )
+  {
+    UIApplication uiapp = commandData.Application;
+    UIDocument uidoc = uiapp.ActiveUIDocument;
+    Document doc = uidoc.Document;
+ 
+    // Retrieve wall from selection set
+ 
+    Selection sel = uidoc.Selection;
+ 
+    SelElementSet set = sel.Elements;
+ 
+    Wall wall = null;
+ 
+    if( 1 == set.Size )
+    {
+      foreach( Element e in set )
+      {
+        wall = e as Wall;
+      }
+    }
+ 
+    if( null == wall )
+    {
+      message = "Please select exactly one wall element.";
+ 
+      return Result.Failed;
+    }
+ 
+    // Ensure wall is straight
+ 
+    LocationCurve lc = wall.Location as LocationCurve;
+ 
+    Line line = lc.Curve as Line;
+ 
+    if( null == line )
+    {
+      message = "Unable to retrieve wall location line.";
+ 
+      return Result.Failed;
+    }
+ 
+    // Determine view family type to use
+ 
+    ViewFamilyType vft
+      = new FilteredElementCollector( doc )
+        .OfClass( typeof( ViewFamilyType ) )
+        .Cast<ViewFamilyType>()
+        .FirstOrDefault<ViewFamilyType>( x =>
+          ViewFamily.Section == x.ViewFamily );
+ 
+    // Determine section box
+ 
+    XYZ p = line.get_EndPoint( 0 );
+    XYZ q = line.get_EndPoint( 1 );
+    XYZ v = q - p;
+ 
+    BoundingBoxXYZ bb = wall.get_BoundingBox( null );
+    double minZ = bb.Min.Z;
+    double maxZ = bb.Max.Z;
+ 
+    double w = v.GetLength();
+    double h = maxZ - minZ;
+    double d = wall.WallType.Width;
+    double offset = 0.1 * w;
+ 
+    XYZ min = new XYZ( -w, minZ - offset, -offset );
+    XYZ max = new XYZ( w, maxZ + offset, 0 );
+ 
+    XYZ midpoint = p + 0.5 * v;
+    XYZ walldir = v.Normalize();
+    XYZ up = XYZ.BasisZ;
+    XYZ viewdir = walldir.CrossProduct( up );
+ 
+    Transform t = Transform.Identity;
+    t.Origin = midpoint;
+    t.BasisX = walldir;
+    t.BasisY = up;
+    t.BasisZ = viewdir;
+ 
+    BoundingBoxXYZ sectionBox = new BoundingBoxXYZ();
+    sectionBox.Transform = t;
+    sectionBox.Min = min;
+    sectionBox.Max = max;
+ 
+    // Create wall section view
+ 
+    using( Transaction tx = new Transaction( doc ) )
+    {
+      tx.Start( "Create Wall Section View" );
+ 
+      ViewSection.CreateSection( doc, vft.Id, sectionBox );
+ 
+      tx.Commit();
+    }
+    return Result.Succeeded;
+  }
+}

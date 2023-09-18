@@ -1,0 +1,877 @@
+{
+  "Uuid": "568fc31d-f115-4364-80dc-aa149e70721e",
+  "IsCustomNode": false,
+  "Description": null,
+  "Name": "Topography_solid_layers_020",
+  "ElementResolver": {
+    "ResolutionMap": {
+      "Math": {
+        "Key": "DSCore.Math",
+        "Value": "DSCoreNodes.dll"
+      }
+    }
+  },
+  "Inputs": [],
+  "Outputs": [],
+  "Nodes": [
+    {
+      "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
+      "NodeType": "BooleanInputNode",
+      "InputValue": true,
+      "Id": "3272409649f0442e89d1a1de92b5e225",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "700fe5cd23b94058952fbf75000c962f",
+          "Name": "",
+          "Description": "Boolean",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Selection between a true and false."
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "\r\nimport clr\r\nimport sys\r\npyt_path = r'C:\\Program Files (x86)\\IronPython 2.7\\Lib'\r\nsys.path.append(pyt_path)\r\nimport os\r\nimport webbrowser\r\nimport unicodedata\r\nimport copy\t\r\n\r\nclr.AddReference('System.Windows.Forms')\r\nclr.AddReference('System.Drawing')\r\nclr.AddReference('System.Windows.Forms.DataVisualization')\r\n\r\n\r\nclr.AddReference(\"DSCoreNodes\")\r\nimport DSCore as DS\r\n\r\nimport System.Drawing\r\nimport System.Windows.Forms\r\n\r\nfrom System.Drawing import  Point , Size , Graphics, Bitmap, Image, Font, FontStyle, Icon, Color, Region , Rectangle , ContentAlignment\r\nfrom System.Windows.Forms import Button,Label,ListView,Form,CheckState\r\n\r\n\r\nclr.AddReference(\"RevitAPI\")\r\nfrom Autodesk.Revit.DB import FilteredElementCollector,BuiltInParameter,RevitLinkInstance,Level,ElementLevelFilter,Document,BuiltInCategory,Category\r\n\r\nfrom Autodesk.Revit.DB.Plumbing import Pipe\r\n\r\n\r\nclr.AddReference(\"RevitAPIUI\")\r\nfrom Autodesk.Revit.UI.Selection import Selection,ObjectType,ISelectionFilter\r\nfrom Autodesk.Revit.UI import TaskDialog\r\n\r\n\r\n\r\n#from Autodesk.Revit.UI import *\r\n\r\nclr.AddReference(\"RevitServices\")\r\nimport RevitServices\r\nfrom RevitServices.Persistence import DocumentManager\r\nfrom RevitServices.Transactions import TransactionManager\r\ndoc = DocumentManager.Instance.CurrentDBDocument\r\nuiapp = DocumentManager.Instance.CurrentUIApplication\r\napp = uiapp.Application\r\nuidoc = DocumentManager.Instance.CurrentUIApplication.ActiveUIDocument\r\ndoc = DocumentManager.Instance.CurrentDBDocument\r\n\r\n\r\n\r\n\r\n\r\nclass CustomISelectionFilter(ISelectionFilter):\r\n\r\n\tdef __init__(self, categoryIds):\r\n\t\tself.CategoryIds = categoryIds\r\n\t\t\r\n\tdef AllowElement(self, e):\r\n\t\t\r\n\t\tif e.Category.Id in self.CategoryIds:\r\n\t\t\treturn True\r\n\t\telse:\r\n\t\t\treturn False\r\n\tdef AllowReference(self, ref, point):\r\n\t\treturn true\r\n\r\n\r\ndef __interface__():\r\n\r\n\t\r\n\t\r\n\tcategories = [BuiltInCategory.OST_Topography]\r\n\t\r\n\t\t\r\n\tcatergoryIds = [Category.GetCategory(doc,c).Id for c in categories]\r\n\tTaskDialog.Show(\"Hi!\",\"Select one or more topographies in Revit and click 'Finish'\")\r\n\ttry:\t\r\n\t\telements = [doc.GetElement(ref) for ref in uidoc.Selection.PickObjects(ObjectType.Element,CustomISelectionFilter(catergoryIds))]\t\r\n\texcept:\r\n\t\treturn []\r\n\t\r\n\r\n\treturn elements\r\n\r\nx = __interface__()\r\nOUT = x\r\n\r\n\r\n\r\n\r\n",
+      "VariableInputPorts": true,
+      "Id": "ec9eea51b00045ea8341503b0f052c6a",
+      "Inputs": [
+        {
+          "Id": "fc7c157c9ee847c7a8e45b1e703cf06e",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "f61072c7f7e342a6929f1091c2a885bf",
+          "Name": "OUT",
+          "Description": "Результат сценария Python",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded IronPython script."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.Filename, CoreNodeModels",
+      "HintPath": "C:\\ProgramData\\Autodesk\\RVT 2021\\Family Templates\\English\\Metric Generic Model.rft",
+      "InputValue": "..\\..\\..\\..\\..\\..\\..\\..\\ProgramData\\Autodesk\\RVT 2021\\Family Templates\\English\\Metric Generic Model.rft",
+      "NodeType": "ExtensionNode",
+      "Id": "a60232f18bc44ae3abc7799c0c9b214b",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "3a77c1a0a5e94cb6b4edc98ca05ab297",
+          "Name": "",
+          "Description": "Filename",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows you to select a file on the system to get its filename"
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "import clr\r\nimport sys\r\nsys.path.append(r'C:\\Program Files (x86)\\IronPython 2.7\\Lib')\r\nimport random\r\n\r\nclr.AddReference(\"RevitAPI\")\r\nfrom Autodesk.Revit.DB import *\r\n\r\nclass ScriptSettings():\r\n\r\n\tdef __init__(self):\r\n\r\n\t\tself.Topographies = UnwrapElement(IN[0])\r\n\t\tself.FamilyTemplatePath = IN[1]\r\n\t\tself.Level = UnwrapElement(IN[2])\r\n\t\t\r\n\t\tself.MaterialData = IN[3]\r\n\t\tself.Clean = True\r\n\t\tself.ByFloor = IN[4]\r\n\t\t\r\n\t\tself.FloorType = UnwrapElement(IN[5])\r\n\t\t\r\n\r\n\t\t\r\nx = ScriptSettings()\t\t\r\n\t\t\r\nOUT = x",
+      "VariableInputPorts": true,
+      "Id": "147bae45b89f40afa2b6861a22b5419a",
+      "Inputs": [
+        {
+          "Id": "c38b46aca2a348cf968e7082b62c8279",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "6ab190f19e484c8690ec6245f3780c33",
+          "Name": "IN[1]",
+          "Description": "Input #1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "31b25a41ef3b4a0b9436ffd8807e9413",
+          "Name": "IN[2]",
+          "Description": "Input #2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "673eed320e1a405cb2f236e3df7e2e04",
+          "Name": "IN[3]",
+          "Description": "Input #3",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "7236ef71e6234de5901ea7683d65fd31",
+          "Name": "IN[4]",
+          "Description": "Input #4",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "c81ef77b5c43438dbd5da856262e487e",
+          "Name": "IN[5]",
+          "Description": "Input #5",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "2dae615b2e734defba8de7d14d8d7b0a",
+          "Name": "OUT",
+          "Description": "Результат сценария Python",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded IronPython script."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Watch, CoreNodeModels",
+      "NodeType": "ExtensionNode",
+      "Id": "5ad7e40532ad495086524fccf94526f9",
+      "Inputs": [
+        {
+          "Id": "f0a4ace9eb734f4ba88fce814f909920",
+          "Name": "",
+          "Description": "Узел для оценки.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "adc6bf94139c4fb095404b25ce170e0b",
+          "Name": "",
+          "Description": "Просмотр содержимого.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Visualize the output of node."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.CreateList, CoreNodeModels",
+      "VariableInputPorts": true,
+      "NodeType": "ExtensionNode",
+      "Id": "df74c1de7d624a5ba1241df06d45e1c9",
+      "Inputs": [
+        {
+          "Id": "1ba619f05b17439da4453635b26dc59d",
+          "Name": "item0",
+          "Description": "Индекс элемента #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "8ddd6bc634024e95a34fef4be6a56162",
+          "Name": "item1",
+          "Description": "Индекс элемента #1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "93177a9f617e45b4a1a72e661de4ab96",
+          "Name": "item2",
+          "Description": "Индекс элемента #2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "4e6184186b694e14a6355fe6ebca4bfc",
+          "Name": "item3",
+          "Description": "Индекс элемента #3",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "4e4def1cc0f34915ab043e4e7173041f",
+          "Name": "item4",
+          "Description": "Индекс элемента #4",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "c5423a3e0f6445248f38e65517be3262",
+          "Name": "item5",
+          "Description": "Индекс элемента #5",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "cd1e035c88314101813dcca8db7f0713",
+          "Name": "item6",
+          "Description": "Индекс элемента #6",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "39f2f7c1418541d3afc7c0d08666f78e",
+          "Name": "item7",
+          "Description": "Индекс элемента #7",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "a620432e6f2c4ceb9d06df2aa92a3af2",
+          "Name": "item8",
+          "Description": "Индекс элемента #8",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "ab6a1e4641eb4d1694b2113a221f428c",
+          "Name": "list",
+          "Description": "Список",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Makes a new list out of the given inputs"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "NodeType": "CodeBlockNode",
+      "Code": "[\"Natural stone\",0.06];\n[\"Bedding layer\",1.03];\n[\"Foundation layer\",0.55];\n[\"Fill material\",1.45];\n[\"Naturstein\",1.06];\n[\"Bettungsschicht\",1.03];\n[\"Fundationsschicht\",1.25];\n[\"Füllmaterial\",1.45];\n[\"Stone\",3.0];",
+      "Id": "6893d4b2db44461da66765e3ab52f627",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "0115c5e12f9b493b994221874d077854",
+          "Name": "",
+          "Description": "Value of expression at line 1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "143f9479f40c47918ccbbabedaa8faeb",
+          "Name": "",
+          "Description": "Value of expression at line 2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "6948423fd0cc4cf4b83a276770192d33",
+          "Name": "",
+          "Description": "Value of expression at line 3",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "54018218ff4543a7a003ada52b05ba05",
+          "Name": "",
+          "Description": "Value of expression at line 4",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "ecb5c47eb354400ab4a7809ca2c9a69e",
+          "Name": "",
+          "Description": "Value of expression at line 5",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "eac11f962ddc49649aa9c9782821870a",
+          "Name": "",
+          "Description": "Value of expression at line 6",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "a8db9383dd3041cf81295720515d5773",
+          "Name": "",
+          "Description": "Value of expression at line 7",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "f7d130b3a07c40dfb4a33f8882747584",
+          "Name": "",
+          "Description": "Value of expression at line 8",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "57c3f5c5efe54e5da1869200db563aec",
+          "Name": "",
+          "Description": "Value of expression at line 9",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
+      "NodeType": "BooleanInputNode",
+      "InputValue": false,
+      "Id": "e4d3a006c848465095ece3c7182179cb",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "81e3979ef7f542a8b51e8ea9740246a2",
+          "Name": "",
+          "Description": "Boolean",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Selection between a true and false."
+    },
+    {
+      "ConcreteType": "DSRevitNodesUI.FloorTypes, DSRevitNodesUI",
+      "SelectedIndex": 5,
+      "SelectedString": "Generic 150mm",
+      "NodeType": "ExtensionNode",
+      "Id": "2d2201b33baa45a1badb69c9ea058601",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "8a391d4447b141969e7d8787e709d487",
+          "Name": "Floor Type",
+          "Description": "Выбрано Floor Type",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "All floor types available in the document."
+    },
+    {
+      "ConcreteType": "DSRevitNodesUI.Levels, DSRevitNodesUI",
+      "SelectedIndex": 0,
+      "SelectedString": "Level 1",
+      "NodeType": "ExtensionNode",
+      "Id": "a47fdcfa320e48769f4cb5e2bbdc269d",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "46383bde63f845d788497deafeb241c6",
+          "Name": "Levels",
+          "Description": "Выбрано Levels",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Select a level in the active document"
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "import clr\r\n\r\nimport sys\r\nsys.path.append(r'C:\\Program Files (x86)\\IronPython 2.7\\Lib')\r\n\r\nclr.AddReference('ProtoGeometry')\r\nimport Autodesk.DesignScript.Geometry as DG\r\n\r\nclr.AddReference(\"DSCoreNodes\")\r\nimport DSCore as DS\r\n\r\nclr.AddReference(\"RevitNodes\")\r\nimport Revit.Elements as DR\r\n\r\nimport Revit\r\nclr.ImportExtensions(Revit.Elements)\r\nclr.ImportExtensions(Revit.GeometryConversion)\r\n#\r\nclr.AddReference(\"RevitAPI\")\r\nfrom Autodesk.Revit.DB import *\r\nfrom Autodesk.Revit.DB.Mechanical import *\r\nfrom Autodesk.Revit.DB.Structure import *\r\nclr.AddReference(\"RevitAPIUI\")\r\nfrom Autodesk.Revit.UI import *\r\n\r\nclr.AddReference(\"RevitServices\")\r\nimport RevitServices\r\nfrom RevitServices.Persistence import DocumentManager\r\nfrom RevitServices.Transactions import TransactionManager\r\ndoc = DocumentManager.Instance.CurrentDBDocument\r\nuiapp = DocumentManager.Instance.CurrentUIApplication\r\napp = uiapp.Application\r\nuidoc = DocumentManager.Instance.CurrentUIApplication.ActiveUIDocument\r\ndoc = DocumentManager.Instance.CurrentDBDocument\r\n\r\nimport System\r\nfrom System import Array as CArray\r\nclr.AddReference(\"System\")\r\nfrom System.Collections.Generic import List as CList\r\nfrom System.Collections.Generic import Dictionary\r\n\r\nimport time\r\nimport math\r\nimport copy\r\nimport string\r\nimport datetime\r\nimport random\r\nimport os\r\nimport shutil\r\n\r\n\r\ndef Visualize(geometryOrList):\r\n\r\n\tdef Convert(geometry):\r\n\r\n\t\tlst =[]\r\n\r\n\t\tif geometry is None:\r\n\t\t\tlst.append(None)\r\n\r\n\t\telif geometry.GetType() == Solid:\r\n\r\n\t\t\tedges = [e.AsCurve().ToProtoType() for e in  geometry.Edges]\r\n\t\t\tlst.append(edges)\r\n\r\n\t\telif isinstance(geometry, Face):\r\n\r\n\t\t\tfor loop in geometry.EdgeLoops:\r\n\t\t\t\tfor edge in loop:\r\n\t\t\t\t\tlst.append(edge.AsCurve().ToProtoType())\r\n\r\n\t\telif geometry.GetType() == BoundingBoxXYZ:\r\n\r\n\t\t\tminp,maxp = geometry.Min, geometry.Max\r\n\r\n\t\t\tp1 = minp\r\n\t\t\tp2 = XYZ(minp.X, maxp.Y, minp.Z)\r\n\t\t\tp3 = XYZ(maxp.X, maxp.Y, minp.Z)\r\n\t\t\tp4 = XYZ(maxp.X, minp.Y, minp.Z)\r\n\r\n\t\t\tpoints = [p1,p2,p3,p4]\r\n\r\n\t\t\tcurves = CList[Curve]([Line.CreateBound(points[i-1],points[i]) for i in range(len(points))])\r\n\t\t\tcurveLoop = CurveLoop.Create(curves)\r\n\t\t\tcurveLoopList = CList[CurveLoop]([curveLoop])\r\n\r\n\t\t\tsolid = GeometryCreationUtilities.CreateExtrusionGeometry(curveLoopList, XYZ.BasisZ, math.fabs(maxp.Z - minp.Z) )\r\n\r\n\t\t\tedges = [e.AsCurve().ToProtoType() for e in  solid.Edges]\r\n\r\n\t\t\tlst.append(edges)\r\n\r\n\t\telif geometry.GetType() == XYZ:\r\n\r\n\t\t\tlst.append(geometry.ToPoint())\r\n\r\n\t\telif isinstance(geometry, Curve):\r\n\r\n\t\t\tlst.append(geometry.ToProtoType())\r\n\r\n\t\treturn lst\r\n\r\n\tdef Go_into(geometryOrList, lst):\r\n\r\n\t\tif hasattr(geometryOrList, \"__iter__\"):\r\n\t\t\tsublist = []\r\n\t\t\tfor gol in geometryOrList:\r\n\t\t\t\tres = Go_into(gol,sublist)\r\n\t\t\t\tsublist.append(res)\r\n\t\t\treturn sublist\r\n\t\telse:\r\n\t\t\tgeometryList = Convert(geometryOrList)\r\n\t\t\treturn geometryList\r\n\r\n\tlst = Go_into(geometryOrList,[])\r\n\treturn lst\r\n\r\n\r\ndef RebuildLoop(curves,minAngle,tolerance):\r\n\r\n\r\n\tdef Compare(curve1,curve2):\r\n\r\n\t\tv1 = curve1.ComputeDerivatives(1,True).BasisX\r\n\t\tv2= curve2.ComputeDerivatives(0,True).BasisX\r\n\t\tp11 = curve1.Evaluate(0, True)\r\n\t\tp12 = curve1.Evaluate(1, True)\r\n\r\n\t\tpmid = curve1.Evaluate(0.5, True)\r\n\r\n\t\tp21 = curve2.Evaluate(0, True)\r\n\t\tp22 = curve2.Evaluate(1, True)\r\n\r\n\t\tif v1.AngleTo(v2) < math.radians(minAngle) and p12.DistanceTo(p21)< tolerance/304.8:\r\n\t\t\treturn p11,p22,pmid\r\n\t\telse:\r\n\t\t\treturn None\r\n\ti = 0\r\n\twhile i< len(curves):\r\n\t\tcom = Compare(curves[i-1],curves[i])\r\n\t\tif com is None:\r\n\t\t\ti += 1\r\n\t\telse:\r\n\t\t\tif com[0] == Arc:\r\n\t\t\t\tcurves[i-1] = Arc.Create(com[0],com[1],com[2])\r\n\t\t\telse:\r\n\t\t\t\tcurves[i-1] = Line.CreateBound(com[0],com[1])\r\n\t\t\tdel curves[i]\r\n\treturn curves\r\n\r\n\r\ndef BakeGeometryAsFamilyInstance(solids,name,materialName,familyTemplatePath,color,level):\r\n\r\n\t#familyPath = \"C:\\ProgramData\\Autodesk\\RVT 2019\\Family Templates\\Russian\\Метрическая система, типовая модель\"\r\n\r\n\tclass NewFolder():\r\n\r\n\t\tdef __init__(self):\r\n\r\n\t\t\tdataPath = os.getenv('APPDATA')\r\n\r\n\t\t\tdirPath = dataPath + \"//Dynamograph\"\r\n\t\t\ttry:\r\n\t\t\t\tos.mkdir(dirPath)\r\n\t\t\texcept:\r\n\t\t\t\tpass\r\n\r\n\t\t\tself.Path = dirPath\r\n\r\n\t\tdef Delete(self):\r\n\r\n\t\t\tshutil.rmtree(self.Path)\r\n\r\n\tgeoElements = []\r\n\r\n\tclass FamOpt1(IFamilyLoadOptions):\r\n\t\tdef __init__(self):\r\n\t\t\tpass\r\n\t\tdef OnFamilyFound(self,familyInUse, overwriteParameterValues):\r\n\t\t\treturn True\r\n\t\tdef OnSharedFamilyFound(self,familyInUse, source, overwriteParameterValues):\r\n\t\t\treturn True\r\n\r\n\tfolder = NewFolder()\r\n\tfolderPath = folder.Path\r\n\r\n\tsaveAsOpt = SaveAsOptions()\r\n\tsaveAsOpt.OverwriteExistingFile = True\r\n\r\n\tTransactionManager.Instance.ForceCloseTransaction()\r\n\tfamDoc = doc.Application.NewFamilyDocument(familyTemplatePath)\r\n\tTransactionManager.Instance.EnsureInTransaction(famDoc)\r\n\r\n\tmaterialId = Material.Create(famDoc,materialName)\r\n\tmaterial = famDoc.GetElement(materialId)\r\n\tmaterial.Color = color\r\n\r\n\r\n\tf = famDoc.OwnerFamily\r\n\tf.FamilyCategory = Category.GetCategory(doc,BuiltInCategory.OST_StructuralFoundation)\r\n\t#Color(random.random()*255,random.random()*255,random.random()*255)\r\n\r\n\tfor solid in solids:\r\n\t\ttry:\r\n\t\t\tfreeForm = FreeFormElement.Create(famDoc, solid)\r\n\t\t\tfreeForm.get_Parameter(BuiltInParameter.MATERIAL_ID_PARAM).Set(materialId)\r\n\t\texcept:\r\n\t\t\tpass\r\n\tTransactionManager.Instance.ForceCloseTransaction()\r\n\r\n\t\r\n\tfamDoc.SaveAs(folderPath +\"\\\\\"+name+\".rfa\", saveAsOpt)\r\n\tfamily1 = famDoc.LoadFamily(doc, FamOpt1() )\r\n\r\n\tfamDoc.Close(False)\r\n\r\n\tsymbols = family1.GetFamilySymbolIds().GetEnumerator()\r\n\tsymbols.MoveNext()\r\n\tsymbol1 = doc.GetElement(symbols.Current)\r\n\r\n\tt1 = TransactionManager.Instance\r\n\tt1.EnsureInTransaction(doc)\r\n\tif not symbol1.IsActive:\r\n\t\tsymbol1.Activate()\r\n\r\n\tfamilyInstance = doc.Create.NewFamilyInstance(XYZ(0,0,0), symbol1,level, StructuralType.NonStructural)\r\n\r\n\t\r\n\tTransactionManager.ForceCloseTransaction(t1)\r\n\r\n\tfolder.Delete()\r\n\r\n\treturn familyInstance\r\n\r\ndef GetHorizontalLoopsBySolid(solid,up):\r\n\r\n\tfaces = list(solid.Faces)\r\n\r\n\tif up:\r\n\t\tfilteredFaces = [f for f in faces if f.ComputeNormal(UV(0,0)).Normalize().Z > 0.99]\r\n\telse:\r\n\t\tfilteredFaces = [f for f in faces if f.ComputeNormal(UV(0,0)).Normalize().Z < -0.99]\r\n\r\n\tfilteredFaces.sort(key = lambda x:x.Area)\r\n\tfilteredFace = filteredFaces[-1]\r\n\r\n\tloops = list(filteredFace.GetEdgesAsCurveLoops())\r\n\tloops = GetExternalAndInternalLoops(loops)\r\n\treturn loops\r\n\r\ndef GetExternalAndInternalLoops(loops):\r\n\r\n\txx,yy,zz = [],[],[]\r\n\tfor l in loops:\r\n\t\tfor c in l:\r\n\t\t\tfor p in c.Tessellate():\r\n\t\t\t\txx.append(p.X)\r\n\t\t\t\tyy.append(p.Y)\r\n\t\t\t\tzz.append(p.Z)\r\n\r\n\tpoint = XYZ(min(xx),min(yy),min(zz))\r\n\r\n\tminDist = 9999999\r\n\tindex = 0\r\n\tfor i,loop in enumerate(loops):\r\n\t\tfor curve in loop:\r\n\t\t\td = curve.Distance(point)\r\n\t\t\tif d < minDist:\r\n\t\t\t\tminDist = d\r\n\t\t\t\tindex = i\r\n\r\n\toutLoop = loops.pop(index)\r\n\treturn outLoop,loops\r\n\r\ndef BoundingBoxByGeometry(geometry):\r\n\t\r\n\tif geometry.GetType() == Solid:\r\n\t\tbox = geometry.GetBoundingBox()\r\n\t\torigin = box.Transform.Origin\r\n\t\tbox.Min = box.Min.Add(origin)\r\n\t\tbox.Max = box.Max.Add(origin)\r\n\r\n\telif isinstance(geometry,Curve):\r\n\t\tpoints = curve.Tesselate()\t\r\n\t\tx,y,z = [p.X for p in points],[p.Y for p in points],[p.Z for p in points]\r\n\t\tbox = BoundingBoxXYZ()\r\n\t\tbox.Max =  XYZ(max(x),max(y),max(z))\r\n\t\tbox.Min = XYZ(min(x),min(y),min(z))\t\r\n\t\t\r\n\treturn box\r\n\r\ndef TryToUnite(solids):\r\n\tif len(solids) == 1:\r\n\t\treturn solids\r\n\tsolid0 = list(solids).pop(0)#\r\n\tbop = BooleanOperationsType.Union\r\n\treport = []\r\n\tfor s in solids:\r\n\t\tresult = BooleanOperation(solid0, s, bop)\r\n\t\tif result is None:\r\n\t\t\treport.append(s)\r\n\t\telse:\r\n\t\t\tsolid0 = result\r\n\treturn [solid0]+report\r\n\r\n\r\ndef BooleanOperation(solid1, solid2, bop):\r\n\r\n\ttry:\r\n\t\tresult = BooleanOperationsUtils.ExecuteBooleanOperation(solid1, solid2, bop)\r\n\texcept:\r\n\t\treturn None\r\n\tif result.Volume > 0:\r\n\t\treturn result\r\n\telse:\r\n\t\treturn None\r\n\r\ndef SolidByBoundingBox(bb):\r\n\r\n\tmaxp = bb.Max\r\n\tminp = bb.Min\r\n\theight = maxp.Z - minp.Z\r\n\r\n\tp1 = XYZ(minp.X,maxp.Y,minp.Z)\r\n\tp2 = XYZ(maxp.X,maxp.Y,minp.Z)\r\n\tp3 = XYZ(maxp.X,minp.Y,minp.Z)\r\n\tpoints = [minp,p1,p2,p3]\r\n\r\n\tlines = CList[Curve]()\r\n\tfor j in range(len(points)):\r\n\r\n\t\tlines.Add(Line.CreateBound(points[j-1],points[j]))\r\n\r\n\tloop = CurveLoop.Create(lines)\r\n\tloopList = CList[CurveLoop]([loop])\r\n\tsolid = GeometryCreationUtilities.CreateExtrusionGeometry(loopList,XYZ(0,0,1),height)\r\n\treturn solid\r\n\r\ndef GroupAndSortCurves(curves):\r\n\r\n\tgroups = []\r\n\tk = 0.1/304.8\r\n\r\n\twhile len(curves) !=0:\r\n\r\n\t\tgroups.append([curves.pop(0)])\r\n\t\toldLen = 0\r\n\r\n\t\twhile oldLen != len(curves):\r\n\r\n\t\t\toldLen = len(curves)\r\n\r\n\t\t\ti = 0\r\n\t\t\twhile i<len(curves):\r\n\r\n\t\t\t\tpg0 = groups[-1][0].GetEndPoint(0)\r\n\t\t\t\tpg1 = groups[-1][-1].GetEndPoint(1)\r\n\r\n\t\t\t\tp0 = curves[i].GetEndPoint(0)\r\n\t\t\t\tp1 = curves[i].GetEndPoint(1)\r\n\r\n\t\t\t\tif pg0.DistanceTo(p0) < k:\r\n\t\t\t\t\tgroups[-1].insert(0,curves.pop(i).CreateReversed())\r\n\r\n\t\t\t\telif pg1.DistanceTo(p0) < k:\r\n\t\t\t\t\tgroups[-1].append(curves.pop(i))\r\n\r\n\t\t\t\telif pg1.DistanceTo(p1) < k:\r\n\t\t\t\t\tgroups[-1].append(curves.pop(i).CreateReversed())\r\n\r\n\t\t\t\telif pg0.DistanceTo(p1) < k:\r\n\t\t\t\t\tgroups[-1].insert(0,curves.pop(i))\r\n\r\n\t\t\t\telse:\r\n\t\t\t\t\ti+=1\r\n\r\n\r\n\treturn groups\r\n\r\n\r\n\r\ndef GetTriangles(topography):\r\n\r\n\topt = Options()\r\n\tgeometryList  = topography.get_Geometry(opt)\r\n\r\n\tmesh = None\r\n\tfor g in geometryList:\r\n\t\tif g.GetType() == Mesh:\r\n\t\t\tmesh = g\r\n\t\t\tbreak\r\n\r\n\tif mesh is None:\r\n\t\treturn None\r\n\r\n\ttriangles = [mesh.get_Triangle(i) for i in range(mesh.NumTriangles)]\r\n\treturn triangles\r\n\r\n\r\ndef GetOutCurvesByByTopography(topography):\r\n\r\n\topt = Options()\r\n\tgeometryList  = topography.get_Geometry(opt)\r\n\r\n\tmesh = None\r\n\tfor g in geometryList:\r\n\t\tif g.GetType() == Mesh:\r\n\t\t\tmesh = g\r\n\t\t\tbreak\r\n\tif mesh is None:\r\n\t\treturn None\r\n\r\n\ttriangles = mesh.NumTriangles\r\n\tsolidOpt = SolidCurveIntersectionOptions()\r\n\r\n\tlines = []\r\n\tfor i in range(mesh.NumTriangles):\r\n\r\n\t\ttriangle = mesh.get_Triangle(i)\r\n\t\tpoints = [triangle.Vertex[0],triangle.Vertex[1],triangle.Vertex[2]]\r\n\r\n\t\tfor j in range(len(points)):\r\n\r\n\t\t\ttry:\r\n\t\t\t\tline = Line.CreateBound(points[j-1],points[j])\r\n\t\t\texcept:\r\n\t\t\t\tcontinue\r\n\r\n\t\t\tlines.append(line)\r\n\r\n\t# Delete lines that have adjacent lines\r\n\r\n\ti = 0\r\n\twhile i<len(lines)-1:\r\n\t\tj = i+1\r\n\t\tlonely = True\r\n\t\tp1 = lines[i].Evaluate(0.5,True)\r\n\t\twhile j<len(lines):\r\n\t\t\tp2 = lines[j].Evaluate(0.5,True)\r\n\t\t\tif p1.DistanceTo(p2)<1/304.8:\r\n\t\t\t\tlonely = False\r\n\t\t\t\tdel lines[j]\r\n\t\t\t\tbreak\r\n\t\t\telse:\r\n\t\t\t\tj+=1\r\n\t\tif lonely:\r\n\t\t\ti+=1\r\n\t\telse:\r\n\t\t\tdel lines[i]\r\n\r\n\r\n\treturn lines\r\n\r\n\r\nclass TriangleElement():\r\n\r\n\tdef __init__(self,triangle,selfIndex):\r\n\r\n\t\tpoints = [triangle.Vertex[0],triangle.Vertex[1],triangle.Vertex[2]]\r\n\r\n\t\tlines,edgePoints = [],[]\r\n\t\tfor i in range(len(points)):\r\n\r\n\t\t\ttry:\r\n\t\t\t\tlines.append(Line.CreateBound(points[i-1],points[i]))\r\n\t\t\texcept:\r\n\t\t\t\tcontinue\r\n\t\t\tedgePoints.append(points[i].Add(points[i-1]).Multiply(0.5))\r\n\r\n\t\tx,y,z = sum([p.X for p in points])/3,sum([p.Y for p in points])/3,sum([p.Z for p in points])/3\r\n\r\n\t\tself.Triangle = triangle\r\n\t\tself.SelfIndex = selfIndex\r\n\t\tself.ParentIndex = 0\r\n\r\n\t\tself.Middle = XYZ(x,y,z )\r\n\t\tself.Middle0 = XYZ(x,y,0)\r\n\t\tself.Points = points\r\n\t\tself.Lines = lines\r\n\t\tself.EdgePoints = edgePoints\r\n\t\tself.Solid = None\r\n\t\tself.Branch = None\r\n\r\n\t\tself.Generation = None\r\n\t\tself.Tree = None\r\n\t\tself.NumberOfChildren = 0\r\n\r\n\tdef TryToAdopt(self,parent,maxNumberOfChildren,maxTreeSize):\r\n\r\n\t\tc1 = parent.Tree.Size >= maxTreeSize\r\n\t\tc2 = parent.NumberOfChildren >= maxNumberOfChildren\r\n\t\tif c1 or c2:\r\n\t\t\treturn False\r\n\r\n\t\ti = 0\r\n\t\twhile i < len(parent.EdgePoints):\r\n\t\t\tj = 0\r\n\t\t\twhile j < len(self.EdgePoints):\r\n\t\t\t\tif parent.EdgePoints[i].IsAlmostEqualTo(self.EdgePoints[j]):\r\n\t\t\t\t\tdel parent.EdgePoints[i]\r\n\t\t\t\t\tdel self.EdgePoints[j]\r\n\t\t\t\t\treturn True\r\n\t\t\t\tj+=1\r\n\t\t\ti+=1\r\n\t\treturn False\r\n\r\n\tdef InheritProperties(self,parent):\r\n\r\n\t\tself.Generation = Generation(parent.Generation.Number + 1)\r\n\t\tself.Tree = parent.Tree\r\n\t\tself.ParentIndex = parent.SelfIndex\r\n\t\tself.BirthNumber = parent.NumberOfChildren\r\n\r\n\t\ttry:\r\n\t\t\tline = Line.CreateBound(self.Middle,parent.Middle)\r\n\t\texcept:\r\n\t\t\tline = None\r\n\r\n\t\tself.Branch = line\r\n\t\tparent.NumberOfChildren += 1\r\n\t\tself.Tree.Size += 1\r\n\t\tself.Generation.Size +=1\r\n\r\n\tdef Extrude(self,deep):\r\n\r\n\t\tlines = CList[Curve](self.Lines)\r\n\r\n\t\ttry:\r\n\t\t\tloop = CurveLoop.Create(lines)\r\n\t\t\tloopList = CList[CurveLoop]([loop])\r\n\t\t\tsolid = GeometryCreationUtilities.CreateExtrusionGeometry(loopList,XYZ(0,0,-1),deep)\r\n\t\t\tself.Solid = solid\r\n\t\t\treturn solid\r\n\t\texcept:\r\n\t\t\treturn None\r\n\t\t\t\r\n\t\t\r\n\r\nclass Tree():\r\n\r\n\tdef __init__(self,number):\r\n\t\r\n\t\tself.Number = number\r\n\t\tself.NumberOfGenerations = 1\r\n\t\tself.Generations = []\r\n\t\tself.Size = 0\r\n\r\nclass Generation():\r\n\r\n\tdef __init__(self,number):\r\n\t\r\n\t\tself.Elements = []\r\n\t\tself.Number = number\r\n\t\tself.Size = 0\r\n\r\ndef LinkTriangleElements(triangleElements,startIndexes,maxNumberOfChildren, maxTreeSize):\r\n\r\n\tindexes = range(len(triangleElements))\r\n\r\n\tchildren,parents,treeNumber = [],[],0\r\n\twhile len(indexes)>0: # This cycle occurs until all parents in a generation have found all of their children\r\n\r\n\t\tif len(children) == 0: #birth of new tree\r\n\r\n\t\t\tstartIndexes.sort()\r\n\t\t\tstartIndexes.reverse()\r\n\r\n\t\t\tfor i in startIndexes:\r\n\r\n\t\t\t\tchild = triangleElements[indexes.pop(i)]\r\n\t\t\t\tchild.ParentIndex = None\r\n\t\t\t\tchild.Tree = Tree(treeNumber)\r\n\r\n\t\t\t\tchild.Generation = Generation(0)\r\n\t\t\t\tchild.Tree.Size = 1\r\n\t\t\t\tchildren.append(child)\r\n\t\t\t\ttreeNumber += 1\r\n\r\n\t\t\tstartIndexes = [0]\r\n\r\n\r\n\t\tif len(parents) == 0: #If there are no more parents left to find children, children become parents\r\n\r\n\r\n\t\t\tparents = children\r\n\r\n\t\t\tchildren = []\r\n\r\n\t\ti = 0\r\n\t\twhile i < len(parents):\r\n\r\n\t\t\tbirth = False\r\n\t\t\tj = 0\r\n\t\t\twhile j < len(indexes):\r\n\r\n\t\t\t\tresult = triangleElements[indexes[j]].TryToAdopt(parents[i],maxNumberOfChildren,maxTreeSize)\r\n\r\n\t\t\t\tif result:\r\n\t\t\t\t\tbirth = True\r\n\r\n\t\t\t\t\tchild = triangleElements[indexes.pop(j)]\r\n\t\t\t\t\tchild.InheritProperties(parents[i])\r\n\r\n\t\t\t\t\tchildren.append(child)\r\n\t\t\t\t\tbreak #Each parent has the right to assign only one child in one iteration. Otherwise, the development of the trees will be uneven.\r\n\r\n\t\t\t\telse:\r\n\t\t\t\t\tj+=1\r\n\r\n\t\t\tif birth == False:\r\n\t\t\t\tparents.pop(i) #If the parent has not found any new connections in a new iteration, there is no point in checking it further\r\n\r\n\t\t\telse:\r\n\t\t\t\ti+=1\r\n\r\n\treturn triangleElements\r\n\r\n\r\n\r\ndef CleanDuplicatedLines(lines):\r\n\r\n\ti = 0\r\n\twhile i<len(lines)-1:\r\n\t\tj = i+1\r\n\t\tp1 = lines[i].Evaluate(0.5,True)\r\n\t\twhile j<len(lines):\r\n\t\t\tp2 = lines[j].Evaluate(0.5,True)\r\n\t\t\tif p1.DistanceTo(p2)<1/304.8:\r\n\t\t\t\tdel lines[j]\r\n\t\t\t\tbreak\r\n\t\t\telse:\r\n\t\t\t\tj+=1\r\n\t\ti+=1\r\n\r\n\treturn lines\r\n\r\n\r\ndef CreateFloorByCurves(floorCurves,openingLoops,level,floorType):\r\n\r\n\r\n\tarr = CurveArray()\r\n\tfor curve in floorCurves:\r\n\t\tarr.Append(curve)\r\n\r\n\tnewFloor = None\r\n\ttry:\r\n\t\tnewFloor = doc.Create.NewFloor( arr, floorType, level, False )\r\n\texcept:\r\n\t\treturn None\r\n\r\n\tdoc.Regenerate()\r\n\r\n\tfor curves in openingLoops:\r\n\t\tarr2 = CurveArray()\r\n\t\tfor curve in curves:\r\n\t\t\tarr2.Append(curve)\r\n\r\n\t\ttry:\r\n\t\t\topening = doc.Create.NewOpening( newFloor, arr2, True)\r\n\t\texcept:\r\n\t\t\tpass\r\n\treturn newFloor\r\n\r\ndef SortedGroups(values,keys,group = True):\r\n\r\n\tdata = list(zip(values,keys))\r\n\tdata.sort(key = lambda x:x[1])\r\n\r\n\tif not group:\r\n\t\treturn [dd[0] for dd in data],[dd[1] for dd in data]\r\n\r\n\tdata.reverse()\r\n\tdd = data.pop()\r\n\tgroups,uniqueKeys = [[dd[0]]],[dd[1]]\r\n\twhile len(data)!=0:\r\n\t\tdd = data.pop()\r\n\t\tif dd[1] == uniqueKeys[-1]:\r\n\t\t\tgroups[-1].append(dd[0])\r\n\t\telse:\r\n\t\t\tgroups.append([dd[0]])\r\n\t\t\tuniqueKeys.append(dd[1])\r\n\r\n\r\n\treturn groups,uniqueKeys\r\n\r\ndef __maincode__():\r\n\t\r\n\r\n\t# 1. Receiving data and displaying warnings when problems occur\r\n\tsettings = IN[0]\r\n\r\n\tif len(settings.Topographies)== 0:\r\n\t\treturn \"You did not select any topography or cancel the operation\"\r\n\r\n\tif \"ProtoCore.DSASM.StackValue\" ==  str(settings.MaterialData) :\r\n\t\treturn \"Please close the extra empty slots on the 'List.Create' nodes\"\r\n\r\n\topt = Options()\r\n\ttopographies = settings.Topographies\r\n\tmaterialData = settings.MaterialData\r\n\r\n\t# 2. Mode 1: Creating layers by points\r\n\t\r\n\tif settings.ByFloor:\r\n\r\n\t\tfor topography in topographies:\r\n\t\t\tlines = GetOutCurvesByByTopography(topography)\r\n\r\n\t\t\tnullLines = []\r\n\r\n\t\t\tfor l in lines:\r\n\r\n\t\t\t\tp1 = l.GetEndPoint(0)\r\n\t\t\t\tp2 = l.GetEndPoint(1)\r\n\t\t\t\tp01 = XYZ(p1.X,p1.Y,0)\r\n\t\t\t\tp02 = XYZ(p2.X,p2.Y,0)\r\n\t\t\t\tnullLines.append(Line.CreateBound(p01,p02))\r\n\r\n\t\t\tgroups = GroupAndSortCurves(nullLines)\r\n\r\n\t\t\tfor i in range(len(groups)):\r\n\r\n\t\t\t\tgroups[i] = RebuildLoop(groups[i], 1/304.8, 0.01)\r\n\r\n\t\t\tfloorCurves = groups.pop(0)\r\n\t\t\tTransactionManager.Instance.EnsureInTransaction(doc)\r\n\r\n\t\t\tfloor = CreateFloorByCurves(floorCurves,groups,settings.Level,settings.FloorType)\r\n\r\n\t\t\tif floor is None:\r\n\t\t\t\treturn \"The mistake of creating a floor. Try another method \"\r\n\t\t\tdoc.Regenerate()\r\n\r\n\t\t\teditor = floor.SlabShapeEditor\r\n\t\t\teditor.Enable()\r\n\t\t\tfor point in topography.GetPoints():\r\n\t\t\t\teditor.DrawPoint(point)\r\n\r\n\r\n\t\t\tTransactionManager.Instance.TransactionTaskDone()\r\n\t\t\treturn floor\r\n\r\n\t\r\n\t# 3. Cleaning the model out the old elements\r\n\r\n\tTransactionManager.Instance.EnsureInTransaction(doc)\r\n\tif settings.Clean:\r\n\r\n\t\ttopographyIds = [str(t.Id) for t in topographies]\r\n\t\ttopoIds = []\r\n\t\tfor topography in topographies:\r\n\r\n\t\t\tid = topography.Id\r\n\t\t\ttopoIds.append(str(id))\r\n\r\n\t\tfamilies = FilteredElementCollector(doc).OfClass(Family).ToElements()\r\n\t\ttoDelete = CList[ElementId]()\r\n\r\n\t\tfor family in families:\r\n\t\t\tfamilyName = family.Name\r\n\t\t\r\n\t\t\tfor topoId in topographyIds:\r\n\t\t\t\t\r\n\t\t\t\tif topoId in familyName:\r\n\t\t\t\t\ttoDelete.Add(family.Id)\r\n\t\t\t\t\tbreak\r\n\t\t\t\t\r\n\t\tdoc.Delete(toDelete)\r\n\t\tdoc.Regenerate()\r\n\r\n\tTransactionManager.Instance.TransactionTaskDone()\r\n\r\n\t# 3. Mode 2: Creating layers by familyInstance\r\n\t# 4. Creating a list of transforms\r\n\ttransforms = []\r\n\tz = 0\r\n\tfor md in materialData:\r\n\t\r\n\t\ttransform = Transform.CreateTranslation(XYZ(0,0,z))\r\n\t\ttransforms.append(transform)\r\n\t\tz -= md[1]*1000/304.8\r\n\r\n\r\n\r\n\telements = []\r\n\r\n\tfor i,topography in enumerate(topographies):\r\n\r\n\r\n\t\t# 5. Obtaining  triangles of topography\r\n\t\t\r\n\t\ttriangles = GetTriangles(topography)\r\n\t\trandom.shuffle(triangles)\r\n\t\t# Creating containers for clustering triangles\r\n\t\ttriangleElements = [TriangleElement(triangle,i) for i,triangle in enumerate(triangles)]\r\n\r\n\t\t# Clustering of triangles\r\n\t\tsqr = int(len(triangleElements)**(0.5))\r\n\t\tstartIndexes = range(len(triangleElements))[:sqr]\r\n\t\ttriangleElements = LinkTriangleElements(triangleElements,startIndexes,2, 99999)\r\n\t\tgroupedTriangleElements = SortedGroups(triangleElements,[e.Tree.Number for e in triangleElements])[0]\r\n\r\n\r\n\t\t# Creating solids and uniting them\r\n\t\ttopographySquare = topography.get_Parameter(BuiltInParameter.SURFACE_AREA).AsDouble()\r\n\r\n\r\n\t\t\r\n\t\tfor j,md in enumerate(materialData):\r\n\r\n\t\t\tglobalSolidList = []\r\n\t\t\ttopographyVolume = topographySquare*md[1]\r\n\t\t\t\r\n\t\t\t\r\n\t\t\tfor group in groupedTriangleElements:\r\n\r\n\t\t\t\tsolidList = []\r\n\r\n\t\t\t\tfor triangleElement in group:\r\n\r\n\t\t\t\t\tsolid = triangleElement.Extrude(md[1]*1000/304.8)\r\n\t\t\t\t\tsolidList.append(solid)\r\n\t\t\t\t\t\r\n\r\n\t\t\t\tif len(solidList)>1:\r\n\r\n\t\t\t\t\tsolidList = TryToUnite(solidList)\r\n\r\n\t\t\t\tglobalSolidList.extend(solidList)\r\n\r\n\t\t\tglobalSolidList = TryToUnite(globalSolidList)\r\n\r\n\t\t\t# Moving the solids to the level of their layer\r\n\r\n\t\t\tfor i in range(len(globalSolidList)):\r\n\t\t\t\ttry:\r\n\t\t\t\t\tglobalSolidList[i] = SolidUtils.CreateTransformed(globalSolidList[i],transforms[j])\r\n\t\t\t\texcept:\r\n\t\t\t\t\tpass\r\n\r\n\r\n\t\t\tmaxZforSolid = max([BoundingBoxByGeometry(s).Max.Z for s in globalSolidList if s is not None])\r\n\t\t\t#return box\r\n\r\n\t\t\t#return Visualize(globalSolidList)\r\n\r\n\t\t\t# Creating materials and names\r\n\t\t\tname = materialData[j][0]+\"_\"+str(materialData[j][1])+\"_layer_number-\"+str(j+1)+\"_topoId-\"+str(topography.Id)\r\n\t\t\tpath = settings.FamilyTemplatePath\r\n\t\t\tcolor = Color(random.random()*255,random.random()*255,random.random()*255)\r\n\r\n\t\t\t#Creating a family and family instance\r\n\t\t\telement = BakeGeometryAsFamilyInstance(globalSolidList,name,materialData[j][0],path,color,settings.Level)\r\n\t\t\tmaxZforElement = element.get_BoundingBox(None).Max.Z\r\n\r\n\t\t\t# Set parameter for family instance\r\n\t\t\tTransactionManager.Instance.EnsureInTransaction(doc)\r\n\t\t\t\r\n\t\t\ttopographyVolume = round(topographyVolume*(304.8**2)/(1000**2),2)\r\n\t\t\telement.get_Parameter(BuiltInParameter.ALL_MODEL_INSTANCE_COMMENTS).Set(\"Volume: \"+str(topographyVolume)+\" m3\")\r\n\t\t\telement.get_Parameter(BuiltInParameter.FLOOR_HEIGHTABOVELEVEL_PARAM).Set(maxZforSolid-maxZforElement)\r\n\t\t\t\r\n\t\t\t\r\n\t\t\tTransactionManager.Instance.EnsureInTransaction(doc)\r\n\t\t\telements.append(element)\r\n\r\n\t\t\tdoc.Regenerate()\r\n\r\n\treturn elements\r\n\t\r\n\r\n\r\n\r\n\r\ntimeStart = time.time()\r\n#TransactionManager.Instance.EnsureInTransaction(doc)\r\nreport = __maincode__()\r\n#TransactionManager.Instance.TransactionTaskDone()\r\nsumTime = time.time() - timeStart\r\nOUT = \"Time: \" + str(sumTime),report",
+      "VariableInputPorts": true,
+      "Id": "a9756a9993714e0594a4fc099d341d94",
+      "Inputs": [
+        {
+          "Id": "e00666a15ed94510965d38590fe37d5f",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "8013da6e223c408fb40df761b443a267",
+          "Name": "OUT",
+          "Description": "Результат сценария Python",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded IronPython script."
+    }
+  ],
+  "Connectors": [
+    {
+      "Start": "700fe5cd23b94058952fbf75000c962f",
+      "End": "fc7c157c9ee847c7a8e45b1e703cf06e",
+      "Id": "99cfdf68365945f08f1e6a8a0078b4df"
+    },
+    {
+      "Start": "f61072c7f7e342a6929f1091c2a885bf",
+      "End": "c38b46aca2a348cf968e7082b62c8279",
+      "Id": "1860d0f973094cbb8c09ff3d982e8a26"
+    },
+    {
+      "Start": "3a77c1a0a5e94cb6b4edc98ca05ab297",
+      "End": "6ab190f19e484c8690ec6245f3780c33",
+      "Id": "c711d0f48e8d413fb72a064ee46f1d7f"
+    },
+    {
+      "Start": "2dae615b2e734defba8de7d14d8d7b0a",
+      "End": "e00666a15ed94510965d38590fe37d5f",
+      "Id": "257723ab160a42f690dd98d0674cbee8"
+    },
+    {
+      "Start": "ab6a1e4641eb4d1694b2113a221f428c",
+      "End": "673eed320e1a405cb2f236e3df7e2e04",
+      "Id": "53aafd6b22c049a6b8bdee05af68881b"
+    },
+    {
+      "Start": "0115c5e12f9b493b994221874d077854",
+      "End": "1ba619f05b17439da4453635b26dc59d",
+      "Id": "99b4fd8db1064c1e85f15634f8debf47"
+    },
+    {
+      "Start": "143f9479f40c47918ccbbabedaa8faeb",
+      "End": "8ddd6bc634024e95a34fef4be6a56162",
+      "Id": "939efdb4bd5e42c48591d82095b8a335"
+    },
+    {
+      "Start": "6948423fd0cc4cf4b83a276770192d33",
+      "End": "93177a9f617e45b4a1a72e661de4ab96",
+      "Id": "0c3774be767c499387c3654b700347f4"
+    },
+    {
+      "Start": "54018218ff4543a7a003ada52b05ba05",
+      "End": "4e6184186b694e14a6355fe6ebca4bfc",
+      "Id": "29ab49751fc04b08af7dc6f9a20263c3"
+    },
+    {
+      "Start": "ecb5c47eb354400ab4a7809ca2c9a69e",
+      "End": "4e4def1cc0f34915ab043e4e7173041f",
+      "Id": "76bee58d07cd47378fa0f7e2cc91d082"
+    },
+    {
+      "Start": "eac11f962ddc49649aa9c9782821870a",
+      "End": "c5423a3e0f6445248f38e65517be3262",
+      "Id": "e22172f969fd4d87a481ad4510ab4951"
+    },
+    {
+      "Start": "a8db9383dd3041cf81295720515d5773",
+      "End": "cd1e035c88314101813dcca8db7f0713",
+      "Id": "3f19fef126a64cd88998ceb01d700747"
+    },
+    {
+      "Start": "f7d130b3a07c40dfb4a33f8882747584",
+      "End": "39f2f7c1418541d3afc7c0d08666f78e",
+      "Id": "f436dd715cdb428fa1c3fb2c9bc76caf"
+    },
+    {
+      "Start": "57c3f5c5efe54e5da1869200db563aec",
+      "End": "a620432e6f2c4ceb9d06df2aa92a3af2",
+      "Id": "760ba81ca5b943b79904c1dce14ca1fd"
+    },
+    {
+      "Start": "81e3979ef7f542a8b51e8ea9740246a2",
+      "End": "7236ef71e6234de5901ea7683d65fd31",
+      "Id": "2202ab7d94484aa58fbdf16f61bf5560"
+    },
+    {
+      "Start": "8a391d4447b141969e7d8787e709d487",
+      "End": "c81ef77b5c43438dbd5da856262e487e",
+      "Id": "37578d441e9f48918024098a6734f77e"
+    },
+    {
+      "Start": "46383bde63f845d788497deafeb241c6",
+      "End": "31b25a41ef3b4a0b9436ffd8807e9413",
+      "Id": "25dccc8ceac6434ea5e7dcb4d752c91d"
+    },
+    {
+      "Start": "8013da6e223c408fb40df761b443a267",
+      "End": "f0a4ace9eb734f4ba88fce814f909920",
+      "Id": "6c9de3ec67ae4aa88e1be4c57efb1441"
+    }
+  ],
+  "Dependencies": [],
+  "NodeLibraryDependencies": [],
+  "Bindings": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 1.0,
+      "HasRunWithoutCrash": true,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "2.6.1.8786",
+      "RunType": "Manual",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "Background Preview",
+      "EyeX": 116411.07286867415,
+      "EyeY": 191467.7752201281,
+      "EyeZ": -169446.3388487515,
+      "LookX": -116411.07286867415,
+      "LookY": -195632.7752201281,
+      "LookZ": 169446.3388487515,
+      "UpX": -0.29333282900863994,
+      "UpY": 0.8553645603933846,
+      "UpZ": 0.4269746131226384
+    },
+    "NodeViews": [
+      {
+        "ShowGeometry": true,
+        "Name": "Restart",
+        "Id": "3272409649f0442e89d1a1de92b5e225",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 2139.0329951087238,
+        "Y": 1782.81876954241
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Interface",
+        "Id": "ec9eea51b00045ea8341503b0f052c6a",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 2705.1560684513934,
+        "Y": 2066.8187695424103
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "File Path",
+        "Id": "a60232f18bc44ae3abc7799c0c9b214b",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 2139.0329951087238,
+        "Y": 1992.393635933063
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Settings",
+        "Id": "147bae45b89f40afa2b6861a22b5419a",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 2705.0329951087238,
+        "Y": 2160.3936359330628
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Watch",
+        "Id": "5ad7e40532ad495086524fccf94526f9",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 2949.7684067788118,
+        "Y": 2381.8827692246987
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "List Create",
+        "Id": "df74c1de7d624a5ba1241df06d45e1c9",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 2139.0329951087238,
+        "Y": 2605.3936359330628
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Code Block",
+        "Id": "6893d4b2db44461da66765e3ab52f627",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 1745.0329951087238,
+        "Y": 2643.3136359330629
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "ON / OFF",
+        "Id": "e4d3a006c848465095ece3c7182179cb",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 2331.8329951087235,
+        "Y": 2376.9735451999586
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Floor Types",
+        "Id": "2d2201b33baa45a1badb69c9ea058601",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 2139.0329951087238,
+        "Y": 2437.8137266661679
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Levels",
+        "Id": "a47fdcfa320e48769f4cb5e2bbdc269d",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 2139.0329951087238,
+        "Y": 2193.3936359330628
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Code",
+        "Id": "a9756a9993714e0594a4fc099d341d94",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 2754.0742362565538,
+        "Y": 2432.7310107802168
+      }
+    ],
+    "Annotations": [
+      {
+        "Id": "0cbbbc65bbd34a55952b04fc2bc6170a",
+        "Title": "Script Settings",
+        "Nodes": [
+          "147bae45b89f40afa2b6861a22b5419a",
+          "ec9eea51b00045ea8341503b0f052c6a",
+          "a9756a9993714e0594a4fc099d341d94"
+        ],
+        "Left": 2695.0329951087238,
+        "Top": 2036.8187695424103,
+        "Width": 193.04124114783008,
+        "Height": 488.91224123780648,
+        "FontSize": 14.0,
+        "InitialTop": 2066.8187695424103,
+        "InitialHeight": 460.0639996822888,
+        "TextblockHeight": 20.0,
+        "Background": "#FFB5B5B5"
+      },
+      {
+        "Id": "13468b8bdf4b4f138e968a082f6f707c",
+        "Title": "Restart",
+        "Nodes": [
+          "3272409649f0442e89d1a1de92b5e225"
+        ],
+        "Left": 2129.0329951087238,
+        "Top": 1752.81876954241,
+        "Width": 155.0,
+        "Height": 98.0,
+        "FontSize": 14.0,
+        "InitialTop": 1782.81876954241,
+        "InitialHeight": 145.0,
+        "TextblockHeight": 20.0,
+        "Background": "#FF48B9FF"
+      },
+      {
+        "Id": "82a2493d492f4b83a461cf23efb6b4cd",
+        "Title": "PLEASE READ BEFORE YOU START   \r\n\r\n● NAME:  Creating solid topography with layers\r\n\r\n● DESCRIPTION: \r\n\r\nhttps://vschugr.notion.site/Solid-state-topography-part-2-08c5f264bbf148d088bbf2022e9cfcd7\r\n\r\n● EXECUTION ORDER: \r\n\r\n1. Select the path to the family template \"Metric Generic Model\". Something like this:\r\nC:\\ProgramData\\Autodesk\\RVT 2019\\Family Templates\\....\r\n\r\n2. Run the script. Revit will prompt you to select one or more topographies. Select the topographies in the project and click \"Finish\".\r\n\r\n3. View the results of the script. \r\n\r\n4. To restart the script, toggle the Yes/No toggle switch and click \"Run\" in Dynamo. This restart will restart the script, but not the wall sampling. This is done to save time when you search the best gradient in your facade.\r\n\r\n5. In order to re-select the walls, toggle the \"Restarting curtain walls selection\" toggle switch below. \r\n\r\n● COMMENTS:\r\n\r\nIf there are any problems, please email me on Linkedin\r\n\r\n● CLIENT:  WORLD\r\n● SECTIONS: Arch\r\n● SOFTWARE:  Revit 2019.1 +\r\n● DYNAMO: Dynamo 2.0.3\r\n",
+        "Nodes": [
+          "cf88db6ccc3b4112ad74c097e1fb9ad6"
+        ],
+        "Left": 600.49503715914193,
+        "Top": 1921.708230038917,
+        "Width": 599.99333333333334,
+        "Height": 669.0,
+        "FontSize": 14.0,
+        "InitialTop": 2502.708230038917,
+        "InitialHeight": 140.0,
+        "TextblockHeight": 571.0,
+        "Background": "#FFD8D8D8"
+      },
+      {
+        "Id": "26606dbe947a4c9fbffc79ffc50ea643",
+        "Title": "Select the path to the family template \"Metric Generic Model\"\r\n\r\nSomething like this:\r\n\r\nC:\\ProgramData\\Autodesk\\RVT 2019\\Family Templates\\Russian\\Метрическая система, типовая модель",
+        "Nodes": [
+          "a60232f18bc44ae3abc7799c0c9b214b"
+        ],
+        "Left": 2129.0329951087238,
+        "Top": 1864.393635933063,
+        "Width": 355.0,
+        "Height": 222.0,
+        "FontSize": 14.0,
+        "InitialTop": 1992.393635933063,
+        "InitialHeight": 145.0,
+        "TextblockHeight": 118.0,
+        "Background": "#FF48B9FF"
+      },
+      {
+        "Id": "583f2a4793c547eb83d927b48a57a0ec",
+        "Title": "Report",
+        "Nodes": [
+          "5ad7e40532ad495086524fccf94526f9"
+        ],
+        "Left": 2939.7684067788118,
+        "Top": 2351.8827692246987,
+        "Width": 310.0,
+        "Height": 382.0,
+        "FontSize": 14.0,
+        "InitialTop": 2381.8827692246987,
+        "InitialHeight": 145.0,
+        "TextblockHeight": 20.0,
+        "Background": "#FF48B9FF"
+      },
+      {
+        "Id": "1544231a1da4474ba5cd1e0f0927b11e",
+        "Title": "List of material names and thicknesses (m)",
+        "Nodes": [
+          "6893d4b2db44461da66765e3ab52f627"
+        ],
+        "Left": 1735.0329951087238,
+        "Top": 2613.3136359330629,
+        "Width": 294.0,
+        "Height": 259.0,
+        "FontSize": 14.0,
+        "InitialTop": 2643.3136359330629,
+        "InitialHeight": 145.0,
+        "TextblockHeight": 20.0,
+        "Background": "#FFC1D676"
+      },
+      {
+        "Id": "a9a5c512e7dc412cb339c044568e1f0c",
+        "Title": "Don't forget to close empty slots!",
+        "Nodes": [
+          "df74c1de7d624a5ba1241df06d45e1c9"
+        ],
+        "Left": 2129.0329951087238,
+        "Top": 2561.3936359330628,
+        "Width": 140.0,
+        "Height": 345.0,
+        "FontSize": 14.0,
+        "InitialTop": 2605.3936359330628,
+        "InitialHeight": 145.0,
+        "TextblockHeight": 34.0,
+        "Background": "#FFB5B5B5"
+      },
+      {
+        "Id": "4f12adbbceca4366839ec77c899a1864",
+        "Title": "Enable this option if you want the layer to be created not by creating a family, but by creating a floor and adding points to this floor",
+        "Nodes": [
+          "e4d3a006c848465095ece3c7182179cb",
+          "2d2201b33baa45a1badb69c9ea058601"
+        ],
+        "Left": 2129.0329951087238,
+        "Top": 2316.9735451999586,
+        "Width": 347.79999999999973,
+        "Height": 213.84018146620929,
+        "FontSize": 14.0,
+        "InitialTop": 2376.9735451999586,
+        "InitialHeight": 205.84018146620929,
+        "TextblockHeight": 50.0,
+        "Background": "#FFFFAA45"
+      },
+      {
+        "Id": "935b3e91d1c1470ab8d0e8701c536ebe",
+        "Title": "Select the level that will be assigned to the elements\r\nSelect the level that will be assigned to the elements",
+        "Nodes": [
+          "a47fdcfa320e48769f4cb5e2bbdc269d"
+        ],
+        "Left": 2129.0329951087238,
+        "Top": 2116.3936359330628,
+        "Width": 169.0,
+        "Height": 170.0,
+        "FontSize": 14.0,
+        "InitialTop": 2193.3936359330628,
+        "InitialHeight": 145.0,
+        "TextblockHeight": 67.0,
+        "Background": "#FFC1D676"
+      },
+      {
+        "Id": "cf88db6ccc3b4112ad74c097e1fb9ad6",
+        "Title": "Developer:                                                                                                                                   \r\nVsevolod Chugreev\r\nvschugr@gmail.com \r\nwww.linkedin.com/in/vschugr/                                   ",
+        "Nodes": [],
+        "Left": 610.49503715914193,
+        "Top": 2502.708230038917,
+        "Width": 0.0,
+        "Height": 0.0,
+        "FontSize": 36.0,
+        "InitialTop": 0.0,
+        "InitialHeight": 0.0,
+        "TextblockHeight": 0.0,
+        "Background": "#FFC1D676"
+      }
+    ],
+    "X": -1432.3275368510901,
+    "Y": -2236.0842323410538,
+    "Zoom": 0.91775274796576434
+  }
+}

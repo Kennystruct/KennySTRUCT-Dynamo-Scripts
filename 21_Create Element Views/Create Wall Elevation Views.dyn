@@ -1,0 +1,167 @@
+{
+  "Uuid": "9f88e241-75b0-49fd-9960-1ca615b999ab",
+  "IsCustomNode": false,
+  "Description": null,
+  "Name": "Create Wall Elevation Views",
+  "ElementResolver": {
+    "ResolutionMap": {}
+  },
+  "Inputs": [],
+  "Outputs": [],
+  "Nodes": [
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "import clr\r\nimport sys\r\nsys.path.append('C:\\Program Files (x86)\\IronPython 2.7\\Lib')\r\n\r\nimport System\r\nfrom System import Array\r\nfrom System.Collections.Generic import *\r\nclr.AddReference('ProtoGeometry')\r\nfrom Autodesk.DesignScript.Geometry import *\r\n\r\nclr.AddReference(\"RevitNodes\")\r\nimport Revit\r\nclr.ImportExtensions(Revit.Elements)\r\nclr.ImportExtensions(Revit.GeometryConversion)\r\n\r\nclr.AddReference(\"RevitServices\")\r\nimport RevitServices\r\nfrom RevitServices.Persistence import DocumentManager \r\nfrom RevitServices.Transactions import TransactionManager \r\n\r\nclr.AddReference(\"RevitAPI\")\r\nfrom Autodesk.Revit.DB import *\r\n\r\nclr.AddReference(\"RevitAPIUI\")\r\nfrom Autodesk.Revit.UI import *\r\n\r\ndoc = DocumentManager.Instance.CurrentDBDocument\r\nuiapp = DocumentManager.Instance.CurrentUIApplication \r\napp = uiapp.Application \r\nuidoc = uiapp.ActiveUIDocument\r\n\r\ndef units(mmToFeets):\r\n\tdut = DisplayUnitType.DUT_MILLIMETERS\r\n\treturn UnitUtils.ConvertToInternalUnits(mmToFeets, dut)\r\n\r\ndef PickedWalls():\r\n\tclass MySelectionFilter(Selection.ISelectionFilter):\r\n\t\tdef __init__(self):\r\n\t\t\tpass\r\n\t\tdef AllowElement(self, element):\r\n\t\t\tif element.Category.Name == \"Walls\":\r\n\t\t\t\treturn True\r\n\t\t\telse:\r\n\t\t\t\treturn False\r\n\t\tdef AllowReference(self, element):\r\n\t\t\treturn False\r\n\r\n\twalls = []\r\n\r\n\r\n\tSel_filter = MySelectionFilter()\r\n\tobj_type = Selection.ObjectType.Element\r\n\r\n\tselection = uidoc.Selection.PickObjects(obj_type,Sel_filter,\"Select Wall(s)\")\r\n\r\n\tfor elems in selection:\r\n\t\t\twalls.append(Document.GetElement(doc,elems))\r\n\treturn walls\r\n\r\nwalls = PickedWalls()\r\n\r\n\r\n# wall selection\r\n#walls = UnwrapElement(IN[0])\r\n\r\n# Check if an input data is a list\r\nif not isinstance(walls, list):\r\n    walls = [walls]\r\n\r\n# user section type name\r\nsectionTypeName = IN[0]\r\n\r\n# user offset (crop region = far clip)\r\noffset = units(IN[1])\r\n\r\n# filtering user section type name (id)\r\nviewFamilyTypes = FilteredElementCollector(doc).OfClass(ViewFamilyType).ToElements()\r\n\r\nfor vf in viewFamilyTypes:\r\n\tif vf.get_Parameter(BuiltInParameter.SYMBOL_NAME_PARAM).AsString() == sectionTypeName:\r\n\t\tviewFamilyTypeId = vf.Id\r\n\r\nnewSections = []\r\nfor wall in walls:\r\n    def builtInParam(wallParam):\r\n        return units(float(wall.get_Parameter(wallParam).AsValueString()))\r\n\r\n    # Determine section box\r\n    lc = wall.Location\r\n    line = lc.Curve\r\n\r\n    p = line.GetEndPoint(0)\r\n    q = line.GetEndPoint(1)\r\n    v = q - p\r\n\r\n    bb = wall.get_BoundingBox(None)\r\n    minZ = bb.Min.Z\r\n    maxZ = bb.Max.Z\r\n\r\n    w = v.GetLength()\r\n    h = maxZ - minZ\r\n    d = wall.WallType.Width\r\n    wallBaseOffset = builtInParam(BuiltInParameter.WALL_BASE_OFFSET)\r\n    wallUnconnectedHeight = builtInParam(BuiltInParameter.WALL_USER_HEIGHT_PARAM)\r\n\r\n    # XYZ(min/max section line length, min/max height of the section box, min/max far clip)\r\n    min = XYZ(-0.5*w - offset, wallBaseOffset - offset, - offset - 0.5*d)\r\n    max = XYZ(0.5*w + offset, wallBaseOffset + wallUnconnectedHeight + offset, offset + 0.5*d)\r\n\r\n    # factor for direction of section view\r\n    if p.X > q.X or (p.X == q.X and p.Y < q.Y): fc = 1\r\n    else: fc = -1\r\n\r\n    midpoint = p + 0.5*v\r\n    walldir = fc*v.Normalize()\r\n    up = XYZ.BasisZ\r\n    viewdir = walldir.CrossProduct(up)\r\n\r\n    t = Transform.Identity\r\n    t.Origin = midpoint\r\n    t.BasisX = walldir\r\n    t.BasisY = up\r\n    t.BasisZ = viewdir\r\n\r\n    sectionBox = BoundingBoxXYZ()\r\n    sectionBox.Transform = t\r\n    sectionBox.Min = min # scope box bottom\r\n    sectionBox.Max = max # scope box top\r\n\r\n    # Create wall section view\r\n    TransactionManager.Instance.EnsureInTransaction(doc)\r\n\r\n    newSection = ViewSection.CreateSection(doc, viewFamilyTypeId, sectionBox)\r\n    newSections.append(newSection)\r\n\r\n    TransactionManager.Instance.TransactionTaskDone()\r\n\r\nOUT = newSections\r\n",
+      "VariableInputPorts": true,
+      "Id": "03fecc43cc4b439c835a164630452c56",
+      "Inputs": [
+        {
+          "Id": "3206e53589654d51bd049021038f4ace",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "8006313c0f7843d3943f9e4addb6dae9",
+          "Name": "IN[1]",
+          "Description": "Input #1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "887ee36fe61e477c95782a2f969a226d",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded IronPython script."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
+      "NodeType": "StringInputNode",
+      "InputValue": "KSD - Cross Section",
+      "Id": "06df3c10e62c4b22bde35853e86df235",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "26aa251949a84b45b7a3241b0966efe1",
+          "Name": "",
+          "Description": "String",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Creates a string."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.DoubleInput, CoreNodeModels",
+      "NodeType": "NumberInputNode",
+      "NumberType": "Double",
+      "InputValue": 350.0,
+      "Id": "cd507f8f36a44047a4912d173383d1aa",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "7433e19226cd4903acfb62378ffafc8b",
+          "Name": "",
+          "Description": "Double",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Creates a number."
+    }
+  ],
+  "Connectors": [
+    {
+      "Start": "26aa251949a84b45b7a3241b0966efe1",
+      "End": "3206e53589654d51bd049021038f4ace",
+      "Id": "94dee2a77a7c4ed1803a22b1c7b6f0b6"
+    },
+    {
+      "Start": "7433e19226cd4903acfb62378ffafc8b",
+      "End": "8006313c0f7843d3943f9e4addb6dae9",
+      "Id": "e537914acbc24a8485187bb7e17e727b"
+    }
+  ],
+  "Dependencies": [],
+  "NodeLibraryDependencies": [],
+  "Bindings": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 1.0,
+      "HasRunWithoutCrash": true,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "2.6.1.8786",
+      "RunType": "Manual",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "Background Preview",
+      "EyeX": -17.0,
+      "EyeY": 24.0,
+      "EyeZ": 50.0,
+      "LookX": 12.0,
+      "LookY": -13.0,
+      "LookZ": -58.0,
+      "UpX": 0.0,
+      "UpY": 1.0,
+      "UpZ": 0.0
+    },
+    "NodeViews": [
+      {
+        "ShowGeometry": true,
+        "Name": "Python Script",
+        "Id": "03fecc43cc4b439c835a164630452c56",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 324.45770931481059,
+        "Y": 296.312003580588
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Section Type Name",
+        "Id": "06df3c10e62c4b22bde35853e86df235",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 78.3795828942607,
+        "Y": 250.34329707170315
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Offset",
+        "Id": "cd507f8f36a44047a4912d173383d1aa",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 117.10747464717218,
+        "Y": 340.23747952924316
+      }
+    ],
+    "Annotations": [],
+    "X": 137.62878685678191,
+    "Y": -143.08551846963724,
+    "Zoom": 1.0120421414445722
+  }
+}

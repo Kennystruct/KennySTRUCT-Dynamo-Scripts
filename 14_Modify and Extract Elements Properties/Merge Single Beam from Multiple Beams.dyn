@@ -1,0 +1,207 @@
+{
+  "Uuid": "bccf9574-ce65-4185-8ccc-386e01d695a9",
+  "IsCustomNode": false,
+  "Description": null,
+  "Name": "Merge Single Beam from Multiple Beams",
+  "ElementResolver": {
+    "ResolutionMap": {}
+  },
+  "Inputs": [
+    {
+      "Id": "2bfb1f1d8d6d45228bcb88f8d99fdf7c",
+      "Name": "Refresh Script?",
+      "Type": "boolean",
+      "Value": "true",
+      "Description": "Selection between a true and false.",
+      "SelectedIndex": 0
+    }
+  ],
+  "Outputs": [
+    {
+      "Id": "da39743e30b34b1680e7d27497b87407",
+      "Name": "Result",
+      "Type": "unknown",
+      "InitialValue": "",
+      "Description": "Visualize the node's output"
+    }
+  ],
+  "Nodes": [
+    {
+      "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
+      "NodeType": "BooleanInputNode",
+      "InputValue": true,
+      "Id": "2bfb1f1d8d6d45228bcb88f8d99fdf7c",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "45497743b12b4d749973d61e92650236",
+          "Name": "",
+          "Description": "Boolean",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Selection between a true and false."
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "#\tDeveloped by KEHINDE AYOBADE\r\n#\tFree for Use, Kindly share with your network\r\n#\tFor more Information about me, check my linkedIn profile below\r\n#\tHold CTRL on your keyboard and clik the link\r\n#\twww.linkedin.com/in/kehinde-ayobade/\r\n\r\nimport sys\r\nimport clr\r\nclr.AddReference('ProtoGeometry')\r\nfrom Autodesk.DesignScript.Geometry import Point as PT, Line as Crv\r\n\r\nclr.AddReference(\"RevitNodes\")\r\nimport Revit\r\nclr.ImportExtensions(Revit.Elements)\r\nclr.ImportExtensions(Revit.GeometryConversion)\r\n\r\nclr.AddReference(\"RevitServices\")\r\nimport RevitServices\r\nfrom RevitServices.Persistence import DocumentManager \r\nfrom RevitServices.Transactions import TransactionManager \r\n\r\nclr.AddReference(\"RevitAPI\")\r\nfrom Autodesk.Revit.DB import *\r\nfrom Autodesk.Revit.Creation.Document import NewFamilyInstance\r\nfrom Autodesk.Revit.DB.Structure import *\r\n\r\nclr.AddReference(\"RevitAPIUI\")\r\nfrom Autodesk.Revit.UI import *\r\n\r\ndoc = DocumentManager.Instance.CurrentDBDocument\r\nuiapp = DocumentManager.Instance.CurrentUIApplication \r\napp = uiapp.Application \r\nuidoc = uiapp.ActiveUIDocument\r\n\r\nclass MySelectionFilter(Selection.ISelectionFilter):\r\n\tdef __init__(self):\r\n\t\tpass\r\n\tdef AllowElement(self, element):\r\n\t\tif element.Category.Name == \"Structural Framing\":\r\n\t\t\treturn True\r\n\t\telse:\r\n\t\t\treturn False\r\n\tdef AllowReference(self, element):\r\n\t\treturn False\r\n\r\nrefresh = IN[0]\r\nbeams = []\r\n\r\nSel_filter = MySelectionFilter()\r\nobj_type = Selection.ObjectType.Element\r\n\r\nif refresh:\r\n\r\n\tselection = uidoc.Selection.PickObjects(obj_type,Sel_filter,\"Select Structural Framing Element\")\r\n\t\r\n\tfor elems in selection:\r\n\t\tbeams.append(Document.GetElement(doc,elems))\r\n\t\r\n\telements = beams\r\n\t\r\n\tIDs = []\r\n\t\r\n\tfor elem in elements:\r\n\t\tstart = IDs.append(elem.Location.Curve.GetEndPoint(0))\r\n\t\tend = IDs.append(elem.Location.Curve.GetEndPoint(1))\r\n\t\r\n\tDS_Points = []\r\n\t\r\n\tfor point in IDs:\r\n\t\tDS_Points.append(point.ToPoint())\r\n\t\t\r\n\tDS_Points = PT.PruneDuplicates(DS_Points)\r\n\t\r\n\tnewCrv = Crv.ByBestFitThroughPoints(DS_Points)\r\n\t\r\n\tcollector = FilteredElementCollector(doc)\r\n\t\r\n\ttype = Document.GetElement(doc, elements[0].GetTypeId())\r\n\t\r\n\tdef GetLevel(item):\r\n\t\tval = None\r\n\t\tif hasattr(item, \"LevelId\"): \r\n\t\t\tval = item.Document.GetElement(item.LevelId)\r\n\t\t\tif val: return val\r\n\t\tif hasattr(item, \"Level\"):\r\n\t\t\tval = item.Level\r\n\t\t\tif val: return val\r\n\t\tif hasattr(item, \"GenLevel\"):\r\n\t\t\tval = item.GenLevel\r\n\t\t\tif val: return val\r\n\t\tif (item.GetType().ToString() in (\"Autodesk.Revit.DB.Architecture.StairsRun\", \"Autodesk.Revit.DB.Architecture.StairsLanding\")):\r\n\t\t\titem = item.GetStairs()\r\n\t\tif (item.GetType().ToString() == \"Autodesk.Revit.DB.Architecture.Stairs\"):\r\n\t\t\ttry: return item.Document.GetElement(item.get_Parameter(BuiltInParameter.STAIRS_BASE_LEVEL_PARAM).AsElementId())\r\n\t\t\texcept: pass\r\n\t\tif (item.GetType().ToString() == \"Autodesk.Revit.DB.ExtrusionRoof\"):\r\n\t\t\ttry: return item.Document.GetElement(item.get_Parameter(BuiltInParameter.ROOF_CONSTRAINT_LEVEL_PARAM).AsElementId())\r\n\t\t\texcept: pass\r\n\t\tif not val:\r\n\t\t\ttry: return item.Document.GetElement(item.get_Parameter(BuiltInParameter.INSTANCE_REFERENCE_LEVEL_PARAM).AsElementId())\r\n\t\t\texcept: \r\n\t\t\t\ttry: return item.Document.GetElement(item.get_Parameter(BuiltInParameter.INSTANCE_SCHEDULE_ONLY_LEVEL_PARAM).AsElementId())\r\n\t\t\t\texcept: \r\n\t\t\t\t\ttry: return item.Document.GetElement(item.get_Parameter(BuiltInParameter.SCHEDULE_LEVEL_PARAM).AsElementId())\r\n\t\t\t\t\texcept: return None\r\n\t\r\n\t\r\n\tTransactionManager.Instance.EnsureInTransaction(doc)\r\n\t\r\n\tif isinstance(elements, list):\r\n\t\tnewBeam = doc.Create.NewFamilyInstance(newCrv.ToRevitType(), type, GetLevel(elements[0]), StructuralType.Beam)\r\n\t\t\r\n\t\t\r\n\telse:\r\n\t\tnewBeam = doc.Create.NewFamilyInstance(newCrv.ToRevitType(), type, GetLevel(elements), StructuralType.Beam)\r\n\t\r\n\tif newBeam:\r\n\t\tfor elems in elements:\r\n\t\t\tDocument.Delete(doc,elems.Id)\r\n\t\tzOffset = newBeam.GetParameters(\"z Offset Value\")\r\n\t\tzOffset[0].Set(0)\r\n\telse:\r\n\t\tpass\r\n\t\r\n\tTransactionManager.Instance.TransactionTaskDone()\r\n\t\r\n\tOUT = newBeam\r\n\t\r\nelse:\r\n\tOUT = TaskDialog.Show(\"Merge Beams\",\"Script cannot work, please set toggle to True\")",
+      "Engine": "IronPython2",
+      "VariableInputPorts": true,
+      "Id": "5c1f33aa339c484a94a2572a31eb41b4",
+      "Inputs": [
+        {
+          "Id": "e6b6abe9c60d44d28241ae71766718c2",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "49995a3090e947cfb8c4762dd36df22c",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded Python script."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Watch, CoreNodeModels",
+      "NodeType": "ExtensionNode",
+      "Id": "da39743e30b34b1680e7d27497b87407",
+      "Inputs": [
+        {
+          "Id": "b4bd0a83374d491ab0ba8d41e30ba660",
+          "Name": "",
+          "Description": "Node to evaluate.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "65936c3d82164bc0bc98cda704bbdeb6",
+          "Name": "",
+          "Description": "Watch contents.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Visualize the node's output"
+    }
+  ],
+  "Connectors": [
+    {
+      "Start": "45497743b12b4d749973d61e92650236",
+      "End": "e6b6abe9c60d44d28241ae71766718c2",
+      "Id": "9d09addc965242e3ad5d12600143fc41"
+    },
+    {
+      "Start": "49995a3090e947cfb8c4762dd36df22c",
+      "End": "b4bd0a83374d491ab0ba8d41e30ba660",
+      "Id": "93f32e68163f4859afee8183dff6060b"
+    }
+  ],
+  "Dependencies": [],
+  "NodeLibraryDependencies": [],
+  "Thumbnail": null,
+  "GraphDocumentationURL": null,
+  "ExtensionWorkspaceData": [
+    {
+      "ExtensionGuid": "28992e1d-abb9-417f-8b1b-05e053bee670",
+      "Name": "Properties",
+      "Version": "2.12",
+      "Data": {}
+    },
+    {
+      "ExtensionGuid": "DFBD9CC0-DB40-457A-939E-8C8555555A9D",
+      "Name": "Generative Design",
+      "Version": "1.10",
+      "Data": {}
+    }
+  ],
+  "Author": "None provided",
+  "Linting": {
+    "activeLinter": "None",
+    "activeLinterId": "7b75fb44-43fd-4631-a878-29f4d5d8399a",
+    "warningCount": 0,
+    "errorCount": 0
+  },
+  "Bindings": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 1.0,
+      "HasRunWithoutCrash": true,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "2.12.1.8246",
+      "RunType": "Manual",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "Background Preview",
+      "EyeX": -17.0,
+      "EyeY": 24.0,
+      "EyeZ": 50.0,
+      "LookX": 12.0,
+      "LookY": -13.0,
+      "LookZ": -58.0,
+      "UpX": 0.0,
+      "UpY": 1.0,
+      "UpZ": 0.0
+    },
+    "NodeViews": [
+      {
+        "ShowGeometry": true,
+        "Name": "Refresh Script?",
+        "Id": "2bfb1f1d8d6d45228bcb88f8d99fdf7c",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 122.19448723629665,
+        "Y": 235.0133590629695
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Python Script",
+        "Id": "5c1f33aa339c484a94a2572a31eb41b4",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 314.86488249016071,
+        "Y": 211.9139972412375
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Result",
+        "Id": "da39743e30b34b1680e7d27497b87407",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": true,
+        "Excluded": false,
+        "X": 425.62400311035009,
+        "Y": 138.03821173476206
+      }
+    ],
+    "Annotations": [],
+    "X": -13.934994093602768,
+    "Y": -66.710528672513249,
+    "Zoom": 1.067934645295858
+  }
+}

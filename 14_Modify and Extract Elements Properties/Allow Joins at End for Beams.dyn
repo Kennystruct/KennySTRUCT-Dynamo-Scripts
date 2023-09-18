@@ -1,0 +1,185 @@
+{
+  "Uuid": "3bba43f5-c5e1-45b1-bcd4-5e8ac9734114",
+  "IsCustomNode": false,
+  "Description": null,
+  "Name": "Allow Joins at End for Beams",
+  "ElementResolver": {
+    "ResolutionMap": {}
+  },
+  "Inputs": [],
+  "Outputs": [],
+  "Nodes": [
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "import clr\r\nclr.AddReference(\"RevitAPI\")\r\nimport Autodesk\r\nfrom Autodesk.Revit.DB import *\r\nclr.AddReference(\"RevitServices\")\r\nimport RevitServices\r\nfrom RevitServices.Persistence import DocumentManager\r\nfrom RevitServices.Transactions import TransactionManager\r\nclr.AddReference(\"RevitNodes\")\r\nimport Revit\r\nclr.ImportExtensions(Revit.Elements)\r\n#### End of General imports  ##### \r\n# Unwrap inputs\r\ninput = UnwrapElement( IN[0] )\r\nelements = []\r\n#force input into list\r\ntry:\r\n    for e in input:\r\n        if e.Category.Name == \"Structural Framing\":\r\n            elements.append(e)\r\nexcept:\r\n    if input.Category.Name == \"Structural Framing\": \r\n        elements.append(input)\r\n# Start Transaction\r\ndoc = DocumentManager.Instance.CurrentDBDocument\r\nTransactionManager.Instance.EnsureInTransaction(doc)\r\nfor e in elements:\r\n    Autodesk.Revit.DB.Structure.StructuralFramingUtils.AllowJoinAtEnd(e, 0)\r\n    Autodesk.Revit.DB.Structure.StructuralFramingUtils.AllowJoinAtEnd(e, 1)\r\n# End Transaction\r\nTransactionManager.Instance.TransactionTaskDone()\r\n# Wrap\r\nOUT = elements",
+      "Engine": "IronPython2",
+      "VariableInputPorts": true,
+      "Id": "673dc2ae1a7b418391dca713550a6428",
+      "Inputs": [
+        {
+          "Id": "9c8ddc185d914777ad133ad08f740c79",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "d0f349d1a1ec4b9ba39659657dbd5ded",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded Python script."
+    },
+    {
+      "ConcreteType": "DSRevitNodesUI.Categories, DSRevitNodesUI",
+      "SelectedIndex": 600,
+      "SelectedString": "OST_StructuralFraming",
+      "NodeType": "ExtensionNode",
+      "Id": "42d57c7891484ee6a4d00f811205badf",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "0603f49c19ff42048da8fd3e1ffe4766",
+          "Name": "Category",
+          "Description": "The selected Category.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "All built-in categories."
+    },
+    {
+      "ConcreteType": "DSRevitNodesUI.ElementsOfCategory, DSRevitNodesUI",
+      "NodeType": "ExtensionNode",
+      "Id": "66b0047221a04aadac4da4616daeb7f8",
+      "Inputs": [
+        {
+          "Id": "0498573e1ec24b72a2d20b2e48dbe27f",
+          "Name": "Category",
+          "Description": "The Category",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "e6224604440840f1be63ac5f84b597ce",
+          "Name": "Elements",
+          "Description": "An element type.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Get all elements of the specified category from the model."
+    }
+  ],
+  "Connectors": [
+    {
+      "Start": "0603f49c19ff42048da8fd3e1ffe4766",
+      "End": "0498573e1ec24b72a2d20b2e48dbe27f",
+      "Id": "e4e58643dc704610a631eb7ed6380b8a"
+    },
+    {
+      "Start": "e6224604440840f1be63ac5f84b597ce",
+      "End": "9c8ddc185d914777ad133ad08f740c79",
+      "Id": "50f22c60f0ca4d40b7004fa7bbab119f"
+    }
+  ],
+  "Dependencies": [],
+  "NodeLibraryDependencies": [],
+  "Thumbnail": null,
+  "GraphDocumentationURL": null,
+  "ExtensionWorkspaceData": [
+    {
+      "ExtensionGuid": "28992e1d-abb9-417f-8b1b-05e053bee670",
+      "Name": "Properties",
+      "Version": "2.12",
+      "Data": {}
+    }
+  ],
+  "Author": "None provided",
+  "Linting": {
+    "activeLinter": "None",
+    "activeLinterId": "7b75fb44-43fd-4631-a878-29f4d5d8399a",
+    "warningCount": 0,
+    "errorCount": 0
+  },
+  "Bindings": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 1.0,
+      "HasRunWithoutCrash": true,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "2.12.0.5650",
+      "RunType": "Manual",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "Background Preview",
+      "EyeX": -17.0,
+      "EyeY": 24.0,
+      "EyeZ": 50.0,
+      "LookX": 12.0,
+      "LookY": -13.0,
+      "LookZ": -58.0,
+      "UpX": 0.0,
+      "UpY": 1.0,
+      "UpZ": 0.0
+    },
+    "NodeViews": [
+      {
+        "ShowGeometry": true,
+        "Name": "Python Script",
+        "Id": "673dc2ae1a7b418391dca713550a6428",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 510.81118629154395,
+        "Y": 209.99979450487353
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Categories",
+        "Id": "42d57c7891484ee6a4d00f811205badf",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 47.768598476533896,
+        "Y": 215.50507899886509
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "All Elements of Category",
+        "Id": "66b0047221a04aadac4da4616daeb7f8",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 275.575202356016,
+        "Y": 214.86399677343189
+      }
+    ],
+    "Annotations": [],
+    "X": -419.15182735546415,
+    "Y": 49.640037329984523,
+    "Zoom": 1.3938837133076676
+  }
+}

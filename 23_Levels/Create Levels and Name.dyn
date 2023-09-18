@@ -1,0 +1,210 @@
+{
+  "Uuid": "3c9d0464-8643-5ffe-96e5-ab1769818209",
+  "IsCustomNode": false,
+  "Description": "",
+  "Name": "Create Levels and Name",
+  "ElementResolver": {
+    "ResolutionMap": {
+      "Math": {
+        "Key": "DSCore.Math",
+        "Value": "DSCoreNodes.dll"
+      }
+    }
+  },
+  "Inputs": [
+    {
+      "Id": "ab286c8bbef645118d1af29b93d18a3e",
+      "Name": "Refresh Script",
+      "Type": "boolean",
+      "Value": "true",
+      "Description": "Selection between a true and false."
+    }
+  ],
+  "Outputs": [],
+  "Nodes": [
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "# Load the Python Standard and DesignScript Libraries\r\nimport sys\r\nimport clr\r\nclr.AddReference('ProtoGeometry')\r\nfrom Autodesk.DesignScript.Geometry import *\r\n\r\nclr.AddReference(\"RevitServices\")\r\nimport RevitServices\r\nfrom RevitServices.Persistence import DocumentManager \r\nfrom RevitServices.Transactions import TransactionManager \r\n\r\nclr.AddReference(\"RevitAPI\")\r\nfrom Autodesk.Revit.DB import *\r\n\r\nclr.AddReference(\"RevitAPIUI\")\r\nfrom Autodesk.Revit.UI import *\r\n\r\nclr.AddReference(\"System.Windows.Forms\")\r\nimport System.Windows.Forms as FORMS\r\n\r\nclr.AddReference(\"System.Windows\")\r\nimport System.Windows \r\n\r\ndoc = DocumentManager.Instance.CurrentDBDocument\r\nuiapp = DocumentManager.Instance.CurrentUIApplication \r\napp = uiapp.Application \r\nuidoc = uiapp.ActiveUIDocument\r\n\r\nUI_Form = IN[1]\r\n\r\nUI_Form.ShowDialog()\r\n\r\nclass MySelectionFilter(Selection.ISelectionFilter):\r\n\tdef __init__(self):\r\n\t\tpass\r\n\tdef AllowElement(self, element):\r\n\t\tif element.Category.Name == \"Levels\":\r\n\t\t\treturn True\r\n\t\telse:\r\n\t\t\treturn False\r\n\tdef AllowReference(self, element):\r\n\t\treturn False\r\n\r\ndef ordinal(value):\r\n    try:\r\n        value = int(value)\r\n    except ValueError:\r\n        return value\r\n\r\n    if value % 100//10 != 1:\r\n        if value % 10 == 1:\r\n            ordval = u\"%d%s\" % (value, \"st\")\r\n        elif value % 10 == 2:\r\n            ordval = u\"%d%s\" % (value, \"nd\")\r\n        elif value % 10 == 3:\r\n            ordval = u\"%d%s\" % (value, \"rd\")\r\n        else:\r\n            ordval = u\"%d%s\" % (value, \"th\")\r\n    else:\r\n        ordval = u\"%d%s\" % (value, \"th\")\r\n\r\n    return ordval\r\n    \r\n\r\nTransactionManager.Instance.EnsureInTransaction(doc)\r\n\r\ntry:\r\n\r\n\tif UI_Form.DialogResult.ToString() == \"OK\":\r\n\t\tFORMS.MessageBox.Show(\"Please select Reference Level\\nfrom which you want to create new levels\",\"Select Level\")\r\n\t\r\n\t\tlevelSelection  = uidoc.Selection.PickObject(Selection.ObjectType.Element, MySelectionFilter(), \"Select Reference Level\")\r\n\t\t\r\n\t\treflevel = Document.GetElement(doc,levelSelection)\r\n\t\t\r\n\t\tsartNum = int(UI_Form.text1.Text)\r\n\t\tnumOfLevels = int(UI_Form.text2.Text)\r\n\t\televation = int(UI_Form.text3.Text)\r\n\t\tsuffix = UI_Form.text4.Text\r\n\t\tnewLevels = []\r\n\t\tordinals = []\r\n\t\t\r\n\t\tstartElev = int(reflevel.Elevation*304.8 + elevation)\r\n\t\t\r\n\t\ttest = []\r\n\t\tfor i in range(startElev,startElev + numOfLevels*elevation,elevation):\r\n\t\t\ttest.append(i)\r\n\t\t\t\r\n\t\t\r\n\t\tfor nums in range(sartNum,sartNum+numOfLevels):\r\n\t\t\tordinals.append(ordinal(nums))\r\n\t\t\r\n\t\tfor name,elevs in zip(ordinals,range(startElev,startElev + numOfLevels*elevation,elevation)):\r\n\t\t\tnewlevel = Level.Create(doc,elevs/304.8)\r\n\t\t\tnewlevel.Name = name + \" \" + suffix\r\n\t\t\tnewLevels.append(newlevel)\r\n\t\t\r\n\t\tOUT = ordinals\r\n\telse:\r\n\t\tsys.exit\r\nexcept Exception  or NameError or EOFError as E:\r\n\tFORMS.MessageBox.Show(E.ToString(), \"Error\", FORMS.MessageBoxButtons(0), FORMS.MessageBoxIcon.Error)\r\n\t\r\n\tsys.exit\r\nTransactionManager.Instance.TransactionTaskDone()\r\n\r\n",
+      "VariableInputPorts": true,
+      "Id": "e00e4b7d75524be389729ef09df246c7",
+      "Inputs": [
+        {
+          "Id": "fe844901b4d8460fb05a2dd1afcf30c4",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "518dba6b139d4c308aef4be5cef78f25",
+          "Name": "IN[1]",
+          "Description": "Input #1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "28631ba7300948138a907e03a54e554b",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded IronPython script."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
+      "NodeType": "BooleanInputNode",
+      "InputValue": true,
+      "Id": "ab286c8bbef645118d1af29b93d18a3e",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "1f1b4b75f7674ac5af85042e2d08665f",
+          "Name": "",
+          "Description": "Boolean",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Selection between a true and false."
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "import sys\r\nimport clr\r\nclr.AddReference(\"System.IO\")\r\nclr.AddReference(\"System.Reflection\")\r\nclr.AddReference(\"System.Threading\")\r\nclr.AddReference(\"System.Drawing\")\r\nclr.AddReference(\"System.Windows.Forms\")\r\nclr.AddReference(\"System\")\r\nimport System.IO\r\nimport System.Reflection\r\nimport System.Threading\r\nimport System.Drawing\r\nimport System.Windows.Forms\r\nfrom System.Threading import ApartmentState, Thread, ThreadStart\r\nfrom System import Array, Object\r\nfrom System.Collections.Generic import *\r\n\r\nclass CreateLevels(System.Windows.Forms.Form):\r\n\tdef __init__(this):\r\n\t\t#FORM\r\n\t\tthis.ClientSize =   System.Drawing.Size(300, 300)\r\n\t\tthis.MaximizeBox = False\r\n\t\tthis.MaximumSize =   System.Drawing.Size(300, 300)\r\n\t\tthis.MinimizeBox = False\r\n\t\tthis.MinimumSize =   System.Drawing.Size(300, 300)\r\n\t\tthis.Name = \"Create Levels\"\r\n\t\tthis.ShowIcon = False\r\n\t\tthis.Text = \"KennySTRUCT | CREATE LEVELS\"\r\n\t\tthis.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen\r\n\t\t\r\n\t\t# START NUMBER - INPUT\r\n\t\tthis.label1 =   System.Windows.Forms.Label()\r\n\t\tthis.label1.AutoSize = True\r\n\t\tthis.label1.Location =   System.Drawing.Point(20, 40)\r\n\t\tthis.label1.Name = \"StartNumberLabel\"\r\n\t\tthis.label1.Size =   System.Drawing.Size(60, 13)\r\n\t\tthis.label1.TabIndex = 3\r\n\t\tthis.label1.Text = \"Start Level Number\\n(e.g 1,2,3...)\"\r\n\t\t\r\n\t\tthis.text1 = System.Windows.Forms.TextBox()\r\n\t\tthis.text1.Name = \"StartNumberText\"\r\n\t\tthis.text1.Size\t= System.Drawing.Size(120,100)\r\n\t\tthis.text1.Location = System.Drawing.Point(140, 40)\r\n\t\tthis.text1.Text = \"1\"\r\n\r\n\t\t# NUMBER OF LEVELS - INPUT\r\n\t\tthis.label2 =   System.Windows.Forms.Label()\r\n\t\tthis.label2.AutoSize = True\r\n\t\tthis.label2.Location =   System.Drawing.Point(20, 80)\r\n\t\tthis.label2.Name = \"NumberOfLevelsLabel\"\r\n\t\tthis.label2.Size =   System.Drawing.Size(60, 13)\r\n\t\tthis.label2.TabIndex = 3\r\n\t\tthis.label2.Text = \"Number of Levels\\n(e.g 1,2,3...)\"\r\n\t\t\r\n\t\tthis.text2 = System.Windows.Forms.TextBox()\r\n\t\tthis.text2.Name = \"NumberOfLevelsText\"\r\n\t\tthis.text2.Size\t= System.Drawing.Size(120,100)\r\n\t\tthis.text2.Location = System.Drawing.Point(140, 80)\r\n\t\tthis.text2.Text = \"5\"\r\n\r\n\t\t# START ELEVATION - INPUT\r\n\t\tthis.label3 =   System.Windows.Forms.Label()\r\n\t\tthis.label3.AutoSize = True\r\n\t\tthis.label3.Location =   System.Drawing.Point(20, 120)\r\n\t\tthis.label3.Name = \"StartElevationLabel\"\r\n\t\tthis.label3.Size =   System.Drawing.Size(60, 13)\r\n\t\tthis.label3.TabIndex = 3\r\n\t\tthis.label3.Text = \"Start Elevation\\n(mm)\"\r\n\t\t\r\n\t\tthis.text3 = System.Windows.Forms.TextBox()\r\n\t\tthis.text3.Name = \"StartElevationText\"\r\n\t\tthis.text3.Size\t= System.Drawing.Size(120,100)\r\n\t\tthis.text3.Location = System.Drawing.Point(140, 120)\r\n\t\tthis.text3.Text = \"3000\"\r\n\r\n\t\t# NAME SUFFIX - INPUT\r\n\t\tthis.label4 =   System.Windows.Forms.Label()\r\n\t\tthis.label4.AutoSize = True\r\n\t\tthis.label4.Location =   System.Drawing.Point(20, 160)\r\n\t\tthis.label4.Name = \"LevelSuffix\"\r\n\t\tthis.label4.Size =   System.Drawing.Size(60, 13)\r\n\t\tthis.label4.TabIndex = 3\r\n\t\tthis.label4.Text = \"Level Suffix\\n(e.g Level, Floor...)\"\r\n\t\t\r\n\t\tthis.text4 = System.Windows.Forms.TextBox()\r\n\t\tthis.text4.Name = \"StartElevationText\"\r\n\t\tthis.text4.Size\t= System.Drawing.Size(120,100)\r\n\t\tthis.text4.Location = System.Drawing.Point(140, 160)\r\n\t\tthis.text4.Text = \"FLOOR\"\r\n\r\n\t\t# OKAY & CANCEL BUTTONS\r\n\t\tthis.OK_Button =  System.Windows.Forms.Button()\r\n\t\tthis.OK_Button.Location =  System.Drawing.Point(23, 210)\r\n\t\tthis.OK_Button.Name = \"OK_Button\"\r\n\t\tthis.OK_Button.Size =  System.Drawing.Size(80, 23)\r\n\t\tthis.OK_Button.TabIndex = 6\r\n\t\tthis.OK_Button.Text = \"OK\"\r\n\t\tthis.OK_Button.DialogResult = System.Windows.Forms.DialogResult.OK\r\n\t\t\r\n\t\tthis.Cancel =  System.Windows.Forms.Button()\r\n\t\tthis.Cancel.Location =  System.Drawing.Point(110, 210)\r\n\t\tthis.Cancel.Name = \"Cancel_Button\"\r\n\t\tthis.Cancel.Size =  System.Drawing.Size(80, 23)\r\n\t\tthis.Cancel.TabIndex = 6\r\n\t\tthis.Cancel.Text = \"Cancel\"\r\n\t\tthis.Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel\r\n\t\t\r\n\t\t\r\n\t\tthis.Controls.Add(this.label1)\r\n\t\tthis.Controls.Add(this.text1)\r\n\t\tthis.Controls.Add(this.label2)\r\n\t\tthis.Controls.Add(this.text2)\r\n\t\tthis.Controls.Add(this.label3)\r\n\t\tthis.Controls.Add(this.text3)\r\n\t\tthis.Controls.Add(this.label4)\r\n\t\tthis.Controls.Add(this.text4)\r\n\t\tthis.Controls.Add(this.OK_Button)\r\n\t\tthis.Controls.Add(this.Cancel)\r\n\t\t\r\n\r\n# Place your code below this line\r\n\r\n# Assign your output to the OUT variable.\r\nOUT = CreateLevels()",
+      "VariableInputPorts": true,
+      "Id": "823aa54c32a2489d93c5e4816ae84f35",
+      "Inputs": [
+        {
+          "Id": "77472d6777ab4628bcbb2211dc857363",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "594ddb90664146e5867f9c165d4822ee",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded IronPython script."
+    }
+  ],
+  "Connectors": [
+    {
+      "Start": "1f1b4b75f7674ac5af85042e2d08665f",
+      "End": "fe844901b4d8460fb05a2dd1afcf30c4",
+      "Id": "8f105d2fc33d44fd9e983b5e431d874e"
+    },
+    {
+      "Start": "1f1b4b75f7674ac5af85042e2d08665f",
+      "End": "77472d6777ab4628bcbb2211dc857363",
+      "Id": "5b85719a9f3a40559d68fbd8b154e54b"
+    },
+    {
+      "Start": "594ddb90664146e5867f9c165d4822ee",
+      "End": "518dba6b139d4c308aef4be5cef78f25",
+      "Id": "591ce59c59cb4be48c96d377e9bb67bb"
+    }
+  ],
+  "Dependencies": [],
+  "NodeLibraryDependencies": [],
+  "Bindings": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 1.0,
+      "HasRunWithoutCrash": true,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "2.6.1.8786",
+      "RunType": "Manual",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "Background Preview",
+      "EyeX": -17.0,
+      "EyeY": 24.0,
+      "EyeZ": 50.0,
+      "LookX": 12.0,
+      "LookY": -13.0,
+      "LookZ": -58.0,
+      "UpX": 0.0,
+      "UpY": 1.0,
+      "UpZ": 0.0
+    },
+    "NodeViews": [
+      {
+        "ShowGeometry": true,
+        "Name": "Python Script: COMMAND",
+        "Id": "e00e4b7d75524be389729ef09df246c7",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 1648.6006933400949,
+        "Y": 2070.896628272666
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Refresh Script",
+        "Id": "ab286c8bbef645118d1af29b93d18a3e",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 1209.3497184570342,
+        "Y": 2080.28321333018
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Python Script: UI",
+        "Id": "823aa54c32a2489d93c5e4816ae84f35",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 1420.1922204579785,
+        "Y": 2156.1941808915335
+      }
+    ],
+    "Annotations": [
+      {
+        "Id": "9f0ae35925524042aa3736cab7fc4149",
+        "Title": "Developed by Kehinde Ayobade",
+        "Nodes": [],
+        "Left": 1651.3555103018418,
+        "Top": 1985.7500947158785,
+        "Width": 0.0,
+        "Height": 0.0,
+        "FontSize": 36.0,
+        "InitialTop": 0.0,
+        "InitialHeight": 0.0,
+        "TextblockHeight": 0.0,
+        "Background": "#FFC1D676"
+      }
+    ],
+    "X": -847.75033114082385,
+    "Y": -1359.284405808784,
+    "Zoom": 0.75068261706358286
+  }
+}

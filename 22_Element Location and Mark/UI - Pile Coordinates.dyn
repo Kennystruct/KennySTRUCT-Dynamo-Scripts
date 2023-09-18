@@ -1,0 +1,101 @@
+{
+  "Uuid": "75d46846-1eca-48f3-a8e7-ba400ca55884",
+  "IsCustomNode": false,
+  "Description": "",
+  "Name": "UI - Pile Coordinates",
+  "ElementResolver": {
+    "ResolutionMap": {}
+  },
+  "Inputs": [],
+  "Outputs": [],
+  "Nodes": [
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "import sys\r\nimport clr\r\nclr.AddReference(\"System.IO\")\r\nclr.AddReference(\"System.Reflection\")\r\nclr.AddReference(\"System.Threading\")\r\nclr.AddReference(\"System.Drawing\")\r\nclr.AddReference(\"System.Windows.Forms\")\r\nclr.AddReference(\"System\")\r\nimport System.IO\r\nimport System.Reflection\r\nimport System.Threading\r\nimport System.Drawing\r\nimport System.Windows.Forms\r\nfrom System.Threading import ApartmentState, Thread, ThreadStart\r\nfrom System import Array, Object\r\nfrom System.Collections.Generic import *\r\nfrom System.Windows.Forms import Application\r\n\r\n\r\ndef tolist(obj1):\r\n\tif hasattr(obj1,\"__iter__\"): return obj1\r\n\telse: return [obj1]\r\n\r\ndef hasInd(l1, i):\r\n\ttry:\r\n\t\tl1[i]\r\n\t\treturn  True\r\n\texcept:\r\n\t\treturn  False\r\n\r\nclass PileCoordinates(System.Windows.Forms.Form):\r\n\r\n\tdef __init__(this):\r\n\t\tthis.groupBox1 =   System.Windows.Forms.GroupBox()\r\n\t\tthis.label5 =   System.Windows.Forms.Label()\r\n\t\tthis.label2 =   System.Windows.Forms.Label()\r\n\t\tthis.label1 =   System.Windows.Forms.Label()\r\n\t\tthis.comboBox1 =   System.Windows.Forms.ComboBox()\r\n\t\tthis.button1 =   System.Windows.Forms.Button()\r\n\t\tthis.button2 =   System.Windows.Forms.Button()\r\n\t\tthis.label3 =   System.Windows.Forms.Label()\r\n\t\tthis.comboBox2 =   System.Windows.Forms.ComboBox()\r\n\t\tthis.comboBox3 =   System.Windows.Forms.ComboBox()\r\n\t\tthis.label4 =   System.Windows.Forms.Label()\r\n\t\tthis.groupBox1.SuspendLayout()\r\n\t\tthis.SuspendLayout()\r\n\t\t#\r\n\t\t# groupBox1\r\n\t\t#\r\n\t\tthis.groupBox1.Controls.Add(this.label5)\r\n\t\tthis.groupBox1.Controls.Add(this.label2)\r\n\t\tthis.groupBox1.Controls.Add(this.label1)\r\n\t\tthis.groupBox1.Controls.Add(this.comboBox3)\r\n\t\tthis.groupBox1.Controls.Add(this.comboBox2)\r\n\t\tthis.groupBox1.Controls.Add(this.comboBox1)\r\n\t\tthis.groupBox1.FlatStyle = System.Windows.Forms.FlatStyle.Popup\r\n\t\tthis.groupBox1.Font =   System.Drawing.Font(\"Calibri\", 12, System.Drawing.FontStyle.Regular)\r\n\t\tthis.groupBox1.ImeMode = System.Windows.Forms.ImeMode.On\r\n\t\tthis.groupBox1.Location =   System.Drawing.Point(29, 32)\r\n\t\tthis.groupBox1.Margin =   System.Windows.Forms.Padding(4)\r\n\t\tthis.groupBox1.Name = \"groupBox1\"\r\n\t\tthis.groupBox1.Padding =   System.Windows.Forms.Padding(4)\r\n\t\tthis.groupBox1.Size =   System.Drawing.Size(385, 237)\r\n\t\tthis.groupBox1.TabIndex = 0\r\n\t\tthis.groupBox1.TabStop = False\r\n\t\tthis.groupBox1.Text = \"Parameters\"\r\n\t\t#\r\n\t\t# label5\r\n\t\t#\r\n\t\tthis.label5.AutoSize =  True\r\n\t\tthis.label5.Font =   System.Drawing.Font(\"Calibri\", 11.25, System.Drawing.FontStyle.Regular)\r\n\t\tthis.label5.Location =   System.Drawing.Point(8, 188)\r\n\t\tthis.label5.Margin =   System.Windows.Forms.Padding(4, 0, 4, 0)\r\n\t\tthis.label5.Name = \"label5\"\r\n\t\tthis.label5.Size =   System.Drawing.Size(85, 18)\r\n\t\tthis.label5.TabIndex = 1\r\n\t\tthis.label5.Text = \"Elevation (Z)\"\r\n\t\t#\r\n\t\t# label2\r\n\t\t#\r\n\t\tthis.label2.AutoSize =  True\r\n\t\tthis.label2.Font =   System.Drawing.Font(\"Calibri\", 11.25, System.Drawing.FontStyle.Regular)\r\n\t\tthis.label2.Location =   System.Drawing.Point(8, 121)\r\n\t\tthis.label2.Margin =   System.Windows.Forms.Padding(4, 0, 4, 0)\r\n\t\tthis.label2.Name = \"label2\"\r\n\t\tthis.label2.Size =   System.Drawing.Size(118, 18)\r\n\t\tthis.label2.TabIndex = 1\r\n\t\tthis.label2.Text = \"Northings (N/S/Y)\"\r\n\t\t#\r\n\t\t# label1\r\n\t\t#\r\n\t\tthis.label1.AutoSize =  True\r\n\t\tthis.label1.Font =   System.Drawing.Font(\"Calibri\", 11.25, System.Drawing.FontStyle.Regular)\r\n\t\tthis.label1.Location =   System.Drawing.Point(8, 51)\r\n\t\tthis.label1.Margin =   System.Windows.Forms.Padding(4, 0, 4, 0)\r\n\t\tthis.label1.Name = \"label1\"\r\n\t\tthis.label1.Size =   System.Drawing.Size(110, 18)\r\n\t\tthis.label1.TabIndex = 1\r\n\t\tthis.label1.Text = \"Eastings (E/W/X)\"\r\n\t\t#\r\n\t\t# comboBox1\r\n\t\t#\r\n\t\tthis.comboBox1.FormattingEnabled =  True\r\n\t\tthis.comboBox1.Location =   System.Drawing.Point(139, 47)\r\n\t\tthis.comboBox1.Margin =   System.Windows.Forms.Padding(4)\r\n\t\tthis.comboBox1.Name = \"Eastings\"\r\n\t\tthis.comboBox1.Size =   System.Drawing.Size(207, 27)\r\n\t\tthis.comboBox1.TabIndex = 0\r\n\t\t#this.comboBox1.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend\r\n\t\tthis.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList\r\n\r\n\t\t#\r\n\t\t# button1\r\n\t\t#\r\n\t\tthis.button1.BackColor = System.Drawing.Color.Gainsboro\r\n\t\tthis.button1.Font =   System.Drawing.Font(\"Calibri\", 12, System.Drawing.FontStyle.Regular)\r\n\t\tthis.button1.Location =   System.Drawing.Point(440, 41)\r\n\t\tthis.button1.Margin =   System.Windows.Forms.Padding(4)\r\n\t\tthis.button1.Name = \"button1\"\r\n\t\tthis.button1.Size =   System.Drawing.Size(122, 34)\r\n\t\tthis.button1.TabIndex = 1\r\n\t\tthis.button1.Text = \"OK\"\r\n\t\tthis.button1.Click += this.finish\r\n\t\tthis.button1.UseVisualStyleBackColor = False\r\n\t\t#\r\n\t\t# button2\r\n\t\t#\r\n\t\tthis.button2.BackColor = System.Drawing.Color.Gainsboro\r\n\t\tthis.button2.Font =   System.Drawing.Font(\"Calibri\", 12, System.Drawing.FontStyle.Regular)\r\n\t\tthis.button2.Location =   System.Drawing.Point(440, 92)\r\n\t\tthis.button2.Margin =   System.Windows.Forms.Padding(4)\r\n\t\tthis.button2.Name = \"button2\"\r\n\t\tthis.button2.Size =   System.Drawing.Size(122, 34)\r\n\t\tthis.button2.TabIndex = 1\r\n\t\tthis.button2.Text = \"Cancel\"\r\n\t\tthis.button2.Click += this.cancel\r\n\t\tthis.button2.UseVisualStyleBackColor = False\r\n\t\t#\r\n\t\t# label3\r\n\t\t#\r\n\t\tthis.label3.AutoSize =  True\r\n\t\tthis.label3.Font =   System.Drawing.Font(\"Calibri\", 9, System.Drawing.FontStyle.Regular)\r\n\t\tthis.label3.Location =   System.Drawing.Point(443, 295)\r\n\t\tthis.label3.Name = \"label3\"\r\n\t\tthis.label3.Size =   System.Drawing.Size(119, 14)\r\n\t\tthis.label3.TabIndex = 2\r\n\t\tthis.label3.Text = \"(C) Kehinde Ayobade\"\r\n\t\t#\r\n\t\t# comboBox2\r\n\t\t#\r\n\t\tthis.comboBox2.FormattingEnabled =  True\r\n\t\tthis.comboBox2.Location =   System.Drawing.Point(139, 117)\r\n\t\tthis.comboBox2.Margin =   System.Windows.Forms.Padding(4)\r\n\t\tthis.comboBox2.Name = \"Northings\"\r\n\t\tthis.comboBox2.Size =   System.Drawing.Size(207, 27)\r\n\t\tthis.comboBox2.TabIndex = 0\r\n\t\t#this.comboBox2.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend\r\n\t\tthis.comboBox2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList\r\n\r\n\t\t#\r\n\t\t# comboBox3\r\n\t\t#\r\n\t\tthis.comboBox3.FormattingEnabled =  True\r\n\t\tthis.comboBox3.Location =   System.Drawing.Point(139, 184)\r\n\t\tthis.comboBox3.Margin =   System.Windows.Forms.Padding(4)\r\n\t\tthis.comboBox3.Name = \"Elevations\"\r\n\t\tthis.comboBox3.Size =   System.Drawing.Size(207, 27)\r\n\t\tthis.comboBox3.TabIndex = 0\r\n\t\t#this.comboBox3.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend\r\n\t\tthis.comboBox3.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList\r\n\r\n\t\t#\r\n\t\t# label4\r\n\t\t#\r\n\t\tthis.label4.AutoSize =  True\r\n\t\tthis.label4.Font =   System.Drawing.Font(\"Calibri\", 9, System.Drawing.FontStyle.Regular)\r\n\t\tthis.label4.Location =   System.Drawing.Point(26, 283)\r\n\t\tthis.label4.Name = \"label4\"\r\n\t\tthis.label4.Size =   System.Drawing.Size(202, 28)\r\n\t\tthis.label4.TabIndex = 3\r\n\t\tthis.label4.Text = \"NB: Please note that this works for\\r\\nonly structural foundations category\"\r\n\t\t#\r\n\t\t# Form1\r\n\t\t#\r\n\t\tthis.AcceptButton = this.button1\r\n\t\tthis.AutoScaleDimensions =   System.Drawing.SizeF(8, 18)\r\n\t\tthis.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font\r\n\t\tthis.CancelButton = this.button2\r\n\t\tthis.ClientSize =   System.Drawing.Size(599, 364)\r\n\t\tthis.Controls.Add(this.label4)\r\n\t\tthis.Controls.Add(this.label3)\r\n\t\tthis.Controls.Add(this.button2)\r\n\t\tthis.Controls.Add(this.button1)\r\n\t\tthis.Controls.Add(this.groupBox1)\r\n\t\tthis.Font =   System.Drawing.Font(\"Calibri\", 11.25, System.Drawing.FontStyle.Regular)\r\n\t\tthis.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle\r\n\t\tthis.Margin =   System.Windows.Forms.Padding(3, 4, 3, 4)\r\n\t\tthis.MaximizeBox = False\r\n\t\tthis.MaximumSize =   System.Drawing.Size(599, 364)\r\n\t\tthis.MinimizeBox = False\r\n\t\tthis.MinimumSize =   System.Drawing.Size(599, 364)\r\n\t\tthis.Name = \"Form1\"\r\n\t\tthis.ShowIcon = False\r\n\t\tthis.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen\r\n\t\tthis.Text = \"FOUNDATION COORDINATES\"\r\n\t\tthis.groupBox1.ResumeLayout(False)\r\n\t\tthis.groupBox1.PerformLayout()\r\n\t\tthis.ResumeLayout(False)\r\n\t\tthis.PerformLayout()\r\n\r\n\tdef add_range(this,LST):\r\n\t\tthis.comboBox1.Items.AddRange(LST)\r\n\t\tthis.comboBox2.Items.AddRange(LST)\r\n\t\tthis.comboBox3.Items.AddRange(LST)\r\n\r\n\tdef finish(this,sender,event):\r\n\t\tthis.Finish = this.comboBox1.SelectedItem,this.comboBox2.SelectedItem,this.comboBox3.SelectedItem\r\n\t\tthis.Close()\r\n\r\n\tdef cancel(this,sender,event):\r\n\t\tthis.Cancel = None\r\n\t\tthis.Close()\r\n\r\nform = PileCoordinates()\r\n\r\n#Application.Run(form)\r\n\r\n\r\nOUT = form = PileCoordinates()",
+      "Engine": "IronPython2",
+      "VariableInputPorts": true,
+      "Id": "8aa5f1aff4b244ef8c1f7f5410ea018a",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "71512f5264d64652ab4700010a756dd0",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded Python script."
+    }
+  ],
+  "Connectors": [],
+  "Dependencies": [],
+  "NodeLibraryDependencies": [],
+  "Thumbnail": "",
+  "GraphDocumentationURL": null,
+  "ExtensionWorkspaceData": [
+    {
+      "ExtensionGuid": "28992e1d-abb9-417f-8b1b-05e053bee670",
+      "Name": "Properties",
+      "Version": "2.13",
+      "Data": {}
+    },
+    {
+      "ExtensionGuid": "DFBD9CC0-DB40-457A-939E-8C8555555A9D",
+      "Name": "Generative Design",
+      "Version": "2.0",
+      "Data": {}
+    }
+  ],
+  "Author": "",
+  "Linting": {
+    "activeLinter": "None",
+    "activeLinterId": "7b75fb44-43fd-4631-a878-29f4d5d8399a",
+    "warningCount": 0,
+    "errorCount": 0
+  },
+  "Bindings": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 1.0,
+      "HasRunWithoutCrash": true,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "2.13.1.3887",
+      "RunType": "Manual",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "Background Preview",
+      "EyeX": -17.0,
+      "EyeY": 24.0,
+      "EyeZ": 50.0,
+      "LookX": 12.0,
+      "LookY": -13.0,
+      "LookZ": -58.0,
+      "UpX": 0.0,
+      "UpY": 1.0,
+      "UpZ": 0.0
+    },
+    "ConnectorPins": [],
+    "NodeViews": [
+      {
+        "Name": "Python Script",
+        "ShowGeometry": true,
+        "Id": "8aa5f1aff4b244ef8c1f7f5410ea018a",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 66.709561420741409,
+        "Y": 244.59621817708046
+      }
+    ],
+    "Annotations": [],
+    "X": 102.24737519850672,
+    "Y": -93.42385382631187,
+    "Zoom": 1.545620359375
+  }
+}
